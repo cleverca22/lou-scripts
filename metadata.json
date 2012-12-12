@@ -5,6 +5,11 @@
    "userscript":84343,
    "filename":"lou-bos.js",
    "version":"1.6.0"
+  },{
+   "name":"LoU MERC Tools 3.0",
+   "userscript":152303,
+   "filename":"lou-merc.js",
+   "version":"3.0"
   }
  ]
 }
