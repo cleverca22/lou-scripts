@@ -10,6 +10,11 @@
    "userscript":152303,
    "filename":"lou-merc.js",
    "version":"3.0"
+  },{
+   "name":"LoU Tweak",
+   "userscript":80532,
+   "filename":"lou-tweak.js",
+   "version":"1.7.6"
   }
  ]
 }
