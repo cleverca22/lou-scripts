@@ -1,0 +1,10 @@
+{
+ "scripts":[
+  {
+   "name":"LoU BoS",
+   "userscript":84343,
+   "filename":"lou-bos.js",
+   "version":"1.6.0"
+  }
+ ]
+}
