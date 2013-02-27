@@ -4,21 +4,25 @@
    "name":"LoU BoS",
    "userscript":84343,
    "filename":"lou-bos.js",
+   "type":"old",
    "version":"1.6.0"
   },{
    "name":"LoU MERC Tools 3.0",
    "userscript":152303,
    "filename":"lou-merc.js",
+   "type":"old",
    "version":"3.0"
   },{
    "name":"LoU Tweak",
    "userscript":80532,
    "filename":"lou-tweak.js",
+   "type":"old",
    "version":"1.7.6"
   },{
    "name":"LoU winter disable",
    "userscript":153096,
    "filename":"lou-summer.js",
+   "type":"old",
    "version":"1.1.1"
   }
  ]
