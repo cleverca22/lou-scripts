@@ -2613,13 +2613,13 @@ function pollCompleted(e) {
                     {
                         this.idleUnitsTable.removeDefoConsumer();
                     },
-          interceptSetDungeon: function(bi)
-          {
-            var app = qx.core.Init.getApplication();
-            var dv = (app.dungeonDetailView || app.getDungeonDetailView());
-            dv.originalSetDungeon( bi );
-            dv.mercRaid.curDungeon = bi;
-            dv.mercRaid.addDungeonToRaid( bi );
+          interceptSetDungeon: function(bi,bo) {
+	   this.setIsBoss(bo);
+	   this.city = bi;
+	   this.showDungeon(bi);
+	   this.onTick();
+	   this.mercRaid.curDungeon = bi;
+	   this.mercRaid.addDungeonToRaid( bi );
           },
           addDungeonToRaid: function( d )
           {
