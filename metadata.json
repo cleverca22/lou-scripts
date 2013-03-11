@@ -35,6 +35,13 @@
    "filename":"mailapp.user.js",
    "type":"old",
    "version":"1.9"
+  },{
+   "name":"build queue status",
+   "filename":"build-queue.js",
+   "type":"old",
+   "version":"1",
+   "screenshot":"build-queue.png",
+   "description":"build queue info tool removed from lou-tweak"
   }
  ]
 }
