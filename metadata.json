@@ -39,7 +39,7 @@
    "name":"build queue status",
    "filename":"build-queue.js",
    "type":"dumb_inject",
-   "version":"1",
+   "version":"2",
    "screenshot":"build-queue.png",
    "description":"build queue info tool removed from lou-tweak"
   }

@@ -9,9 +9,8 @@
 (function() {
 	function createTweak() {
 		var LTversion = "1.7.6";
-		var louTweak = {};
 		var LT = {options:{showQueueTimes:true}}; // FIXME
-		qx.Class.define("louTweak.main",{
+		qx.Class.define("buildQueue.main",{
 			type : "singleton",
 			extend : qx.core.Object,
 			members : {
@@ -20,7 +19,7 @@
 							.getApplication();
 					LT.a = this.app;
 					// ***** Queue times label ***** //
-					this.qtLab = new window.louTweak.queueTimesLabel();
+					this.qtLab = new window.buildQueue.queueTimesLabel();
 					if (this.app.selectorBar
 							.isMapSelectorBarAnchorToLeft()) {
 						this.app.desktop.add(
@@ -42,7 +41,7 @@
 
 		qx.Class
 				.define(
-						"louTweak.queueTimesLabel",
+						"buildQueue.queueTimesLabel",
 						{
 							extend : qx.core.Object,
 							construct : function() {
@@ -250,7 +249,7 @@
 				wdst = webfrontend.data.ServerTime.getInstance().refTime;
 				if (a && c && ch && wdst) {
 					createTweak();
-					window.louTweak.main.getInstance().initialize();
+					window.buildQueue.main.getInstance().initialize();
 				} else
 					window.setTimeout(LT_checkIfLoaded, 1000);
 			} else {
