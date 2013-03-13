@@ -7517,7 +7517,7 @@ qx.Class.define("paTweak.ui.AboutWindow", {
             var licenseLabel = new qx.ui.basic.Label("License").set({font:"bold"});
             this.add(licenseLabel);
 
-            var license = "MERC Tools - GreaseMonkey script for Lord of Ultima™";
+            var license = "MERC Tools - GreaseMonkey script for Lord of Ultima";
             license += "\nCopyright © 2012 " + paTweak.Version.PAauthors;
             license += "\n\nPortions copyright " + paTweak.Version.PAcontrib;
             license += "\n\n";
