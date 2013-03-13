@@ -7,7 +7,6 @@
 // ==/UserScript==
 
 (function() {
-	function createTweak() {
 		var LTversion = "1.7.6";
 		var LT = {options:{showQueueTimes:true}}; // FIXME
 		qx.Class.define("buildQueue.main",{
@@ -239,30 +238,7 @@
 								}
 							}
 						});
+	if (/lordofultima\.com/i.test(document.domain)) {
+		window.buildQueue.main.getInstance().initialize();
 	}
-	function LT_checkIfLoaded() {
-		try {
-			if (typeof qx != 'undefined') {
-				a = qx.core.Init.getApplication(); // application
-				c = a.cityInfoView;
-				ch = a.chat;
-				wdst = webfrontend.data.ServerTime.getInstance().refTime;
-				if (a && c && ch && wdst) {
-					createTweak();
-					window.buildQueue.main.getInstance().initialize();
-				} else
-					window.setTimeout(LT_checkIfLoaded, 1000);
-			} else {
-				window.setTimeout(LT_checkIfLoaded, 1000);
-			}
-		} catch (e) {
-			if (typeof console != 'undefined')
-				console.log(e);
-			else if (window.opera)
-				opera.postError(e);
-			else
-				GM_log(e);
-		}
-	}
-	if (/lordofultima\.com/i.test(document.domain)) window.setTimeout(LT_checkIfLoaded, 1000);
 })();
