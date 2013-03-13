@@ -3,13 +3,12 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      AmpliDude
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.7.6
+// @version        1.7.6.1
 // @grant          GM_log
 // ==/UserScript==
 
 (function(){
 
-var LT_mainFunction = function() {
 
 	function createTweak() {
 		var LTversion = "1.7.6";
@@ -2352,6 +2351,7 @@ var LT_mainFunction = function() {
 							resVal[5] = it[i].end;
 					}
 
+					var st = webfrontend.data.ServerTime.getInstance();
 					for (i=1; i<5; i++) {
 						freeSpc = 0;
 						curVal = c.getResourceCount(i);
@@ -4025,39 +4025,8 @@ var LT_mainFunction = function() {
 			// pal ruins 80
 		});
 	}
-	
-	function LT_checkIfLoaded() {
-		try {
-			if (typeof qx != 'undefined') {
-				a = qx.core.Init.getApplication(); // application
-				c = a.cityInfoView;
-				ch = a.chat;
-				wdst = webfrontend.data.ServerTime.getInstance().refTime;
-				if (a && c && ch && wdst) {
-					createTweak();
-					window.louTweak.main.getInstance().initialize();
-				} else
-					window.setTimeout(LT_checkIfLoaded, 1000);
-			} else {
-				window.setTimeout(LT_checkIfLoaded, 1000);
-			}
-		} catch (e) {
-			if (typeof console != 'undefined') console.log(e);
-			else if (window.opera) opera.postError(e);
-			else GM_log(e);
-		}
+	if (/lordofultima\.com/i.test(document.domain)) {
+		createTweak();
+		window.louTweak.main.getInstance().initialize();
 	}
-	if (/lordofultima\.com/i.test(document.domain))
-		window.setTimeout(LT_checkIfLoaded, 1000);
-			
-}
-
-	// injecting, because there seem to be problems when creating game interface with unsafeWindow
-	var louTweakScript = document.createElement("script");
-		txt = LT_mainFunction.toString();
-		louTweakScript.innerHTML = "(" + txt + ")();";
-		louTweakScript.type = "text/javascript";
-	if (/lordofultima\.com/i.test(document.domain))
-		document.getElementsByTagName("head")[0].appendChild(louTweakScript);
-
 })();
