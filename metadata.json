@@ -41,7 +41,13 @@
    "type":"dumb_inject",
    "version":"2",
    "screenshot":"build-queue.png",
+   "prio":2,
    "description":"build queue info tool removed from lou-tweak"
+  },{
+   "name":"framework for addons",
+   "filename":"addon-base.js",
+   "prio":1,
+   "version":"1"
   }
  ]
 }
