@@ -1,5 +1,4 @@
 (function outer() {
-	function createEverything() {
 		qx.Class.define("dsislou.addon",{
 			extend: qx.core.Object,
 			construct: function () {
@@ -23,30 +22,22 @@
 						console.log(err.toString()); // failMessage passed to construct
 						console.log(err.getUri()); // uri passed to construct
 						console.log(err.getLineNumber()); // line# passed to construct
+					} else if (err.classname == 'qx.core.GlobalError') {
+						try {
+							var exception = err.getSourceException();
+							var msg = exception.toString();
+							var file = exception.fileName;
+							var line = exception.lineNumber;
+							var stack = exception.stack;
+							unsafeDebug(msg+'\n'+file+':'+line+'\n'+stack);
+						} catch (e) {
+							console.log(e);
+						}
 					} else {
 						console.log(err);
 					}
 				}
 			}
 		});
-	}
-	function checkQx() {
-		try {
-			if (typeof qx != 'undefined') {
-				var a = qx.core.Init.getApplication();
-				var c = a.cityInfoView;
-				var ch = a.chat;
-				var wdst = webfrontend.data.ServerTime.getInstance().refTime;
-				if (a && c && ch && wdst) {
-					createEverything();
-					dsislou.main.getInstance();
-				} else window.setTimeout(checkQx,1000);
-			} else {
-				window.setTimeout(checkQx,1000);
-			}
-		} catch (e) {
-			console.log(e);
-		}
-	}
-	if (/lordofultima\.com/i.test(document.domain)) window.setTimeout(checkQx,1000);
+	if (/lordofultima\.com/i.test(document.domain)) dsislou.main.getInstance();
 })();

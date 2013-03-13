@@ -53,7 +53,7 @@
    "name":"framework for addons",
    "filename":"addon-base.js",
    "prio":1,
-   "type":"dumb_inject",
+   "type":"smart_inject",
    "version":"1"
   }
  ]
