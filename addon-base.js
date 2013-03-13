@@ -18,7 +18,14 @@
 				qx.event.GlobalError.setErrorHandler(this.handleError,this);
 			},members:{
 				handleError: function (err) {
-					console.log(err);
+					if (err.classname == 'qx.core.WindowError') {
+						console.log(err.stack); // stack points to qx.core.WindowError.construct, its useless
+						console.log(err.toString()); // failMessage passed to construct
+						console.log(err.getUri()); // uri passed to construct
+						console.log(err.getLineNumber()); // line# passed to construct
+					} else {
+						console.log(err);
+					}
 				}
 			}
 		});
