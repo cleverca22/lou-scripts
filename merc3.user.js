@@ -3188,12 +3188,12 @@ function pollCompleted(e) {
 
                       var app = qx.core.Init.getApplication();
                       var dv = (app.dungeonDetailView || app.getDungeonDetailView());
-                      //if( !dv.hasOwnProperty( "originalSetDungeon" ))
-                      //{
-                        //dv.originalSetDungeon = dv.setDungeon;
+                      if( !dv.hasOwnProperty( "originalSetDungeon" ))
+                      {
+                        dv.originalSetDungeon = dv.setDungeon;
                         dv.mercRaid = this;
-                        //dv.setDungeon = this.interceptSetDungeon;
-                      //}
+                        dv.setDungeon = this.interceptSetDungeon;
+                      }
                       /*
                       var cv = (app.cityDetailView || app.getCityDetailView());
                       if( !cv.hasOwnProperty( "originalSetCity" ))
@@ -3222,13 +3222,14 @@ function pollCompleted(e) {
                     {
                         this.idleUnitsTable.removeDefoConsumer();
                     },
-          interceptSetDungeon: function(bi)
+          interceptSetDungeon: function(bi,bo)
           {
-            var app = qx.core.Init.getApplication();
-            var dv = (app.dungeonDetailView || app.getDungeonDetailView());
-            //dv.originalSetDungeon( bi ); 2013-02-28 EDIT
-            dv.mercRaid.curDungeon = bi;
-            dv.mercRaid.addDungeonToRaid( bi );
+	  this.setIsBoss(bo);
+	  this.city = bi;
+	  this.showDungeon(bi);
+	  this.onTick();
+            this.mercRaid.curDungeon = bi;
+            this.mercRaid.addDungeonToRaid( bi );
           },
           interceptSetCity: function(bT)
           {
