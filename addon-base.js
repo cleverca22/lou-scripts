@@ -1,3 +1,4 @@
+// @version 1
 (function outer() {
 		qx.Class.define("dsislou.addon",{
 			extend: qx.core.Object,

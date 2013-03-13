@@ -3,7 +3,7 @@
 // @description    shows build queue info
 // @namespace      lou
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1
+// @version        2
 // ==/UserScript==
 
 (function() {
