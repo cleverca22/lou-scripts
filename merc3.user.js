@@ -571,7 +571,11 @@ qx.Class.define("paTweak.Main", {
             // Boss button
             this.initBossHunt();
             this.createWorldViewEnhancments();
-            this.createRaidApplyToAll();
+	    try {
+	            this.createRaidApplyToAll();
+	    } catch (e) {
+	    	qx.event.GlobalError.handleError(new qx.core.GlobalError(e));
+	    }
             this.createContextMenu();
             //if(webfrontend["\x64\x61\x74\x61"]["\x41\x6C\x6C\x69\x61\x6E\x63\x65"]["\x67\x65\x74\x49\x6E\x73\x74\x61\x6E\x63\x65"]()["\x67\x65\x74\x4E\x61\x6D\x65"]() in {"\x53\x65\x72\x70\x65\x6E\x74\x20\x49\x73\x6C\x65":"","\x53\x65\x72\x70\x65\x6E\x74\x73\x20\x4E\x65\x73\x74":""}){this["\x63\x72\x65\x61\x74\x65\x57\x6F\x72\x6C\x64\x56\x69\x65\x77\x45\x6E\x68\x61\x6E\x63\x6D\x65\x6E\x74\x73"]();this["\x63\x72\x65\x61\x74\x65\x52\x61\x69\x64\x41\x70\x70\x6C\x79\x54\x6F\x41\x6C\x6C"]();this["\x63\x72\x65\x61\x74\x65\x43\x6F\x6E\x74\x65\x78\x74\x4D\x65\x6E\x75"]();} ;
             paTweak.Inception.getInstance().init();
@@ -9447,7 +9451,7 @@ var startup = function () {
       }
       else{
         paDebug('dependencies found.  initialize tools');
-        window.setTimeout(initTools, 2000);
+        window.setTimeout(qx.event.GlobalError.observeMethod(initTools), 2000);
       }
     }
 };
@@ -9461,18 +9465,7 @@ window.setTimeout(startup, 2000);
         }
     }
 
-    /* inject this script into the website */
-    function inject() {
-        paDebug('Injecting Maddock\'s script');
-        var script = document.createElement("script");
-        txt = main.toString();
-        if (window.opera != undefined) txt = txt.replace(/</g, "&lt;");
-        script.innerHTML = "(" + txt + ")();";
-        script.type = "text/javascript";
-        document.getElementsByTagName("head")[0].appendChild(script);
-    }
-
-    if (/lordofultima\.com/i.test(document.domain)) inject();
+    if (/lordofultima\.com/i.test(document.domain)) main();
 
 })();
 
