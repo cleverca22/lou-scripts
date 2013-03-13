@@ -38,7 +38,7 @@
   },{
    "name":"build queue status",
    "filename":"build-queue.js",
-   "type":"dumb_inject",
+   "type":"smart_inject",
    "version":"2",
    "screenshot":"build-queue.png",
    "prio":2,
