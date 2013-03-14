@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           LoU Mail App
 // @description    UI Extension for LordOfUltima
-// @version        1.9.2
+// @version        1.9.3
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
 // ==/UserScript==
 
@@ -448,9 +448,9 @@ qx.Class.define("MailApp",{
 			return;
 		},
 		__Tw:function(){
-			if (typeof this.__Tr.__dB.__Ah != "undefined") {
-				this.__Tr.__dB.__Ah.setSelection([this.__Tr.__dB.__Ah.getChildren()[0]]);
-				this.__Tr.__dC.__Ah.setSelection([this.__Tr.__dC.__Ah.getChildren()[0]]);
+			if (typeof this.allianceTab.__Am != "undefined") {
+				this.allianceTab.__Am.setSelection([this.allianceTab.__Am.getChildren()[0]]);
+				this.friendsTab.__Am.setSelection([this.friendsTab.__Am.getChildren()[0]]);
 			}
 			if(this.__Tr.isVisible()){
 				this.__Tr.close();
@@ -459,9 +459,9 @@ qx.Class.define("MailApp",{
 			}
 		},
 		__Tw2:function(){
-            if (typeof this.__Tr.__dB.__Ah != "undefined") {
-				this.__Tr.__dB.__Ah.setSelection([this.__Tr.__dB.__Ah.getChildren()[1]]);
-				this.__Tr.__dC.__Ah.setSelection([this.__Tr.__dC.__Ah.getChildren()[1]]);
+            if (typeof this.allianceTab.__Am != "undefined") {
+				this.allianceTab.__Am.setSelection([this.allianceTab.__Am.getChildren()[1]]);
+				this.friendsTab.__Am.setSelection([this.friendsTab.__Am.getChildren()[1]]);
 			}
 			if(this.__Tr.isVisible()){
 				this.__Tr.close();
@@ -699,6 +699,8 @@ qx.Class.define("MailApp",{
 				}
 			}
 			this.__Tr=new webfrontend.gui.Mail.Contacts.MainWindow({callbackFunction: this.__Tv, opener: this});
+			this.allianceTab = this.__Tr.__fm;
+			this.friendsTab = this.__Tr.__fn;
 			this.receiver = "";
 			this.cc = "";
 
