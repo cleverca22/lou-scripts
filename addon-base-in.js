@@ -1,4 +1,3 @@
-(function outer() {
 		qx.Class.define("dsislou.addon",{
 			extend: qx.core.Object,
 			construct: function () {
@@ -22,6 +21,7 @@
 				}
 			},members:{
 				handleError: function (err) {
+					this.lastError = err;
 					try {
 						var obj;
 						if (err.classname == 'qx.core.WindowError') {
@@ -56,9 +56,13 @@
 					} catch (e) {
 						console.log(e);
 					}
+				},getLastError: function () {
+					return this.lastError;
 				},openScriptList: function () {
 					//dsisLouBridge.openScriptList();
-					dsislou.MainWindow.openAndSetup();
+					qx.event.GlobalError.observeMethod(function () {
+						dsislou.MainWindow.openAndSetup()
+					})();
 				},addChatMessage: function(msg) {
 					var eV = webfrontend.config.Config.getInstance().getChat(),
 						eN = '<font size="' + eV.getFontSize() + '" color="' + eV.getChannelColor('Info') + '" style="word-wrap: break-word;">' + msg + '</font>',
