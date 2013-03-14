@@ -15,47 +15,43 @@ window.setTimeout(daveloutm, 5000);
 return;
 }
 qx.Class.define("dave.lou.TMC", {
-extend: qx.core.Object,
-construct: function()
-{
-new qx.event.Timer.once(this.k,this,2000);
-},
-members: {
-i: null,
-j: null,
-k:function(){
-if (!p.ministerInfoWidget) {
-new qx.event.Timer.once(this.k,this,2000);
-}
-else {
-if (!this.i) {
-this.i =p.ministerInfoWidget;
-}
-if (this.i[4]&&!this.j) {
-this.j=this.i[4].clientArea.getChildren()[0].getSelection()[0];
-if (this.j.classname!="webfrontend.gui.TradeMinisterOptionsPage"){
-this.j=null;
-new qx.event.Timer.once(this.k,this,2000);
-return;
-}
-this.j=this.j.getChildren()[1].getChildren()[1];
-if (this.j.getChildren().length==3) {
-var j=v= new qx.ui.menu.Menu().set({
-iconColumnWidth: 0,
-});
-var b= new qx.ui.form.MenuButton("TM Assist",null,j);
-this.j.addAt(b,2)
-this.j.addAt(new qx.ui.core.Spacer(),3,{
-flex:1
-})
-new dave.lou.TMS()
-}
-}
-else
-new qx.event.Timer.once(this.k,this,2000);
-}
-},
-}
+	extend: qx.core.Object,
+	construct: function() {
+		new qx.event.Timer.once(this.k,this,2000);
+	},
+	members: {
+		i: null,
+		j: null,
+		k:function(){
+			if (!p.ministerInfoWidget) {
+				new qx.event.Timer.once(this.k,this,2000);
+			} else {
+				if (!this.i) {
+					this.i =p.ministerInfoWidget;
+				}
+				if (this.i[4]&&!this.j) {
+					this.j=this.i[4].clientArea.getChildren()[0].getSelection()[0];
+					if (this.j.classname!="webfrontend.gui.TradeMinisterOptionsPage"){
+						this.j=null;
+						new qx.event.Timer.once(this.k,this,2000);
+						return;
+					}
+					this.j=this.j.getChildren()[1].getChildren()[1];
+					if (this.j.getChildren().length==3) {
+						var j=v= new qx.ui.menu.Menu().set({
+							iconColumnWidth: 0,
+						});
+						var b= new qx.ui.form.MenuButton("TM Assist",null,j);
+						this.j.addAt(b,2)
+						this.j.addAt(new qx.ui.core.Spacer(),3,{
+							flex:1
+						})
+						new dave.lou.TMS()
+					}
+				} else new qx.event.Timer.once(this.k,this,2000);
+			}
+		},
+	}
 });
 qx.Class.define("dave.lou.L", {
 extend: qx.core.Object,
