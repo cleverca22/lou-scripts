@@ -60,9 +60,9 @@
    "name":"LoU davelou TM Assist",
    "filename":"158345.user.js",
    "prio":2,
-   "type":"old",
+   "type":"smart_inject",
    "userscript":158345,
-   "version":"0.3.1"
+   "version":"0.3.2"
   },{
    "name":"LoU davelou Raid Assistant",
    "filename":"154016.user.js",

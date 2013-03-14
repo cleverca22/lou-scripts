@@ -3,203 +3,192 @@
 // @description    Trade Minister utility
 // @namespace      davelou
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        0.3.1
+// @version        0.3.2
 // ==/UserScript==
 
 (function() {
-var inject = function daveloutm() {
-if (!window.qx || !window.webfrontend
-||!qx.core.Init.getApplication().initDone
-||webfrontend.data.City.getInstance().getId()<1) {
-window.setTimeout(daveloutm, 5000);
-return;
-}
-qx.Class.define("dave.lou.TMC", {
-	extend: qx.core.Object,
-	construct: function() {
-		new qx.event.Timer.once(this.k,this,2000);
-	},
-	members: {
-		i: null,
-		j: null,
-		k:function(){
-			if (!p.ministerInfoWidget) {
-				new qx.event.Timer.once(this.k,this,2000);
-			} else {
-				if (!this.i) {
-					this.i =p.ministerInfoWidget;
-				}
-				if (this.i[4]&&!this.j) {
-					this.j=this.i[4].clientArea.getChildren()[0].getSelection()[0];
-					if (this.j.classname!="webfrontend.gui.TradeMinisterOptionsPage"){
-						this.j=null;
-						new qx.event.Timer.once(this.k,this,2000);
-						return;
-					}
-					this.j=this.j.getChildren()[1].getChildren()[1];
-					if (this.j.getChildren().length==3) {
-						var j=v= new qx.ui.menu.Menu().set({
-							iconColumnWidth: 0,
-						});
-						var b= new qx.ui.form.MenuButton("TM Assist",null,j);
-						this.j.addAt(b,2)
-						this.j.addAt(new qx.ui.core.Spacer(),3,{
-							flex:1
-						})
-						new dave.lou.TMS()
-					}
-				} else new qx.event.Timer.once(this.k,this,2000);
-			}
+	var inject = function daveloutm() {
+		if (webfrontend.data.City.getInstance().getId()<1) {
+			window.setTimeout(daveloutm, 5000);
+			return;
+		}
+	qx.Class.define("dave.lou.TMC", {
+		extend: qx.core.Object,
+		construct: function() {
+			new qx.event.Timer.once(this.k,this,2000);
 		},
-	}
-});
-qx.Class.define("dave.lou.L", {
-extend: qx.core.Object,
-construct: function()
-{
-this.w();
-},
-members: {
-j:[],
-o: {},
-i: d=dave||function(){},
-w: function(){
-l=this;
-var e=null;
-try{
-e=this.o=this.v();
-}
-catch(r){}
-if (!e) {
-e=this.o={};
-e.s="hub";
-e.t="hub";
-e.l={};
-e.l[1]={
-m:"null"
-}
-e.l[100]={
-i:150,
-j:150,
-k:0,
-l:0,
-m:"Res build"
-}
-e.l[101]={
-i:0,
-j:0,
-k:0,
-l:0,
-m:"Res done"
-}
-e.l[102]={
-i:200,
-j:200,
-k:200,
-l:200,
-m:"Mil build"
-}
-this.p();
-}
-if (!e.t) e.t="hub";
-this.k();
-},
-k: function() {
-if (!this.o.l[1]) {
-var l={};
-l[1]={
-m:"null"
-};
-var a=100;
-for (var i in this.o.l) {
-var j=this.o.l[i];
-j.m=i;
-l[a++]=j;
-}
-this.o.l=l;
-this.p()
-}
-},
-p: function(){
-if (localStorage)
-localStorage["daveloutm"]=JSON.stringify(this.o);
-},
-v: function () {
-var j = localStorage["daveloutm"];
-if (j) return JSON.parse(j);
-else return null;
-},
-},
-});
-qx.Class.define("dave.lou.TMS", {
-extend: qx.core.Object,
-construct: function()
-{
-this.i();
-this.n();
-r=this;
-},
-members: {
-j: null,
-n: function (i) {
-v.removeAll();
-for (var j in l.o.l) {
-if (j==1)continue;
-var k = new qx.ui.menu.Button(l.o.l[j].m);
-k.setUserData("i",j);
-v.add(k);
-k.addListener("execute", function(e){
-var i=e.getTarget().getUserData("i");
-this.m(i);
-},this, false);
-}
-k = new qx.ui.menu.Button("Config");
-k.set({
-blockToolTip: false,
-toolTipText : "Manage config",
-});
-v.add(k)
-k.addListener("execute", function(){
-if (!this.j) this.j=new dave.lou.TMW()
-this.j.i();
-},this, false);
-},
-m: function(i){
-new dave.lou.TMF().n(l.o.l[i])
-},
-q:null,
-o:null,
-p:null,
-i: function(){
-var app = qx.core.Init.getApplication();
-var a  = app.currentOverlay;
-if (!a) return;
-if (a.classname!="webfrontend.gui.MinisterInfo.Trade")return;
-if (a.getVisibility()!="visible") return;
-a = a.clientArea.getChildren()[0].getSelection()[0];
-if (a.classname!="webfrontend.gui.TradeMinisterOptionsPage") return;
-if (!a||a.getVisibility()!="visible") return;
-for (var k in a) {
-if (a.hasOwnProperty(k)) {
-var l = a[k];
-if (l instanceof Array && l.length==4) {
-if (l[0].classname=="webfrontend.ui.CustomSelectBox"
-&&l[0].getUserData("Type")==0) {
-this.o=x=l;
-}
-if (l[0].classname=="webfrontend.ui.CustomSelectBox"
-&&l[0].getUserData("Type")==1) {
-this.q=z=l;
-}
-if (l[0].classname=="webfrontend.ui.SpinnerInt") {
-this.p=y=l;
-}
-}
-}
-}
-},
-}
-});
+		members: {
+			i: null,
+			j: null,
+			k:function(){
+				if (!p.ministerInfoWidget) {
+					new qx.event.Timer.once(this.k,this,2000);
+				} else {
+					if (!this.i) {
+						this.i =p.ministerInfoWidget;
+					}
+					if (this.i[4]&&!this.j) {
+						this.j=this.i[4].clientArea.getChildren()[0].getSelection()[0];
+						if (this.j.classname!="webfrontend.gui.TradeMinisterOptionsPage"){
+							this.j=null;
+							new qx.event.Timer.once(this.k,this,2000);
+							return;
+						}
+						this.j=this.j.getChildren()[1].getChildren()[1];
+						if (this.j.getChildren().length==3) {
+							var j=v= new qx.ui.menu.Menu().set({
+								iconColumnWidth: 0,
+							});
+							var b= new qx.ui.form.MenuButton("TM Assist",null,j);
+							this.j.addAt(b,2)
+							this.j.addAt(new qx.ui.core.Spacer(),3,{
+								flex:1
+							})
+							new dave.lou.TMS()
+						}
+					} else new qx.event.Timer.once(this.k,this,2000);
+				}
+			},
+		}
+	});
+	qx.Class.define("dave.lou.L", {
+		extend: qx.core.Object,
+		construct: function() {
+			this.w();
+		},members: {
+			j:[],
+			o: {},
+			i: d=dave||function(){},
+			w: function(){
+				l=this;
+				var e=null;
+				try{
+					e=this.o=this.v();
+				} catch(r){}
+				if (!e) {
+					e=this.o={};
+					e.s="hub";
+					e.t="hub";
+					e.l={};
+					e.l[1]={m:"null"}
+					e.l[100]={
+							i:150,
+							j:150,
+							k:0,
+							l:0,
+							m:"Res build"
+					}
+					e.l[101]={
+							i:0,
+							j:0,
+							k:0,
+							l:0,
+							m:"Res done"
+					}
+					e.l[102]={
+							i:200,
+							j:200,
+							k:200,
+							l:200,
+							m:"Mil build"
+					}
+					this.p();
+				}
+				if (!e.t) e.t="hub";
+				this.k();
+			},
+			k: function() {
+			if (!this.o.l[1]) {
+			var l={};
+			l[1]={
+			m:"null"
+			};
+			var a=100;
+			for (var i in this.o.l) {
+			var j=this.o.l[i];
+			j.m=i;
+			l[a++]=j;
+			}
+			this.o.l=l;
+			this.p()
+			}
+			},
+			p: function(){
+			if (localStorage)
+			localStorage["daveloutm"]=JSON.stringify(this.o);
+			},
+			v: function () {
+			var j = localStorage["daveloutm"];
+			if (j) return JSON.parse(j);
+			else return null;
+			},
+		},
+	});
+	qx.Class.define("dave.lou.TMS", {
+		extend: qx.core.Object,
+		construct: function() {
+			this.i();
+			this.n();
+			r=this;
+		},members: {
+			j: null,
+			n: function (i) {
+				v.removeAll();
+				for (var j in l.o.l) {
+					if (j==1)continue;
+					var k = new qx.ui.menu.Button(l.o.l[j].m);
+					k.setUserData("i",j);
+					v.add(k);
+					k.addListener("execute", function(e){
+						var i=e.getTarget().getUserData("i");
+						this.m(i);
+					},this, false);
+				}
+				k = new qx.ui.menu.Button("Config");
+				k.set({
+					blockToolTip: false,
+					toolTipText : "Manage config",
+				});
+				v.add(k)
+				k.addListener("execute", function(){
+					if (!this.j) this.j=new dave.lou.TMW()
+					this.j.i();
+				},this, false);
+			},
+			m: function(i){
+				new dave.lou.TMF().n(l.o.l[i])
+			},
+			q:null,
+			o:null,
+			p:null,
+			i: function(){
+				var app = qx.core.Init.getApplication();
+				var a  = app.currentOverlay;
+				if (!a) return;
+				if (a.classname!="webfrontend.gui.MinisterInfo.Trade")return;
+				if (a.getVisibility()!="visible") return;
+				a = a.clientArea.getChildren()[0].getSelection()[0];
+				if (a.classname!="webfrontend.gui.TradeMinisterOptionsPage") return;
+				if (!a||a.getVisibility()!="visible") return;
+				for (var k in a) {
+					if (a.hasOwnProperty(k)) {
+						var l = a[k];
+						if (l instanceof Array && l.length==4) {
+							if (l[0].classname=="webfrontend.ui.CustomSelectBox"&&l[0].getUserData("Type")==0) {
+								this.o=x=l;
+							}
+							if (l[0].classname=="webfrontend.ui.CustomSelectBox"&&l[0].getUserData("Type")==1) {
+								this.q=z=l;
+							}
+							if (l[0].classname=="webfrontend.ui.SpinnerInt") {
+								this.p=y=l;
+							}
+						}
+					}
+				}
+			},
+		}
+	});
 qx.Class.define("dave.lou.TMF", {
 extend: qx.core.Object,
 construct: function()
@@ -835,9 +824,5 @@ new dave.lou.L();
 console.error(e);
 }
 }
-var script = document.createElement("script");
-script.innerHTML = "(" + inject.toString() + ")();";
-script.type = "text/javascript";
-script.title = "dave.lou.tm";
-document.getElementsByTagName("head")[0].appendChild(script);
+	inject();
 })();
