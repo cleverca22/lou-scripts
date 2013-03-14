@@ -13,8 +13,8 @@
  */
 
 int main(int argc,char *argv[]) {
-	if (argc != 3) {
-		printf("usage: %s sqlitepath scriptpath\n",argv[0]);
+	if (argc != 4) {
+		printf("usage: %s sqlitepath scriptpath type\n",argv[0]);
 		return -1;
 	}
 	sqlite3 *db;
@@ -45,7 +45,7 @@ int main(int argc,char *argv[]) {
 	}
 	fclose(fh);
 	buffer[done] = 0;
-	char *query = "INSERT OR REPLACE INTO scripts (name,filename,remote_version,installed,localversion,enabled,code,type) VALUES ('local override',?,'9999',1,'9999',1,?,'old')";
+	char *query = "INSERT OR REPLACE INTO scripts (name,filename,remote_version,installed,localversion,enabled,code,type,prio) VALUES ('local override',?,'9999',1,'9999',1,?,?,10)";
 	sqlite3_stmt *statement;
 	err = sqlite3_prepare_v2(db,query,strlen(query),&statement,0);
 	if (err != SQLITE_OK) {
@@ -61,6 +61,11 @@ int main(int argc,char *argv[]) {
 	if (err != SQLITE_OK) {
 		printf("sqlite error\n");
 		return -7;
+	}
+	err = sqlite3_bind_text(statement,3,argv[3],-1,0);
+	if (err != SQLITE_OK) {
+		printf("sqlite error\n");
+		return -11;
 	}
 	err = sqlite3_step(statement);
 	if (err != SQLITE_DONE) {
