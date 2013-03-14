@@ -16018,7 +16018,7 @@ qx.Class.define("qx.ui.form.ListItem",
     this.removeListener("mouseout", this._onMouseOut, this);
   }
 });
-qx.Class.define("test.ScriptRow",{
+qx.Class.define("dsislou.ScriptRow",{
 	extend: qx.ui.core.Widget,
 	include: [qx.ui.form.MModelProperty],
 	construct: function() {
@@ -16089,7 +16089,7 @@ qx.Class.define("test.ScriptRow",{
 		}
 	}
 });
-qx.Class.define("test.Script",{
+qx.Class.define("dsislou.Script",{
 	extend: qx.core.Object,
 	construct: function (name,filename,enabled) {
 		this.setName(name);
@@ -16107,12 +16107,12 @@ qx.Class.define("test.Script",{
 		}
 	},members:{
 		updateSql:function () {
-			var service = test.Scripts.getInstance();
+			var service = dsislou.Scripts.getInstance();
 			service.setScriptEnabled(this.getFilename(),this.getScriptEnabled());
 		}
 	}
 });
-qx.Class.define("test.Scripts",{
+qx.Class.define("dsislou.Scripts",{
 	extend: qx.core.Object,
 	type: 'singleton',
 	construct: function () {
@@ -16123,9 +16123,10 @@ qx.Class.define("test.Scripts",{
 		fetchScripts: function() {
 			var scripts = new qx.data.Array();
 			var listIn = dsisLouBridge.getScripts();
+			console.log(listIn);
 			var i;
-			while (i = listIn.pop()) {
-				scripts.push(new test.Script(i.name,i.filename,i.enabled));
+			while (i = listIn.shift()) {
+				scripts.push(new dsislou.Script(i.name,i.filename,i.enabled));
 			}
 
 			this.setScripts(scripts);
@@ -16142,7 +16143,7 @@ qx.Class.define("test.Scripts",{
 		}
 	}
 });
-qx.Class.define('test.MainWindow',{
+qx.Class.define('dsislou.MainWindow',{
 	extend: qx.ui.window.Window,
 	construct: function() {
 		this.base(arguments,"Script List");
@@ -16180,15 +16181,16 @@ qx.Class.define('test.MainWindow',{
 		}
 	},statics:{
 		openAndSetup: function () {
-			var main = new test.MainWindow();
+			var main = new dsislou.MainWindow();
 			main.open();
 			var list = main.getList();
 			var controller = new qx.data.controller.List(null,list);
 			
-			var service = test.Scripts.getInstance();
+			var service = dsislou.Scripts.getInstance();
 			service.bind("scripts",controller,"model");
 			controller.setDelegate({
 				bindItem: function (controller,item,id) {
+					console.log('bind item');
 					controller.bindProperty("name","name",null,item,id);
 					controller.bindProperty("filename","filename",null,item,id);
 					controller.bindProperty("scriptEnabled","scriptEnabled",null,item,id);
@@ -16196,7 +16198,8 @@ qx.Class.define('test.MainWindow',{
 					controller.bindProperty("","model",null,item,id);
 				},
 				createItem: function () {
-					return new test.ScriptRow();
+					console.log('create item');
+					return new dsislou.ScriptRow();
 				}
 			});
 			main.addListener("reload",function() {
@@ -16270,7 +16273,7 @@ qx.Class.define('test.MainWindow',{
 					}
 				},openScriptList: function () {
 					//dsisLouBridge.openScriptList();
-					test.MainWindow.openAndSetup();
+					dsislou.MainWindow.openAndSetup();
 				},addChatMessage: function(msg) {
 					var eV = webfrontend.config.Config.getInstance().getChat(),
 						eN = '<font size="' + eV.getFontSize() + '" color="' + eV.getChannelColor('Info') + '" style="word-wrap: break-word;">' + msg + '</font>',
