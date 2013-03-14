@@ -55,6 +55,12 @@
    "prio":1,
    "type":"smart_inject",
    "version":"1"
+  },{
+   "name":"LoU davelou TM Assist",
+   "filename":"158345.user.js",
+   "prio":2,
+   "type":"old",
+   "version":"0.3.1"
   }
  ]
 }
