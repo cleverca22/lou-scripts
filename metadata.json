@@ -17,7 +17,8 @@
    "filename":"merc3.user.js",
    "type":"smart_inject",
    "version":"3.1.1",
-   "prio":2
+   "prio":2,
+   "conflicts":[1]
   },{
    "name":"LoU Tweak",
    "userscript":80532,
@@ -68,7 +69,14 @@
    "prio":2,
    "userscript":154016,
    "version":"0.6.8",
-   "type":"old"
+   "type":"old",
+   "conflicts":[1]
+  }
+ ],
+ "conflicts":[
+  {
+   "id":1,
+   "info":"the right click menu on the world map randomly jumps between the 2 scripts"
   }
  ]
 }
