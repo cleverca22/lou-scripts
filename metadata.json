@@ -71,6 +71,12 @@
    "version":"0.6.8",
    "type":"old",
    "conflicts":[1]
+  },{
+   "name":"TDK (was an extension)",
+   "filename":"LoUDefiant_script.js",
+   "prio":2,
+   "type":"smart_inject",
+   "version":"0.0.29"
   }
  ],
  "conflicts":[
