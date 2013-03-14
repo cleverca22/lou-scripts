@@ -62,6 +62,13 @@
    "type":"old",
    "userscript":158345,
    "version":"0.3.1"
+  },{
+   "name":"LoU davelou Raid Assistant",
+   "filename":"154016.user.js",
+   "prio":2,
+   "userscript":154016,
+   "version":"0.6.8",
+   "type":"old"
   }
  ]
 }
