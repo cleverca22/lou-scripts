@@ -1,4 +1,4 @@
-// @version 2
+// @version 3
 (function outer() {
 		qx.Class.define("dsislou.addon",{
 			extend: qx.core.Object,
@@ -16,6 +16,11 @@
 			construct: function () {
 				console.log('dsislou.main loaded');
 				qx.event.GlobalError.setErrorHandler(this.handleError,this);
+				if (typeof dsisLouBridge == 'undefined') {
+					this.addChatMessage("you need to <a href='http://loudb.angeldsis.com' target='_blank'>upgrade</a> the extension");
+				} else {
+					this.addChatMessage('<a href="javascript:dsislou.main.getInstance().openScriptList()">script list</a>');
+				}
 			},members:{
 				handleError: function (err) {
 					if (err.classname == 'qx.core.WindowError') {
@@ -38,6 +43,8 @@
 					} else {
 						console.log(err);
 					}
+				},openScriptList: function () {
+					dsisLouBridge.openScriptList();
 				},addChatMessage: function(msg) {
 					var eV = webfrontend.config.Config.getInstance().getChat(),
 						eN = '<font size="' + eV.getFontSize() + '" color="' + eV.getChannelColor('Info') + '" style="word-wrap: break-word;">' + msg + '</font>',
