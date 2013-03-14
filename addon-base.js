@@ -1,4 +1,4 @@
-// @version 3
+// @version 4
 (function outer() {
 		qx.Class.define("dsislou.addon",{
 			extend: qx.core.Object,
@@ -16,32 +16,45 @@
 			construct: function () {
 				console.log('dsislou.main loaded');
 				qx.event.GlobalError.setErrorHandler(this.handleError,this);
-				if (typeof dsisLouBridge == 'undefined') {
+				if (dsisLouBridge === undefined) {
 					this.addChatMessage("you need to <a href='http://loudb.angeldsis.com' target='_blank'>upgrade</a> the extension");
 				} else {
 					this.addChatMessage('<a href="javascript:dsislou.main.getInstance().openScriptList()">script list</a>');
 				}
 			},members:{
 				handleError: function (err) {
-					if (err.classname == 'qx.core.WindowError') {
-						console.log(err.stack); // stack points to qx.core.WindowError.construct, its useless
-						console.log(err.toString()); // failMessage passed to construct
-						console.log(err.getUri()); // uri passed to construct
-						console.log(err.getLineNumber()); // line# passed to construct
-					} else if (err.classname == 'qx.core.GlobalError') {
-						try {
+					try {
+						var obj;
+						if (err.classname == 'qx.core.WindowError') {
+							console.log(err.stack); // stack points to qx.core.WindowError.construct, its useless
+							console.log(err.toString()); // failMessage passed to construct
+							console.log(err.getUri()); // uri passed to construct
+							console.log(err.getLineNumber()); // line# passed to construct
+							obj = {};
+							obj.stack = err.stack;
+							obj.msg = err.toString();
+							obj.uri == err.getUri();
+							obj.line = err.getLineNumber();
+							obj.type = "WindowError";
+							obj.longmsg = obj.msg;
+						} else if (err.classname == 'qx.core.GlobalError') {
 							var exception = err.getSourceException();
-							var msg = exception.toString();
-							var file = exception.fileName;
-							var line = exception.lineNumber;
-							var stack = exception.stack;
-							unsafeDebug(msg+'\n'+file+':'+line+'\n'+stack);
-							this.addChatMessage(msg+'\n'+file+':'+line+'\n'+stack);
-						} catch (e) {
-							console.log(e);
+							obj = {};
+							obj.msg = exception.toString();
+							obj.uri = exception.fileName;
+							obj.line = exception.lineNumber;
+							obj.stack = exception.stack;
+							obj.longmsg = obj.msg+'\n'+obj.uri+':'+obj.line+'\n'+obj.stack;
+						} else {
+							console.log(err);
 						}
-					} else {
-						console.log(err);
+						if (obj) {
+							if ((dsisLouBridge !== undefined) && dsisLouBridge.reportError) {
+								dsisLouBridge.reportError(obj);
+							} else this.addChatMessage(obj.longmsg);
+						}
+					} catch (e) {
+						console.log(e);
 					}
 				},openScriptList: function () {
 					dsisLouBridge.openScriptList();
