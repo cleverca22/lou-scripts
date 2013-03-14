@@ -55,7 +55,7 @@
    "filename":"addon-base.js",
    "prio":1,
    "type":"smart_inject",
-   "version":"4"
+   "version":"5"
   },{
    "name":"LoU davelou TM Assist",
    "filename":"158345.user.js",

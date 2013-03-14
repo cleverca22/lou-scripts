@@ -1,4 +1,4 @@
-// @version 4
+// @version 5
 (function outer() {
 		qx.Class.define("dsislou.addon",{
 			extend: qx.core.Object,
@@ -44,6 +44,7 @@
 							obj.uri = exception.fileName;
 							obj.line = exception.lineNumber;
 							obj.stack = exception.stack;
+							obj.type = "GlobalError";
 							obj.longmsg = obj.msg+'\n'+obj.uri+':'+obj.line+'\n'+obj.stack;
 						} else {
 							console.log(err);
