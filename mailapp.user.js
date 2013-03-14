@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           LoU Mail App
 // @description    UI Extension for LordOfUltima
-// @version        1.9
+// @version        1.9.1
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
 // ==/UserScript==
 
@@ -16,7 +16,7 @@
 qx.Class.define("MailApp",{
 	extend:qx.ui.window.Window,construct:function(){
 		qx.ui.window.Window.call(this);
-		this.ErrorReporting();
+		//this.ErrorReporting();
 		this.set({width:1000,height:500,allowMaximize:false,allowMinimize:false,resizable:true,caption:"Mail App v1.9",showMaximize:false,showMinimize:false,showStatusbar:false,showClose:false,contentPadding:0,useMoveFrame:true});
 		this.setLayout(new qx.ui.layout.Canvas());
 		var B = new qx.ui.basic.Image("webfrontend/ui/win_mainoverlay_paper.jpg");

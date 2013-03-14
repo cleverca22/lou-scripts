@@ -41,7 +41,7 @@
    "name":"LoU Mail App",
    "filename":"mailapp.user.js",
    "type":"old",
-   "version":"1.9"
+   "version":"1.9.1"
   },{
    "name":"build queue status",
    "filename":"build-queue.js",
