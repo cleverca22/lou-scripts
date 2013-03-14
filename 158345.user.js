@@ -15,14 +15,15 @@
 	qx.Class.define("dave.lou.TMC", {
 		extend: qx.core.Object,
 		construct: function() {
-			new qx.event.Timer.once(this.k,this,2000);
+			qx.event.Timer.once(this.k,this,2000);
 		},
 		members: {
 			i: null,
 			j: null,
+			menu: null,
 			k:function(){
 				if (!p.ministerInfoWidget) {
-					new qx.event.Timer.once(this.k,this,2000);
+					qx.event.Timer.once(this.k,this,2000);
 				} else {
 					if (!this.i) {
 						this.i =p.ministerInfoWidget;
@@ -31,24 +32,28 @@
 						this.j=this.i[4].clientArea.getChildren()[0].getSelection()[0];
 						if (this.j.classname!="webfrontend.gui.TradeMinisterOptionsPage"){
 							this.j=null;
-							new qx.event.Timer.once(this.k,this,2000);
+							qx.event.Timer.once(this.k,this,2000);
 							return;
 						}
 						this.j=this.j.getChildren()[1].getChildren()[1];
 						if (this.j.getChildren().length==3) {
-							var j=v= new qx.ui.menu.Menu().set({
+							this.menu = v = new qx.ui.menu.Menu().set({
 								iconColumnWidth: 0,
 							});
-							var b= new qx.ui.form.MenuButton("TM Assist",null,j);
+							var b= new qx.ui.form.MenuButton("TM Assist",null,this.menu);
 							this.j.addAt(b,2)
 							this.j.addAt(new qx.ui.core.Spacer(),3,{
 								flex:1
 							})
 							new dave.lou.TMS()
+							console.log('made TM Assist button '+v);
 						}
-					} else new qx.event.Timer.once(this.k,this,2000);
+					} else qx.event.Timer.once(this.k,this,2000);
 				}
 			},
+			getMenu: function () {
+				return this.menu;
+			}
 		}
 	});
 	qx.Class.define("dave.lou.L", {
@@ -809,20 +814,20 @@ o:function(){
 this.j.selectAllText();
 },
 }
-});
-var a,b,i,m,p,r,y,d,s,j,l,v,c,t,x,z=false;
-try {
-b=webfrontend;
-p=qx.core.Init.getApplication();
-b=b.data;
-t=b.Player.getInstance();
-s=b.City.getInstance();
-a=b.Server.getInstance();
-new dave.lou.TMC();
-new dave.lou.L();
-} catch (e) {
-console.error(e);
-}
-}
+		});
+		var a,b,i,m,p,r,y,d,s,j,l,v,c,t,x,z=false,tmc;
+		try {
+			b=webfrontend;
+			p=qx.core.Init.getApplication();
+			b=b.data;
+			t=b.Player.getInstance();
+			s=b.City.getInstance();
+			a=b.Server.getInstance();
+			tmc = new dave.lou.TMC();
+			new dave.lou.L();
+		} catch (e) {
+			console.error(e);
+		}
+	} // </inject>
 	inject();
 })();

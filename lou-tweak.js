@@ -3397,12 +3397,12 @@
 						LT.main.getCity();
 						this.cityLayout = {"s":"", "u":"", "u2":""};
 						waterCity = webfrontend.data.City.getInstance().getOnWater();
-						c = LT.city;
+						city = LT.city;
 						var sharestring = "[ShareString.1.3]" + ((waterCity) ? ";" : ":");
 						var url = "http://www.lou-fcp.co.uk/map.php?map=" + ((waterCity) ? "W" : "L");
-						for (i=0; i<c.length; i++) {
-							sharestring += this.self(arguments).louCityP[this.self(arguments).node[c[i][2]]];
-							url += this.self(arguments).louFCityP[this.self(arguments).node[c[i][2]]];
+						for (i=0; i<city.length; i++) {
+							sharestring += this.self(arguments).louCityP[this.self(arguments).node[city[i][2]]];
+							url += this.self(arguments).louFCityP[this.self(arguments).node[city[i][2]]];
 						}
 						if (waterCity) url = url.substring(0,317)+url.substring(319,333);
 						sharestring += "[/ShareString]";
