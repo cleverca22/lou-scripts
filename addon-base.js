@@ -1,4 +1,4 @@
-// @version 1
+// @version 2
 (function outer() {
 		qx.Class.define("dsislou.addon",{
 			extend: qx.core.Object,
@@ -31,12 +31,23 @@
 							var line = exception.lineNumber;
 							var stack = exception.stack;
 							unsafeDebug(msg+'\n'+file+':'+line+'\n'+stack);
+							this.addChatMessage(msg+'\n'+file+':'+line+'\n'+stack);
 						} catch (e) {
 							console.log(e);
 						}
 					} else {
 						console.log(err);
 					}
+				},addChatMessage: function(msg) {
+					var eV = webfrontend.config.Config.getInstance().getChat(),
+						eN = '<font size="' + eV.getFontSize() + '" color="' + eV.getChannelColor('Info') + '" style="word-wrap: break-word;">' + msg + '</font>',
+						eO, eU;
+					if (eV.getTimeStamp()) {
+						eO = webfrontend.data.ServerTime.getInstance();
+						eU = eO.getServerStep();
+						if (eU) eN = '<font color="' + eV.getTimeStampColor() + '">' + webfrontend.Util.getDateTimeString(eO.getStepTime(eU), false, true) + ' ' + eN;
+					}
+					qx.core.Init.getApplication().chat._outputMsg(eN, 'SYSTEM', 7);
 				}
 			}
 		});
