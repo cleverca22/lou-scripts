@@ -4,7 +4,7 @@
 // @namespace      BoS
 // @author         Urthadar
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.6.0
+// @version        1.6.1
 // @require        http://sizzlemctwizzle.com/updater.php?id=84343&days=1
 // ==/UserScript==
 
@@ -2605,7 +2605,7 @@ qx.Class.define("bos.Tweaks", {
 			
 			//for city view
 			try {
-				if (qx.bom.client.Engine.GECKO) {
+				if (qx.core.Environment.get("engine.name") === 'gecko') {
 					a.visMain.scene.domRoot.style.MozTransform = "scale(" + zoom + ")";
 					a.visMain.scene.domRoot.style["overflow"] = "hidden";
 				} else {
@@ -15100,15 +15100,5 @@ function sprintf() {
 }
 };
 
-injectBoSScript();
-
-function injectBoSScript() {
-	GM_log("Injecting LoU BoS script");
-
-	var script = document.createElement("script");
-	script.innerHTML = "(" + main.toString() + ")();";
-	script.type = "text/javascript";
-	document.getElementsByTagName("head")[0].appendChild(script);		
-}
-		
+main();
 })();

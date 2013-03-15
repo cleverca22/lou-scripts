@@ -4,8 +4,8 @@
    "name":"LoU BoS",
    "userscript":84343,
    "filename":"lou-bos.js",
-   "type":"old",
-   "version":"1.6.0"
+   "type":"dumb_inject",
+   "version":"1.6.1"
   },{
    "name":"LoU MERC Tools 3.0",
    "userscript":152303,
