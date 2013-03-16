@@ -4,7 +4,7 @@
 // @namespace      BoS
 // @author         Urthadar
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.6.1
+// @version        1.6.2
 // @require        http://sizzlemctwizzle.com/updater.php?id=84343&days=1
 // ==/UserScript==
 
@@ -2328,8 +2328,7 @@ qx.Class.define("bos.Tweaks", {
 		gameStarted: function() {
 			trace("In gameStarted");
 
-			this.tweakErrorReporting();
-			var res = webfrontend.res.Main.getInstance();		
+			var res = webfrontend.res.Main.getInstance();
 
 			try {
 				var container = a.title.reportButton.getLayoutParent();
@@ -2619,14 +2618,6 @@ qx.Class.define("bos.Tweaks", {
 			var widget = bos.gui.ExtraSummaryWidget.getInstance();
 			widget.open();
 		},
-		tweakErrorReporting: function() {
-			if (bos.Const.DEBUG_VERSION) {
-				//qx.event.GlobalError.setErrorHandler(null, this);
-				//window.onerror = null;
-				qx.event.GlobalError.setErrorHandler(handleError, this);
-				//qx.event.GlobalError.setErrorHandler(null, this);
-			}
-		}, 
 		bosTest: function() {
 			//webfrontend.net.UpdateManager.getInstance().completeRequest = this.test_completeRequest;
 		},
