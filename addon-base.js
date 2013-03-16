@@ -1,4 +1,4 @@
-// @version 7
+// @version 8
 // this script is built from stuff in another repo plus addon-base-in.js
 qx.event.GlobalError.observeMethod(function () {
 
@@ -1557,7 +1557,7 @@ qx.Class.define("dsislou.ScriptRow",{
 		layout.setColumnFlex(0, 1);
 		this._setLayout(layout);
 		this._createChildControl("name");
-		this._createChildControl("filename");
+		this._createChildControl('version');
 		this._createChildControl("script_enabled");
 	},
 	properties:{
@@ -1568,9 +1568,9 @@ qx.Class.define("dsislou.ScriptRow",{
 			check:"String",
 			apply:"_setName",
 			nullable: true
-		},filename:{
+		},version:{
 			check:"String",
-			apply:"_setFilename",
+			apply:"_setVersion",
 			nullable:true
 		},scriptEnabled:{
 			check:"Boolean",
@@ -1587,7 +1587,7 @@ qx.Class.define("dsislou.ScriptRow",{
 				control.setAnonymous(true);
 				this._add(control,{row:0,column:0});
 				break;
-			case 'filename':
+			case 'version':
 				control = new qx.ui.basic.Label(this.getName());
 				control.setAnonymous(true);
 				this._add(control,{row:0,column:1});
@@ -1613,18 +1613,20 @@ qx.Class.define("dsislou.ScriptRow",{
 			check.setValue(value);
 			console.log("check set");
 			console.log(qx.dev.Debug.debugProperties(check));
-		},_setFilename: function (value,old) {
-			var name = this.getChildControl('filename');
-			name.setValue(value);
+		},_setVersion: function (value,old) {
+			var ver = this.getChildControl('version');
+			ver.setValue(value);
 		}
 	}
 });
 qx.Class.define("dsislou.Script",{
 	extend: qx.core.Object,
-	construct: function (name,filename,enabled) {
+	construct: function (name,filename,enabled,version) {
 		this.setName(name);
 		this.setFilename(filename);
 		this.setScriptEnabled(enabled);
+		if (version === undefined) version = '???';
+		this.setVersion(version);
 		this.addListener("scriptEnableChanged",this.updateSql,this);
 	},
 	properties:{
@@ -1634,6 +1636,8 @@ qx.Class.define("dsislou.Script",{
 			event:'filenameChanged'
 		},scriptEnabled:{
 			event:'scriptEnableChanged'
+		},version:{
+			event:'versionChanged'
 		}
 	},members:{
 		updateSql:function () {
@@ -1656,7 +1660,7 @@ qx.Class.define("dsislou.Scripts",{
 			console.log(listIn);
 			var i;
 			while (i = listIn.shift()) {
-				scripts.push(new dsislou.Script(i.name,i.filename,i.enabled));
+				scripts.push(new dsislou.Script(i.name,i.filename,i.enabled,i.version));
 			}
 
 			this.setScripts(scripts);
@@ -1721,7 +1725,7 @@ qx.Class.define('dsislou.MainWindow',{
 			controller.setDelegate({
 				bindItem: function (controller,item,id) {
 					controller.bindProperty("name","name",null,item,id);
-					controller.bindProperty("filename","filename",null,item,id);
+					controller.bindProperty("version","version",null,item,id);
 					controller.bindProperty("scriptEnabled","scriptEnabled",null,item,id);
 					controller.bindPropertyReverse("scriptEnabled","scriptEnabled",null,item,id);
 					controller.bindProperty("","model",null,item,id);
