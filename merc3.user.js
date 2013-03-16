@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        3.1.1
+// @version        3.1.2
 // ==/UserScript==
 /*
  * Changelog
@@ -7444,10 +7444,10 @@ qx.Class.define("paTweak.ui.components.TimePicker", {
 
             // Prepare return date object
             var date = new Date(gameNow);
-            date.setUTCHours(hours);
-            date.setUTCMinutes(minutes);
-            date.setUTCSeconds(seconds);
-            date.setUTCMilliseconds(0);
+            date.setHours(hours);
+            date.setMinutes(minutes);
+            date.setSeconds(seconds);
+            date.setMilliseconds(0);
 
             try {
                 this._updatingValue = true;
