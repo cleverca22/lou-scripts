@@ -78,6 +78,12 @@
    "prio":2,
    "type":"smart_inject",
    "version":"0.0.29"
+  },{
+   "name":"city startup helper",
+   "filename":"city-starter.js",
+   "prio":2,
+   "type":"smart_inject",
+   "version":"1"
   }
  ],
  "conflicts":[
