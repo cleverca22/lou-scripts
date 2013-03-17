@@ -37,6 +37,30 @@ qx.Class.define("dsislou.cityStarter.checkBuildMini",{
 		errors:[null,"auto build normal bad","auto build def bad"]
 	}
 });
+qx.Class.define("dsislou.cityStarter.checkWall",{
+	extend: dsislou.cityStarter.checker,
+	members:{
+		check: function () {
+			var wallLevel = webfrontend.data.City.getInstance().getWallLevel();
+			if (wallLevel > 0) return true;
+			var buildQueue = webfrontend.data.City.getInstance().buildQueue;
+			for (var i=0; i<buildQueue.length; i++) {
+				if (buildQueue[i].type == 23) return true;
+			}
+			this.setProblem(1);
+			return false;
+		},fixit: function() {
+			webfrontend.net.CommandManager.getInstance().sendCommand("UpgradeBuilding",{
+				cityid:webfrontend.data.City.getInstance().getId(),
+				"buildingid":264966,
+				"buildingType":23,
+				"isPaid":false},this,function(){console.log('done');});
+		}
+	},statics:{
+		title:'wall started:',
+		errors:[null,'not started']
+	}
+});
 qx.Class.define("dsislou.cityStarterWindow",{
 	extend: qx.ui.window.Window,
 	type: 'singleton',
@@ -48,8 +72,8 @@ qx.Class.define("dsislou.cityStarterWindow",{
 		layout.setColumnFlex(0, 1);
 		for (var x=0; x<10; x++) this.label(x);
 		this.messages = [];
-		for (var x=0; x<1; x++) this.messages[x] = this.makeMsg(x);
-		this.checks = [ dsislou.cityStarter.checkBuildMini ];
+		this.checks = [ dsislou.cityStarter.checkBuildMini, dsislou.cityStarter.checkWall ];
+		for (var x=0; x<this.checks.length; x++) this.messages[x] = this.makeMsg(x);
 		webfrontend.base.Timer.getInstance().addListener("uiTick", this.tick,this);
 		this.checkers = [];
 		this.button = new qx.ui.form.Button("Fix it!!");
@@ -66,7 +90,7 @@ qx.Class.define("dsislou.cityStarterWindow",{
 			this.add(b,{row:x,column:1});
 			return b;
 		},tick: function() {
-			for (var x=0; x<1; x++) {
+			for (var x=0; x<this.checks.length; x++) {
 				var checker = this.checkers[x];
 				console.log(x,checker);
 				if (!checker) checker = this.checkers[x] = new this.checks[x]();
