@@ -1,4 +1,4 @@
-// @version: 2
+// @version: 3
 qx.event.GlobalError.observeMethod(function() {
 qx.Class.define("dsislou.cityStarter",{
 	extend: dsislou.addon,
@@ -61,6 +61,32 @@ qx.Class.define("dsislou.cityStarter.checkWall",{
 		errors:[null,'not started']
 	}
 });
+qx.Class.define("dsislou.cityStarter.checkTowers",{
+	extend: dsislou.cityStarter.checker,
+	members:{
+		check: function () {
+			var lookout = webfrontend.data.City.getInstance().getTowerBuildingCounts()[38];
+			var water = webfrontend.data.City.getInstance().getOnWater();
+			if (lookout === undefined) lookout = 0;
+			
+			var buildQueue = webfrontend.data.City.getInstance().buildQueue;
+			for (var i=0; i<buildQueue.length; i++) {
+				if ((buildQueue[i].type == 38) && (buildQueue[i].level == 1)) lookout++;
+			}
+
+			var goal = 2;
+			if (water) goal = 4;
+			if (lookout < goal) {
+				this.setProblem(1);
+				return false;
+			}
+			return true;
+		}
+	},statics:{
+		title:'lookout towers:',
+		errors:[null,'not enough lookouts']
+	}
+});
 qx.Class.define("dsislou.cityStarterWindow",{
 	extend: qx.ui.window.Window,
 	type: 'singleton',
@@ -72,7 +98,7 @@ qx.Class.define("dsislou.cityStarterWindow",{
 		layout.setColumnFlex(0, 1);
 		for (var x=0; x<10; x++) this.label(x);
 		this.messages = [];
-		this.checks = [ dsislou.cityStarter.checkBuildMini, dsislou.cityStarter.checkWall ];
+		this.checks = [ dsislou.cityStarter.checkBuildMini, dsislou.cityStarter.checkWall, dsislou.cityStarter.checkTowers ];
 		for (var x=0; x<this.checks.length; x++) this.messages[x] = this.makeMsg(x);
 		webfrontend.base.Timer.getInstance().addListener("uiTick", this.tick,this);
 		this.checkers = [];
@@ -107,9 +133,13 @@ qx.Class.define("dsislou.cityStarterWindow",{
 					var par = this.button.getLayoutParent();
 					if (par) par.remove(this.button)
 				} else {
-					this.messages[x].setValue(this.checks[x].errors[checker.getProblem()]);
 					this.lastChecker = checker;
-					this.add(this.button,{row:x,column:2});
+					if (this.lastChecker.fixit) {
+						this.messages[x].setValue(this.checks[x].errors[checker.getProblem()]);
+						this.add(this.button,{row:x,column:2});
+					} else {
+						this.messages[x].setValue(this.checks[x].errors[checker.getProblem()]+' please manualy build a few'); // FIXME
+					}
 					break;
 				}
 			}
