@@ -1,4 +1,4 @@
-// @version: 1
+// @version: 2
 qx.event.GlobalError.observeMethod(function() {
 qx.Class.define("dsislou.cityStarter",{
 	extend: dsislou.addon,
@@ -78,6 +78,7 @@ qx.Class.define("dsislou.cityStarterWindow",{
 		this.checkers = [];
 		this.button = new qx.ui.form.Button("Fix it!!");
 		this.button.addListener("click",this.fixIt,this);
+		this.lastCity = webfrontend.data.City.getInstance().getId();
 	},members:{
 		fixIt: function () {
 			this.lastChecker.fixit();
@@ -90,6 +91,11 @@ qx.Class.define("dsislou.cityStarterWindow",{
 			this.add(b,{row:x,column:1});
 			return b;
 		},tick: function() {
+			var curCity = webfrontend.data.City.getInstance().getId();
+			if (this.lastCity != curCity) {
+				this.show();
+				this.lastCity = curCity;
+			}
 			for (var x=0; x<this.checks.length; x++) {
 				var checker = this.checkers[x];
 				console.log(x,checker);
