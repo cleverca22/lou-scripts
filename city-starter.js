@@ -72,8 +72,11 @@ qx.Class.define("dsislou.cityStarterWindow",{
 				if (!checker) checker = this.checkers[x] = new this.checks[x]();
 				var good = checker.check();
 				console.log(good);
-				if (good) this.messages[x].setValue(this.checks[x].title+" good");
-				else {
+				if (good) {
+					this.messages[x].setValue(this.checks[x].title+" good");
+					var par = this.button.getLayoutParent();
+					if (par) par.remove(this.button)
+				} else {
 					this.messages[x].setValue(this.checks[x].errors[checker.getProblem()]);
 					this.lastChecker = checker;
 					this.add(this.button,{row:x,column:2});
