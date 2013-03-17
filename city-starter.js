@@ -1,4 +1,4 @@
-// @version: 3
+// @version: 4
 qx.event.GlobalError.observeMethod(function() {
 qx.Class.define("dsislou.cityStarter",{
 	extend: dsislou.addon,
@@ -44,8 +44,10 @@ qx.Class.define("dsislou.cityStarter.checkWall",{
 			var wallLevel = webfrontend.data.City.getInstance().getWallLevel();
 			if (wallLevel > 0) return true;
 			var buildQueue = webfrontend.data.City.getInstance().buildQueue;
-			for (var i=0; i<buildQueue.length; i++) {
-				if (buildQueue[i].type == 23) return true;
+			if (buildQueue) {
+				for (var i=0; i<buildQueue.length; i++) {
+					if (buildQueue[i].type == 23) return true;
+				}
 			}
 			this.setProblem(1);
 			return false;
@@ -70,8 +72,10 @@ qx.Class.define("dsislou.cityStarter.checkTowers",{
 			if (lookout === undefined) lookout = 0;
 			
 			var buildQueue = webfrontend.data.City.getInstance().buildQueue;
-			for (var i=0; i<buildQueue.length; i++) {
-				if ((buildQueue[i].type == 38) && (buildQueue[i].level == 1)) lookout++;
+			if (buildQueue) {
+				for (var i=0; i<buildQueue.length; i++) {
+					if ((buildQueue[i].type == 38) && (buildQueue[i].level == 1)) lookout++;
+				}
 			}
 
 			var goal = 2;
