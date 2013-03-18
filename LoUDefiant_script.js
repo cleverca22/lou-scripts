@@ -1,4 +1,4 @@
-// @version 0.0.29
+// @version 0.0.30
 var com_senocular_LoUDefiant_pageScript = function(){
 	
 function debug(msg){ 
@@ -165,7 +165,6 @@ debug('in init');
 				extensionButtonsShowNotes:true,
 				extensionButtonsShowTrades:true,
 				extensionButtonsShowCities:true,
-				extensionButtonsShowOptions:true,
 				extensionButtonsShowAbout:false,
 				enableAttackCityButtons:true,
 				attackCityButtonsPosition:1,
@@ -327,7 +326,6 @@ debug('in init');
 			notesButton:null,
 			tradesButton:null,
 			citiesButton:null,
-			optionsButton:null,
 			aboutButton:null,
 			buildUI:function(){
 				
@@ -359,15 +357,15 @@ debug('in init');
 				this.citiesButton.set({appearance:"button-text-small", toolTipText:"Open cities list"});
 				this.citiesButton.addListener("execute", this.showCitiesDialog, this);
 				
-				this.optionsButton = new qx.ui.form.Button("Options");
-				this.optionsButton.set({appearance:"button-text-small", toolTipText:"Open options"});
-				this.optionsButton.addListener("execute", this.showOptionsWindow, this);
+				var optionsMenu = new qx.ui.menu.Button("TDK - Options");
+				optionsMenu.addListener("execute", this.showOptionsWindow, this);
+				dsislou.main.getInstance().getMainMenu().add(optionsMenu);
 				
 				this.aboutButton = new qx.ui.form.Button("About");
 				this.aboutButton.set({appearance:"button-text-small", toolTipText:"Open about page"});
 				this.aboutButton.addListener("execute", this.showAboutWindow, this);
 				
-				this.buttonList = [this.toolsButton, this.notesButton, this.tradesButton, this.citiesButton, this.optionsButton, this.aboutButton];
+				this.buttonList = [this.toolsButton, this.notesButton, this.tradesButton, this.citiesButton, this.aboutButton];
 				
 				// add elements
 				this.add(this.buttonWrapper);
@@ -416,9 +414,6 @@ debug('in init');
 				
 				if (prefs.extensionButtonsShowCities)
 					this.buttonWrapper.add(this.citiesButton);
-				
-				if (prefs.extensionButtonsShowOptions)
-					this.buttonWrapper.add(this.optionsButton);
 				
 				if (prefs.extensionButtonsShowAbout)
 					this.buttonWrapper.add(this.aboutButton);
@@ -543,9 +538,7 @@ debug('in init');
 				}catch(e){ debug(e); }
 			},
 			showOptionsWindow: function(){
-				try {
 				senocular.tdk.ToolsWindow.getInstance().toggleTab("Options");
-				}catch(e){ debug(e); }
 			},
 			showAboutWindow: function(){
 				try{
@@ -631,7 +624,7 @@ debug('in init');
 				this.notesTableData.setColFormat(1,"<div style=\"cursor:pointer;color:#2d5395\">","</div>");
 				this.notesTableData.setColumns(["","Subject","Record"],["sel","sub","record"]);
 				
-				this.notesTable = new webfrontend.gui.CustomTable(this.notesTableData);
+				this.notesTable = new webfrontend.ui.CustomTable(this.notesTableData);
 				this.notesTable.set({statusBarVisible:false, columnVisibilityButtonVisible:false});
 				this.notesTable.getSelectionModel().setSelectionMode(qx.ui.table.selection.Model.NO_SELECTION);
 				this.notesTable.addListener("cellClick", this.selectNote, this);
@@ -866,7 +859,7 @@ debug('in init');
 				this.tradesTableData.setColFormat(4,"<div style=\"cursor:pointer;color:#2d5395\">","</div>"); // to
 				this.tradesTableData.setColFormat(5,"<div style=\"cursor:pointer;color:#2d5395;font-weight:bold\">","</div>"); // send
 				
-				this.tradesTable = new webfrontend.gui.CustomTable(this.tradesTableData);
+				this.tradesTable = new webfrontend.ui.CustomTable(this.tradesTableData);
 				this.tradesTable.set({statusBarVisible:false, columnVisibilityButtonVisible:false});
 				this.tradesTable.getSelectionModel().setSelectionMode(qx.ui.table.selection.Model.NO_SELECTION);
 				this.tradesTable.addListener("cellClick", this.tradeCellClick, this);
@@ -1629,7 +1622,6 @@ debug('in init');
 			extensionButtonsShowNotesCheck:null,
 			extensionButtonsShowTradesCheck:null,
 			extensionButtonsShowCitiesCheck:null,
-			extensionButtonsShowOptionsCheck:null,
 			extensionButtonsShowAboutCheck:null,
 			enableAttackCityButtonsCheck:null,
 			attackCityButtonsPositionSpinner:null,
@@ -1688,7 +1680,6 @@ debug('in init');
 				this.extensionButtonsShowNotesCheck = new qx.ui.form.CheckBox("Notes").set({marginLeft:16});
 				this.extensionButtonsShowTradesCheck = new qx.ui.form.CheckBox("Trades").set({marginLeft:16});
 				this.extensionButtonsShowCitiesCheck = new qx.ui.form.CheckBox("Cities").set({marginLeft:16});
-				this.extensionButtonsShowOptionsCheck = new qx.ui.form.CheckBox("Options").set({marginLeft:16});
 				this.extensionButtonsShowAboutCheck = new qx.ui.form.CheckBox("About").set({marginLeft:16});
 				
 				var cityButtonsGroup = senocular.tdk.WidgetUtils.createTitle("Selected City Buttons:",
@@ -1813,7 +1804,6 @@ debug('in init');
 				extensionButtonsShowGrid.add( this.extensionButtonsShowNotesCheck, {column:2, row:0} );
 				extensionButtonsShowGrid.add( this.extensionButtonsShowTradesCheck, {column:0, row:1} );
 				extensionButtonsShowGrid.add( this.extensionButtonsShowCitiesCheck, {column:1, row:1} );
-				extensionButtonsShowGrid.add( this.extensionButtonsShowOptionsCheck, {column:2, row:1} );
 				extensionButtonsShowGrid.add( this.extensionButtonsShowAboutCheck, {column:0, row:2} );
 				
 				
@@ -1936,7 +1926,6 @@ debug('in init');
 				prefs.extensionButtonsShowNotes = this.extensionButtonsShowNotesCheck.getValue();
 				prefs.extensionButtonsShowTrades = this.extensionButtonsShowTradesCheck.getValue();
 				prefs.extensionButtonsShowCities = this.extensionButtonsShowCitiesCheck.getValue();
-				prefs.extensionButtonsShowOptions = this.extensionButtonsShowOptionsCheck.getValue();
 				prefs.extensionButtonsShowAbout = this.extensionButtonsShowAboutCheck.getValue();
 					
 				prefs.enableAttackCityButtons = this.enableAttackCityButtonsCheck.getValue();
@@ -1990,7 +1979,6 @@ debug('in init');
 				this.extensionButtonsShowNotesCheck.setValue( prefs.extensionButtonsShowNotes );
 				this.extensionButtonsShowTradesCheck.setValue( prefs.extensionButtonsShowTrades );
 				this.extensionButtonsShowCitiesCheck.setValue( prefs.extensionButtonsShowCities );
-				this.extensionButtonsShowOptionsCheck.setValue( prefs.extensionButtonsShowOptions );
 				this.extensionButtonsShowAboutCheck.setValue( prefs.extensionButtonsShowAbout );
 				
 				this.enableAttackCityButtonsCheck.setValue( prefs.enableAttackCityButtons );
