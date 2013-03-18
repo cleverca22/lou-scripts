@@ -1,4 +1,4 @@
-// @version 8
+// @version 9
 // this script is built from stuff in another repo plus addon-base-in.js
 qx.event.GlobalError.observeMethod(function () {
 
@@ -1747,6 +1747,7 @@ qx.Class.define('dsislou.MainWindow',{
 		qx.Class.define("dsislou.addon",{
 			extend: qx.core.Object,
 			construct: function () {
+				this.base(arguments);
 				this.app = qx.core.Init.getApplication();
 			},
 			members:{
@@ -1755,17 +1756,69 @@ qx.Class.define('dsislou.MainWindow',{
 			}
 		});
 		qx.Class.define("dsislou.main",{
-			extend: qx.core.Object,
+			extend: dsislou.addon,
 			type: "singleton",
 			construct: function () {
+				this.base(arguments);
 				console.log('dsislou.main loaded');
 				qx.event.GlobalError.setErrorHandler(this.handleError,this);
+				var container = this.app.title.reportButton.getLayoutParent();
+				this.label = new qx.ui.form.Button("loading");
+				container._add(this.label,{row:0,column:13});
+				this.lastcount = 0;
+				this.lastprofile = {};
+				//webfrontend.base.Timer.getInstance().addListener("uiTick", this.tick,this);
+				this.menu = new qx.ui.menu.Menu().set({iconColumnWidth:0});
+				var mainMenu = new qx.ui.form.MenuButton("Main Menu",null,this.menu);
+				this.app.desktop.add(mainMenu,{right:0,bottom:'50%'});
 				if (dsisLouBridge === undefined) {
 					this.addChatMessage("you need to <a href='http://loudb.angeldsis.com' target='_blank'>upgrade</a> the extension");
 				} else {
-					this.addChatMessage('<a href="javascript:dsislou.main.getInstance().openScriptList()">script list</a>');
+					//this.addChatMessage('<a href="javascript:dsislou.main.getInstance().openScriptList()">script list</a>');
+					var scriptList = new qx.ui.menu.Button("Script List");
+					scriptList.addListener("execute",this.openScriptList,this);
+					this.menu.add(scriptList);
 				}
 			},members:{
+				getMainMenu: function () {
+					return this.menu;
+				},
+				tick: function () {
+					var foo = qx.core.ObjectRegistry.getRegistry();
+					var y = 0;
+					for (x in foo) y++;
+					this.label.setLabel(y);
+					var diff = y - this.lastcount;
+					//if (diff != 0) console.log('count went up '+diff);
+					this.lastcount = y;
+				},
+				getProfile: function () {
+					var list = {};
+					var reg = qx.core.ObjectRegistry.getRegistry();
+					for (x in reg) {
+						var clazz = reg[x].classname;
+						if (!list[clazz]) list[clazz] = 1;
+						else list[clazz]++;
+					}
+					var list2 = [];
+					for (x in list) {
+						if (list[x] < 10) list[x] = undefined;
+						else {
+							var oldcount;
+							if (this.lastprofile[x]) oldcount = this.lastprofile[x];
+							else oldcount = 0;
+							if (list[x] > oldcount) console.log((list[x] - oldcount)+' '+x+' made');
+							else if (list[x] < oldcount) console.log((list[x] - oldcount)+' '+x+' deleted');
+							list2.push({clazz:x,count:list[x]});
+						}
+					}
+					this.lastprofile = list;
+					return list2.sort(function (a,b) {
+						if (a.count > b.count) return -1;
+						else if (a.count < b.count) return 1;
+						return 0;
+					});
+				},
 				handleError: function (err) {
 					this.lastError = err;
 					try {
@@ -1822,5 +1875,11 @@ qx.Class.define('dsislou.MainWindow',{
 				}
 			}
 		});
-	if (/lordofultima\.com/i.test(document.domain)) dsislou.main.getInstance();
+	if (/lordofultima\.com/i.test(document.domain)) {
+		try {
+			dsislou.main.getInstance();
+		} catch (e) {
+			alert(e);
+		}
+	}
 })();
