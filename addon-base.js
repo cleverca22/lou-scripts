@@ -1,4 +1,4 @@
-// @version 9
+// @version 10
 // this script is built from stuff in another repo plus addon-base-in.js
 qx.event.GlobalError.observeMethod(function () {
 
@@ -1764,7 +1764,7 @@ qx.Class.define('dsislou.MainWindow',{
 				qx.event.GlobalError.setErrorHandler(this.handleError,this);
 				var container = this.app.title.reportButton.getLayoutParent();
 				this.label = new qx.ui.form.Button("loading");
-				container._add(this.label,{row:0,column:13});
+				//container._add(this.label,{row:0,column:13});
 				this.lastcount = 0;
 				this.lastprofile = {};
 				//webfrontend.base.Timer.getInstance().addListener("uiTick", this.tick,this);

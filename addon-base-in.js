@@ -18,7 +18,7 @@
 				qx.event.GlobalError.setErrorHandler(this.handleError,this);
 				var container = this.app.title.reportButton.getLayoutParent();
 				this.label = new qx.ui.form.Button("loading");
-				container._add(this.label,{row:0,column:13});
+				//container._add(this.label,{row:0,column:13});
 				this.lastcount = 0;
 				this.lastprofile = {};
 				//webfrontend.base.Timer.getInstance().addListener("uiTick", this.tick,this);
