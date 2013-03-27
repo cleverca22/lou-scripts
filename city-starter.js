@@ -1,4 +1,4 @@
-// @version: 4
+// @version 4
 qx.event.GlobalError.observeMethod(function() {
 qx.Class.define("dsislou.cityStarter",{
 	extend: dsislou.addon,
