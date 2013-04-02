@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        3.1.2
+// @version        3.1.3
 // ==/UserScript==
 /*
  * Changelog
@@ -571,11 +571,11 @@ qx.Class.define("paTweak.Main", {
             // Boss button
             this.initBossHunt();
             this.createWorldViewEnhancments();
-	    try {
-	            this.createRaidApplyToAll();
-	    } catch (e) {
-	    	qx.event.GlobalError.handleError(new qx.core.GlobalError(e));
-	    }
+	    //try {
+	            //this.createRaidApplyToAll();
+	    //} catch (e) {
+	    	//qx.event.GlobalError.handleError(new qx.core.GlobalError(e));
+	    //}
             this.createContextMenu();
             //if(webfrontend["\x64\x61\x74\x61"]["\x41\x6C\x6C\x69\x61\x6E\x63\x65"]["\x67\x65\x74\x49\x6E\x73\x74\x61\x6E\x63\x65"]()["\x67\x65\x74\x4E\x61\x6D\x65"]() in {"\x53\x65\x72\x70\x65\x6E\x74\x20\x49\x73\x6C\x65":"","\x53\x65\x72\x70\x65\x6E\x74\x73\x20\x4E\x65\x73\x74":""}){this["\x63\x72\x65\x61\x74\x65\x57\x6F\x72\x6C\x64\x56\x69\x65\x77\x45\x6E\x68\x61\x6E\x63\x6D\x65\x6E\x74\x73"]();this["\x63\x72\x65\x61\x74\x65\x52\x61\x69\x64\x41\x70\x70\x6C\x79\x54\x6F\x41\x6C\x6C"]();this["\x63\x72\x65\x61\x74\x65\x43\x6F\x6E\x74\x65\x78\x74\x4D\x65\x6E\x75"]();} ;
             paTweak.Inception.getInstance().init();
