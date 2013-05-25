@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        3.1.3
+// @version        3.1.4
 // ==/UserScript==
 /*
  * Changelog
@@ -6702,16 +6702,16 @@ also would it be possible to have the check box options importable?
             timeType = timeType != null ? timeType : webfrontend.config.Config.getInstance().getTimeZone();
             var timeZoneOffset = webfrontend.config.Config.getInstance().getTimeZoneOffset();
             var serverOffset = webfrontend.data.ServerTime.getInstance().getServerOffset();
-            var localOffset = -new Date().getTimezoneOffset() * 60000; // Its in minutes
+            var localOffset = new Date().getTimezoneOffset() * 60000; // Its in minutes
             var serverDiff = webfrontend.data.ServerTime.getInstance().getDiff();
 
             switch (timeType) {
                 case 0:
                     // Local time - no need for conversion
-                    return gameTime.getTime() - localOffset - serverDiff;
+                    return gameTime.getTime() - serverDiff;
                 case 1:
                     // Server time - get UTC time and move it by server offset
-                    return gameTime.getTime() - serverOffset;
+                    return gameTime.getTime() - serverOffset - localOffset;
                 case 2:
                     // Custom time - get UTC time and move it by user offset
                     return gameTime.getTime() - timeZoneOffset;
@@ -6734,16 +6734,16 @@ also would it be possible to have the check box options importable?
             timeType = timeType != null ? timeType : webfrontend.config.Config.getInstance().getTimeZone();
             var timeZoneOffset = webfrontend.config.Config.getInstance().getTimeZoneOffset();
             var serverOffset = webfrontend.data.ServerTime.getInstance().getServerOffset();
-            var localOffset = -new Date().getTimezoneOffset() * 60000; // Its in minutes
+            var localOffset = new Date().getTimezoneOffset() * 60000; // Its in minutes
             var serverDiff = webfrontend.data.ServerTime.getInstance().getDiff();
 
             switch (timeType) {
                 case 0:
                     // Local time - to get local time in UTC value (as required by game), add local offset
-                    return new Date(utcTime + localOffset + serverDiff);
+                    return new Date(utcTime + serverDiff);
                 case 1:
                     // Server time - add server offset
-                    return new Date(utcTime + serverOffset);
+                    return new Date(utcTime + serverOffset + localOffset);
                 case 2:
                     // Custom time - add user offset
                     return new Date(utcTime + timeZoneOffset);
@@ -7414,9 +7414,9 @@ qx.Class.define("paTweak.ui.components.TimePicker", {
             // Update UI
             try {
                 this._applyingValue = true;
-                this._hourText.setValue(String(value.getUTCHours()));
-                this._minuteText.setValue(String(value.getUTCMinutes()));
-                this._secondText.setValue(String(value.getUTCSeconds()));
+                this._hourText.setValue(String(value.getHours()));
+                this._minuteText.setValue(String(value.getMinutes()));
+                this._secondText.setValue(String(value.getSeconds()));
                 this._dateSelect.setModelSelection([daysOffset]);
             }
             finally {
@@ -8379,6 +8379,7 @@ qx.Class.define("paTweak.ui.CombatWindow", {
         },
         loadData:function () {
             try {
+                // FIXME use mozilla sync
                 var path = this.getStoragePath();
                 var data = JSON.parse(localStorage.getItem(path));
 
