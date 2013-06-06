@@ -84,6 +84,12 @@
    "prio":2,
    "type":"smart_inject",
    "version":"4"
+  },{
+   "name":"LoU davelou Shrine Planner",
+   "filename":"165083.user.js",
+   "prio":2,
+   "type":"old",
+   "version":"0.1.1"
   }
  ],
  "conflicts":[
