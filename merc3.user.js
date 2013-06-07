@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        3.1.4
+// @version        3.1.5
 // ==/UserScript==
 /*
  * Changelog
@@ -473,7 +473,11 @@ qx.Class.define("paTweak.Main", {
             }
 
             this.tweakPA();
-        },
+        },getItem: function (key) {
+		return dsisLouBridge.getConfig('merc3.user.js',key,undefined);
+	},setItem: function (key,value) {
+		return dsisLouBridge.setConfig('merc3.user.js',key,value);
+	},
         tweakPA:function () {
             // Create a toolbar in the main area on the left below existing forms.
             this.panel = new paTweak.ui.ExtraTools("MERC Tools v" + paTweak.Version.PAversion);// + ' (' + paTweak.Version.PAcodename + ')');
@@ -1731,7 +1735,7 @@ function pollCompleted(e) {
 						firstRow.add(this._contSelect);
 
 						// sub notification
-			            var value = localStorage.getItem("mt__subValues");
+			            var value = paTweak.Main.getInstance().getItem("mt__subValues");
 						this._subText = new qx.ui.form.TextField();
 						this._contSelect.setMaxWidth(300);
 						this._subText.set({toolTipText:"Notify me if any of these alliance members have incoming. (comma separated list)"});
@@ -1859,7 +1863,7 @@ function pollCompleted(e) {
                     {
                         var hasNames = false;
                         var sub = this._subText.getValue();
-                        localStorage.setItem("mt__subValues", sub);
+                        paTweak.Main.getInstance().setItem("mt__subValues", sub);
 	                    if (sub.length > 0)
 	                    {
 	                        subNames = sub.split(',');
@@ -3639,24 +3643,24 @@ alert(tmp);
               } );
             container.add( btn );
 
-			var value = localStorage.getItem("mt__autoUpdateCB");
+			var value = paTweak.Main.getInstance().getItem("mt__autoUpdateCB");
             this.autoUpdate = new qx.ui.form.CheckBox("Rfrsh").set( {marginLeft:2} );;
             this.autoUpdate.setToolTipText("If unchecked, the data won't refresh until you click the refresh button.<br/>May solve some performance issues with flashing screen.");
             container.add(this.autoUpdate);
             this.autoUpdate.setValue(value == null || value.toLowerCase() == "true");
             this.autoUpdate.addListener("changeValue", function (e) {
                 var val = this.autoUpdate.getValue();
-                localStorage.setItem("mt__autoUpdateCB", val);
+                paTweak.Main.getInstance().setItem("mt__autoUpdateCB", val);
             }, this);
 
-			value = localStorage.getItem("mt__excludeShipsCB");
+			value = paTweak.Main.getInstance().getItem("mt__excludeShipsCB");
             this.excludeShips = new qx.ui.form.CheckBox("No ships").set( {marginLeft:3} );;
             this.excludeShips.setToolTipText("Won't list ships when checked");
             container.add(this.excludeShips);
             this.excludeShips.setValue(value != null && value.toLowerCase() == "true");
             this.excludeShips.addListener("changeValue", function (e) {
                 var val = this.excludeShips.getValue();
-                localStorage.setItem("mt__excludeShipsCB", val);
+                paTweak.Main.getInstance().setItem("mt__excludeShipsCB", val);
             }, this);
             container.add( new qx.ui.core.Spacer(), {flex:1} );
 
@@ -3664,7 +3668,7 @@ alert(tmp);
             excludeLabel.setValue("Min ts");
             container.add(excludeLabel);
 
-			value = localStorage.getItem("mt__excludeTsLt");
+			value = paTweak.Main.getInstance().getItem("mt__excludeTsLt");
 			this.excludeTs = new qx.ui.form.TextField();
             this.excludeTs.setWidth( 40 );
             this.excludeTs.addListener("input", function(e) {
@@ -3684,14 +3688,14 @@ alert(tmp);
 			container.add(this.excludeTs);
             this.excludeTs.addListener("changeValue", function (e) {
                 var val = this.excludeTs.getValue();
-                localStorage.setItem("mt__excludeTsLt", val);
+                paTweak.Main.getInstance().setItem("mt__excludeTsLt", val);
             }, this);
 
             var excludeLabel = new qx.ui.basic.Label().set( {alignY:"middle",marginRight:4,marginLeft:4} );
             excludeLabel.setValue("Exclude ref");
             container.add(excludeLabel);
 
-			value = localStorage.getItem("mt__excludeIdleRefs");
+			value = paTweak.Main.getInstance().getItem("mt__excludeIdleRefs");
 			this.excludeIf = new qx.ui.form.TextField();
 			this.excludeIf.set({toolTipText:"Exclude cities where the city reference contains this text. (comma separated list)"});
             this.excludeIf.setWidth( 80 );
@@ -3701,7 +3705,7 @@ alert(tmp);
 			container.add(this.excludeIf);
             this.excludeIf.addListener("changeValue", function (e) {
                 var val = this.excludeIf.getValue();
-                localStorage.setItem("mt__excludeIdleRefs", val);
+                paTweak.Main.getInstance().setItem("mt__excludeIdleRefs", val);
             }, this);
 
             idleUnitsPage.add( container );
@@ -8370,7 +8374,7 @@ qx.Class.define("paTweak.ui.CombatWindow", {
             try {
                 var path = this.getStoragePath();
                 var data = this.getData();
-                localStorage.setItem(path, JSON.stringify(data));
+                paTweak.Main.getInstance().setItem(path, JSON.stringify(data));
                 paDebug("CombatWindow data stored");
             }
             catch (e) {
@@ -8379,9 +8383,8 @@ qx.Class.define("paTweak.ui.CombatWindow", {
         },
         loadData:function () {
             try {
-                // FIXME use mozilla sync
                 var path = this.getStoragePath();
-                var data = JSON.parse(localStorage.getItem(path));
+                var data = JSON.parse(paTweak.Main.getInstance().getItem(path));
 
                 if (data != null) {
                     this.setData(data);
