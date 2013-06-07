@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        3.1.5
+// @version        3.1.6
 // ==/UserScript==
 /*
  * Changelog
@@ -476,11 +476,7 @@ qx.Class.define("paTweak.Main", {
         },getItem: function (key) {
 		return dsisLouBridge.getConfig('merc3.user.js',key,undefined);
 	},setItem: function (key,value) {
-		try {
-			return dsisLouBridge.setConfig('merc3.user.js',key,value);
-		} catch (e) {
-			alert(e);
-		}
+		return dsisLouBridge.storeConfig('merc3.user.js',key,value);
 	},
         tweakPA:function () {
             // Create a toolbar in the main area on the left below existing forms.
