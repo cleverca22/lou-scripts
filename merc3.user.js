@@ -476,7 +476,11 @@ qx.Class.define("paTweak.Main", {
         },getItem: function (key) {
 		return dsisLouBridge.getConfig('merc3.user.js',key,undefined);
 	},setItem: function (key,value) {
-		return dsisLouBridge.setConfig('merc3.user.js',key,value);
+		try {
+			return dsisLouBridge.setConfig('merc3.user.js',key,value);
+		} catch (e) {
+			alert(e);
+		}
 	},
         tweakPA:function () {
             // Create a toolbar in the main area on the left below existing forms.
