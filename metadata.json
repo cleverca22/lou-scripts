@@ -84,6 +84,12 @@
    "prio":2,
    "type":"smart_inject",
    "version":"4"
+  },{
+   "name":"LoUBBCode extend",
+   "filename":"134067.user.js",
+   "type":"smart_inject",
+   "version":"1.8",
+   "prio":"2"
   }
  ],
  "conflicts":[
