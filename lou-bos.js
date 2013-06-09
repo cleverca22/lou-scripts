@@ -4,7 +4,7 @@
 // @namespace      BoS
 // @author         Urthadar
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.6.2
+// @version        1.6.3
 // @require        http://sizzlemctwizzle.com/updater.php?id=84343&days=1
 // ==/UserScript==
 
@@ -4724,7 +4724,7 @@ qx.Class.define("bos.gui.TradeOrdersPage", {
 		this._tableModel = new qx.ui.table.model.Simple();
 
 		var columnIds = ["id", "cityId", "from", "type", "transport", "state", "start", "end", "position", "target",   
-					"lastUpdated", "resources"];		
+					"lastUpdated", "resources"];
 					
 		this._tableModel.setColumns(bos.Utils.translateArray(columnIds), columnIds);
 
@@ -4746,7 +4746,7 @@ qx.Class.define("bos.gui.TradeOrdersPage", {
 		
 		columnModel.setColumnWidth(3, 64);
 		columnModel.setColumnWidth(4, 70);
-		columnModel.setColumnWidth(5, 70);		
+		columnModel.setColumnWidth(5, 70);
 		
 		columnModel.setColumnWidth(6, 120);
 		columnModel.setColumnWidth(7, 120);
@@ -4907,6 +4907,8 @@ qx.Class.define("bos.gui.TradeOrdersPage", {
 					return tr("transfer");
 				case 3:
 					return tr("minister");
+				case 4:
+					return "mini overflow"; // FIXME, tr
 			}
 
 			return "??? " + type;
@@ -4916,7 +4918,7 @@ qx.Class.define("bos.gui.TradeOrdersPage", {
 				case bos.Const.TRADE_TRANSPORT_CART:
 					return this.tr("tnf:carts");
 				case bos.Const.TRADE_TRANSPORT_SHIP:
-					return this.tr("tnf:ships");
+					return this.tr("tnf:ship");
 			}
 	
 
@@ -5254,7 +5256,7 @@ qx.Class.define("bos.gui.TradeRouteWidget", {
 			container.add(this.ironInput, {
 				row: 5,
 				column: 1
-			});	
+			});
 			
 			container.add(new qx.ui.basic.Label(this.tr("tnf:food")), {
 				row: 6, 
@@ -5265,19 +5267,19 @@ qx.Class.define("bos.gui.TradeRouteWidget", {
 			container.add(this.foodInput, {
 				row: 6,
 				column: 1
-			});	
+			});
 
 			container.add(new qx.ui.basic.Label(tr("transport")), {
 				row: 7, 
 				column : 0
-			});					
+			});
 			this.sbTransport = new qx.ui.form.SelectBox().set({
 				width: selectWidth,
 				height: 28
-			});	
+			});
 			
 			this.sbTransport.add(new qx.ui.form.ListItem(tr("ships then carts"), null, bos.Const.TRADE_TRANSPORT_SHIP_FIRST));
-			this.sbTransport.add(new qx.ui.form.ListItem(tr("carts then ships"), null, bos.Const.TRADE_TRANSPORT_CART_FIRST));							
+			this.sbTransport.add(new qx.ui.form.ListItem(tr("carts then ships"), null, bos.Const.TRADE_TRANSPORT_CART_FIRST));
 			this.sbTransport.add(new qx.ui.form.ListItem(tr("only carts"), null, bos.Const.TRADE_TRANSPORT_CART));
 			this.sbTransport.add(new qx.ui.form.ListItem(tr("only ships"), null, bos.Const.TRADE_TRANSPORT_SHIP));
 			
@@ -5289,11 +5291,11 @@ qx.Class.define("bos.gui.TradeRouteWidget", {
 			container.add(new qx.ui.basic.Label(tr("group")), {
 				row: 8, 
 				column : 0
-			});	
+			});
 			this.sbGroup = new qx.ui.form.SelectBox().set({
 				width: 200,
 				height: 28
-			});	
+			});
 			
 			for (var group = 0; group < 26; group++) {
 				var c = String.fromCharCode(65 + group);
@@ -5302,13 +5304,13 @@ qx.Class.define("bos.gui.TradeRouteWidget", {
 			container.add(this.sbGroup, {
 				row: 8,
 				column: 1
-			});	
+			});
 
 			container.add(new qx.ui.basic.Label(tr("resourceMultiplierNotice")), {
 				row: 9, 
 				column : 0,
 				colSpan: 2
-			});					
+			});
 		
 			return box;
 		}, 

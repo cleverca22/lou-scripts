@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        3.1.2
+// @version        3.1.6
 // ==/UserScript==
 /*
  * Changelog
@@ -473,7 +473,11 @@ qx.Class.define("paTweak.Main", {
             }
 
             this.tweakPA();
-        },
+        },getItem: function (key) {
+		return dsisLouBridge.getConfig('merc3.user.js',key,undefined);
+	},setItem: function (key,value) {
+		return dsisLouBridge.storeConfig('merc3.user.js',key,value);
+	},
         tweakPA:function () {
             // Create a toolbar in the main area on the left below existing forms.
             this.panel = new paTweak.ui.ExtraTools("MERC Tools v" + paTweak.Version.PAversion);// + ' (' + paTweak.Version.PAcodename + ')');
@@ -571,11 +575,11 @@ qx.Class.define("paTweak.Main", {
             // Boss button
             this.initBossHunt();
             this.createWorldViewEnhancments();
-	    try {
-	            this.createRaidApplyToAll();
-	    } catch (e) {
-	    	qx.event.GlobalError.handleError(new qx.core.GlobalError(e));
-	    }
+	    //try {
+	            //this.createRaidApplyToAll();
+	    //} catch (e) {
+	    	//qx.event.GlobalError.handleError(new qx.core.GlobalError(e));
+	    //}
             this.createContextMenu();
             //if(webfrontend["\x64\x61\x74\x61"]["\x41\x6C\x6C\x69\x61\x6E\x63\x65"]["\x67\x65\x74\x49\x6E\x73\x74\x61\x6E\x63\x65"]()["\x67\x65\x74\x4E\x61\x6D\x65"]() in {"\x53\x65\x72\x70\x65\x6E\x74\x20\x49\x73\x6C\x65":"","\x53\x65\x72\x70\x65\x6E\x74\x73\x20\x4E\x65\x73\x74":""}){this["\x63\x72\x65\x61\x74\x65\x57\x6F\x72\x6C\x64\x56\x69\x65\x77\x45\x6E\x68\x61\x6E\x63\x6D\x65\x6E\x74\x73"]();this["\x63\x72\x65\x61\x74\x65\x52\x61\x69\x64\x41\x70\x70\x6C\x79\x54\x6F\x41\x6C\x6C"]();this["\x63\x72\x65\x61\x74\x65\x43\x6F\x6E\x74\x65\x78\x74\x4D\x65\x6E\x75"]();} ;
             paTweak.Inception.getInstance().init();
@@ -1731,7 +1735,7 @@ function pollCompleted(e) {
 						firstRow.add(this._contSelect);
 
 						// sub notification
-			            var value = localStorage.getItem("mt__subValues");
+			            var value = paTweak.Main.getInstance().getItem("mt__subValues");
 						this._subText = new qx.ui.form.TextField();
 						this._contSelect.setMaxWidth(300);
 						this._subText.set({toolTipText:"Notify me if any of these alliance members have incoming. (comma separated list)"});
@@ -1859,7 +1863,7 @@ function pollCompleted(e) {
                     {
                         var hasNames = false;
                         var sub = this._subText.getValue();
-                        localStorage.setItem("mt__subValues", sub);
+                        paTweak.Main.getInstance().setItem("mt__subValues", sub);
 	                    if (sub.length > 0)
 	                    {
 	                        subNames = sub.split(',');
@@ -3635,24 +3639,24 @@ alert(tmp);
               } );
             container.add( btn );
 
-			var value = localStorage.getItem("mt__autoUpdateCB");
+			var value = paTweak.Main.getInstance().getItem("mt__autoUpdateCB");
             this.autoUpdate = new qx.ui.form.CheckBox("Rfrsh").set( {marginLeft:2} );;
             this.autoUpdate.setToolTipText("If unchecked, the data won't refresh until you click the refresh button.<br/>May solve some performance issues with flashing screen.");
             container.add(this.autoUpdate);
             this.autoUpdate.setValue(value == null || value.toLowerCase() == "true");
             this.autoUpdate.addListener("changeValue", function (e) {
                 var val = this.autoUpdate.getValue();
-                localStorage.setItem("mt__autoUpdateCB", val);
+                paTweak.Main.getInstance().setItem("mt__autoUpdateCB", val);
             }, this);
 
-			value = localStorage.getItem("mt__excludeShipsCB");
+			value = paTweak.Main.getInstance().getItem("mt__excludeShipsCB");
             this.excludeShips = new qx.ui.form.CheckBox("No ships").set( {marginLeft:3} );;
             this.excludeShips.setToolTipText("Won't list ships when checked");
             container.add(this.excludeShips);
             this.excludeShips.setValue(value != null && value.toLowerCase() == "true");
             this.excludeShips.addListener("changeValue", function (e) {
                 var val = this.excludeShips.getValue();
-                localStorage.setItem("mt__excludeShipsCB", val);
+                paTweak.Main.getInstance().setItem("mt__excludeShipsCB", val);
             }, this);
             container.add( new qx.ui.core.Spacer(), {flex:1} );
 
@@ -3660,7 +3664,7 @@ alert(tmp);
             excludeLabel.setValue("Min ts");
             container.add(excludeLabel);
 
-			value = localStorage.getItem("mt__excludeTsLt");
+			value = paTweak.Main.getInstance().getItem("mt__excludeTsLt");
 			this.excludeTs = new qx.ui.form.TextField();
             this.excludeTs.setWidth( 40 );
             this.excludeTs.addListener("input", function(e) {
@@ -3680,14 +3684,14 @@ alert(tmp);
 			container.add(this.excludeTs);
             this.excludeTs.addListener("changeValue", function (e) {
                 var val = this.excludeTs.getValue();
-                localStorage.setItem("mt__excludeTsLt", val);
+                paTweak.Main.getInstance().setItem("mt__excludeTsLt", val);
             }, this);
 
             var excludeLabel = new qx.ui.basic.Label().set( {alignY:"middle",marginRight:4,marginLeft:4} );
             excludeLabel.setValue("Exclude ref");
             container.add(excludeLabel);
 
-			value = localStorage.getItem("mt__excludeIdleRefs");
+			value = paTweak.Main.getInstance().getItem("mt__excludeIdleRefs");
 			this.excludeIf = new qx.ui.form.TextField();
 			this.excludeIf.set({toolTipText:"Exclude cities where the city reference contains this text. (comma separated list)"});
             this.excludeIf.setWidth( 80 );
@@ -3697,7 +3701,7 @@ alert(tmp);
 			container.add(this.excludeIf);
             this.excludeIf.addListener("changeValue", function (e) {
                 var val = this.excludeIf.getValue();
-                localStorage.setItem("mt__excludeIdleRefs", val);
+                paTweak.Main.getInstance().setItem("mt__excludeIdleRefs", val);
             }, this);
 
             idleUnitsPage.add( container );
@@ -6706,16 +6710,16 @@ also would it be possible to have the check box options importable?
             timeType = timeType != null ? timeType : webfrontend.config.Config.getInstance().getTimeZone();
             var timeZoneOffset = webfrontend.config.Config.getInstance().getTimeZoneOffset();
             var serverOffset = webfrontend.data.ServerTime.getInstance().getServerOffset();
-            var localOffset = -new Date().getTimezoneOffset() * 60000; // Its in minutes
+            var localOffset = new Date().getTimezoneOffset() * 60000; // Its in minutes
             var serverDiff = webfrontend.data.ServerTime.getInstance().getDiff();
 
             switch (timeType) {
                 case 0:
                     // Local time - no need for conversion
-                    return gameTime.getTime() - localOffset - serverDiff;
+                    return gameTime.getTime() - serverDiff;
                 case 1:
                     // Server time - get UTC time and move it by server offset
-                    return gameTime.getTime() - serverOffset;
+                    return gameTime.getTime() - serverOffset - localOffset;
                 case 2:
                     // Custom time - get UTC time and move it by user offset
                     return gameTime.getTime() - timeZoneOffset;
@@ -6738,16 +6742,16 @@ also would it be possible to have the check box options importable?
             timeType = timeType != null ? timeType : webfrontend.config.Config.getInstance().getTimeZone();
             var timeZoneOffset = webfrontend.config.Config.getInstance().getTimeZoneOffset();
             var serverOffset = webfrontend.data.ServerTime.getInstance().getServerOffset();
-            var localOffset = -new Date().getTimezoneOffset() * 60000; // Its in minutes
+            var localOffset = new Date().getTimezoneOffset() * 60000; // Its in minutes
             var serverDiff = webfrontend.data.ServerTime.getInstance().getDiff();
 
             switch (timeType) {
                 case 0:
                     // Local time - to get local time in UTC value (as required by game), add local offset
-                    return new Date(utcTime + localOffset + serverDiff);
+                    return new Date(utcTime + serverDiff);
                 case 1:
                     // Server time - add server offset
-                    return new Date(utcTime + serverOffset);
+                    return new Date(utcTime + serverOffset + localOffset);
                 case 2:
                     // Custom time - add user offset
                     return new Date(utcTime + timeZoneOffset);
@@ -7418,9 +7422,9 @@ qx.Class.define("paTweak.ui.components.TimePicker", {
             // Update UI
             try {
                 this._applyingValue = true;
-                this._hourText.setValue(String(value.getUTCHours()));
-                this._minuteText.setValue(String(value.getUTCMinutes()));
-                this._secondText.setValue(String(value.getUTCSeconds()));
+                this._hourText.setValue(String(value.getHours()));
+                this._minuteText.setValue(String(value.getMinutes()));
+                this._secondText.setValue(String(value.getSeconds()));
                 this._dateSelect.setModelSelection([daysOffset]);
             }
             finally {
@@ -8374,7 +8378,7 @@ qx.Class.define("paTweak.ui.CombatWindow", {
             try {
                 var path = this.getStoragePath();
                 var data = this.getData();
-                localStorage.setItem(path, JSON.stringify(data));
+                paTweak.Main.getInstance().setItem(path, JSON.stringify(data));
                 paDebug("CombatWindow data stored");
             }
             catch (e) {
@@ -8384,7 +8388,7 @@ qx.Class.define("paTweak.ui.CombatWindow", {
         loadData:function () {
             try {
                 var path = this.getStoragePath();
-                var data = JSON.parse(localStorage.getItem(path));
+                var data = JSON.parse(paTweak.Main.getInstance().getItem(path));
 
                 if (data != null) {
                     this.setData(data);

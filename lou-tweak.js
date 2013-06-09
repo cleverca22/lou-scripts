@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      AmpliDude
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.7.6.1
+// @version        1.7.6.2
 // @grant          GM_log
 // ==/UserScript==
 
@@ -2128,7 +2128,7 @@
 				},
 				loadOptions: function() {
 					forceSave = false;
-					_str = localStorage.getItem("LT_options");
+					_str = dsisLouBridge.getConfig("lou-tweak.js","LT_options");
 					if (_str)
 						this.options = qx.lang.Json.parse(_str);
 					else {
@@ -2234,7 +2234,7 @@
 					this.app.setUserData("LT_options", this.options);
 					if (forceSave) {
 						str = qx.lang.Json.stringify(this.options);
-						localStorage.setItem("LT_options", str);
+						dsisLouBridge.storeConfig("lou-tweak.js","LT_options", str);
 					}
 				},
 				getLang: function() {
@@ -3015,7 +3015,7 @@
 				},
 				saveOptions: function() {
 					str = qx.lang.Json.stringify(LT.options);
-					localStorage.setItem("LT_options", str);
+					dsisLouBridge.storeConfig("lou-tweak.js","LT_options", str);
 					LT.a.switchOverlay(null);
 				},
 				createExpImpWindow: function() {
@@ -3045,7 +3045,7 @@
 							} catch(e) { obj = "error"; }
 							if (typeof obj == "object" && obj != null) {
 								LT.options = qx.lang.Json.parse(txt);
-								localStorage.setItem("LT_options", txt);
+								dsisLouBridge.storeConfig("lou-tweak.js","LT_options", txt);
 								this.close();
 							} else {
 								alert(L("opts").import_invalid);
@@ -3283,7 +3283,7 @@
 					this.errorLabel.setValue("");
 				},
 				loadCityLayouts: function() {
-					_str = localStorage.getItem("LT_cityLayouts");
+					_str = dsisLouBridge.getConfig("lou-tweak.js","LT_cityLayouts");
 					this.cityLayouts = {};
 					this.cityLayouts[this.srvName] = {};
 					if (_str) {
@@ -3293,12 +3293,12 @@
 					}
 				},
 				saveCityLayouts: function() {
-					_str = localStorage.getItem("LT_cityLayouts");
+					_str = dsisLouBridge.getConfig("lou-tweak.js","LT_cityLayouts");
 					if (_str == null) _str = '{"' + this.srvName + '":{}}';
 					_scl = qx.lang.Json.parse(_str);
 					_scl[this.srvName] = this.cityLayouts[this.srvName];
 					_str = qx.lang.Json.stringify(_scl);
-					localStorage.setItem("LT_cityLayouts", _str);
+					dsisLouBridge.storeConfig("lou-tweak.js","LT_cityLayouts", _str);
 				},
 				removeObjects: function() {
 					if (this.oObjs != null) {

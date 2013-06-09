@@ -5,7 +5,7 @@
    "userscript":84343,
    "filename":"lou-bos.js",
    "type":"dumb_inject",
-   "version":"1.6.2"
+   "version":"1.6.3"
   },{
    "name":"LoU MERC Tools 3.0",
    "userscript":152303,
@@ -16,7 +16,7 @@
    "name":"LoU MERC Tools 3.1",
    "filename":"merc3.user.js",
    "type":"smart_inject",
-   "version":"3.1.2",
+   "version":"3.1.6",
    "prio":2,
    "conflicts":[1]
   },{
@@ -24,7 +24,7 @@
    "userscript":80532,
    "filename":"lou-tweak.js",
    "type":"smart_inject",
-   "version":"1.7.6.1"
+   "version":"1.7.6.2"
   },{
    "name":"LoU winter disable",
    "userscript":153096,
@@ -90,6 +90,12 @@
    "type":"smart_inject",
    "version":"1.8",
    "prio":"2"
+  },{
+   "name":"LoU davelou Shrine Planner",
+   "filename":"165083.user.js",
+   "prio":2,
+   "type":"old",
+   "version":"0.1.1"
   }
  ],
  "conflicts":[
