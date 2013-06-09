@@ -3222,15 +3222,11 @@ function pollCompleted(e) {
                     {
                         this.idleUnitsTable.removeDefoConsumer();
                     },
-          interceptSetDungeon: function(bi,bo)
-          {
-	  this.setIsBoss(bo);
-	  this.city = bi;
-	  this.showDungeon(bi);
-	  this.onTick();
-            this.mercRaid.curDungeon = bi;
-            this.mercRaid.addDungeonToRaid( bi );
-          },
+	interceptSetDungeon: function(bi,bo) {
+		this.originalSetDungeon(bi,bo);
+		this.mercRaid.curDungeon = bi;
+		this.mercRaid.addDungeonToRaid( bi );
+	},
           interceptSetCity: function(bT)
           {
             var app = qx.core.Init.getApplication();
