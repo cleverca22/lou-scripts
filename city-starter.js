@@ -114,7 +114,7 @@ qx.Class.define("dsislou.cityStarterWindow",{
 			this.lastChecker.fixit();
 		},
 		label:function (x) {
-			var b = new qx.ui.basic.Label(x+":");
+			var b = new qx.ui.basic.Label((x+1)+":");
 			this.add(b,{row:x,column:0});
 		},makeMsg: function (x) {
 			var b = new qx.ui.basic.Label("loading...");
@@ -128,10 +128,10 @@ qx.Class.define("dsislou.cityStarterWindow",{
 			}
 			for (var x=0; x<this.checks.length; x++) {
 				var checker = this.checkers[x];
-				console.log(x,checker);
+				//console.log(x,checker);
 				if (!checker) checker = this.checkers[x] = new this.checks[x]();
 				var good = checker.check();
-				console.log(good);
+				//console.log(good);
 				if (good) {
 					this.messages[x].setValue(this.checks[x].title+" good");
 					var par = this.button.getLayoutParent();
