@@ -128,10 +128,8 @@ qx.Class.define("dsislou.cityStarterWindow",{
 			}
 			for (var x=0; x<this.checks.length; x++) {
 				var checker = this.checkers[x];
-				console.log(x,checker);
 				if (!checker) checker = this.checkers[x] = new this.checks[x]();
 				var good = checker.check();
-				console.log(good);
 				if (good) {
 					this.messages[x].setValue(this.checks[x].title+" good");
 					var par = this.button.getLayoutParent();
