@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        4.4.1
+// @version        4.4.2
 // ==/UserScript==
 /*
  * Changelog
@@ -2308,7 +2308,7 @@
 						firstRow.add(this._contSelect);
 
 						// sub notification
-						var value = localStorage.getItem("mt__subValues");
+						var value = dsisLouBridge.getConfig("merc3.user.js","mt__subValues");
 						this._subText = new qx.ui.form.TextField();
 						this._contSelect.setMaxWidth(300);
 						this._subText.set({
@@ -2452,7 +2452,7 @@
 					setSub : function() {
 						var hasNames = false;
 						var sub = this._subText.getValue();
-						localStorage.setItem("mt__subValues", sub);
+						dsisLouBridge.storeConfig("merc3.user.js","mt__subValues", sub);
 						if (sub.length > 0) {
 							subNames = sub.split(',');
 							for (var ii = 0; ii < subNames.length; ++ii) {
@@ -4023,7 +4023,7 @@
 						});
 						container.add(btn);
 
-						var value = localStorage.getItem("mt__autoUpdateCB");
+						var value = dsisLouBridge.getConfig("merc3.user.js","mt__autoUpdateCB");
 						this.autoUpdate = new qx.ui.form.CheckBox("Rfrsh").set({
 							marginLeft : 2
 						});
@@ -4033,10 +4033,10 @@
 						this.autoUpdate.setValue(value == null || value.toLowerCase() == "true");
 						this.autoUpdate.addListener("changeValue", function(e) {
 							var val = this.autoUpdate.getValue();
-							localStorage.setItem("mt__autoUpdateCB", val);
+							dsisLouBridge.storeConfig("merc3.user.js","mt__autoUpdateCB", val);
 						}, this);
 
-						value = localStorage.getItem("mt__excludeShipsCB");
+						value = dsisLouBridge.getConfig("merc3.user.js","mt__excludeShipsCB");
 						this.excludeShips = new qx.ui.form.CheckBox("No ships").set({
 							marginLeft : 3
 						});
@@ -4046,7 +4046,7 @@
 						this.excludeShips.setValue(value != null && value.toLowerCase() == "true");
 						this.excludeShips.addListener("changeValue", function(e) {
 							var val = this.excludeShips.getValue();
-							localStorage.setItem("mt__excludeShipsCB", val);
+							dsisLouBridge.storeConfig("merc3.user.js","mt__excludeShipsCB", val);
 						}, this);
 						container.add(new qx.ui.core.Spacer(), {
 							flex : 1
@@ -4060,7 +4060,7 @@
 						excludeLabel.setValue("Min ts");
 						container.add(excludeLabel);
 
-						value = localStorage.getItem("mt__excludeTsLt");
+						value = dsisLouBridge.getConfig("merc3.user.js","mt__excludeTsLt");
 						this.excludeTs = new qx.ui.form.TextField();
 						this.excludeTs.setWidth(40);
 						this.excludeTs.addListener("input", function(e) {
@@ -4081,7 +4081,7 @@
 						container.add(this.excludeTs);
 						this.excludeTs.addListener("changeValue", function(e) {
 							var val = this.excludeTs.getValue();
-							localStorage.setItem("mt__excludeTsLt", val);
+							dsisLouBridge.storeConfig("merc3.user.js","mt__excludeTsLt", val);
 						}, this);
 
 						var excludeLabel = new qx.ui.basic.Label().set({
@@ -4092,7 +4092,7 @@
 						excludeLabel.setValue("Exclude ref");
 						container.add(excludeLabel);
 
-						value = localStorage.getItem("mt__excludeIdleRefs");
+						value = dsisLouBridge.getConfig("merc3.user.js","mt__excludeIdleRefs");
 						this.excludeIf = new qx.ui.form.TextField();
 						this.excludeIf.set({
 							toolTipText : "Exclude cities where the city reference contains this text. (comma separated list)"
@@ -4104,7 +4104,7 @@
 						container.add(this.excludeIf);
 						this.excludeIf.addListener("changeValue", function(e) {
 							var val = this.excludeIf.getValue();
-							localStorage.setItem("mt__excludeIdleRefs", val);
+							dsisLouBridge.storeConfig("merc3.user.js","mt__excludeIdleRefs", val);
 						}, this);
 
 						idleUnitsPage.add(container);
@@ -9793,7 +9793,7 @@ try{
 						try {
 							var path = this.getStoragePath();
 							var data = this.getData();
-							localStorage.setItem(path, JSON.stringify(data));
+							dsisLouBridge.storeConfig("merc3.user.js",path, JSON.stringify(data));
 							paDebug("CombatWindow data stored");
 						} catch (e) {
 							paDebug("Unable to load CombatWindow data: " + e);
@@ -9802,7 +9802,7 @@ try{
 					loadData : function() {
 						try {
 							var path = this.getStoragePath();
-							var data = JSON.parse(localStorage.getItem(path));
+							var data = JSON.parse(dsisLouBridge.getConfig("merc3.user.js",path));
 
 							if (data != null) {
 								this.setData(data);
