@@ -103,6 +103,12 @@
    "version":"4.4.1",
    "prio":2,
    "conflicts":[1]
+  },{
+   "name":"(untested) CityHelp 2.2.6",
+   "filename":"CityHelp 2.2.6.user.js",
+   "type":"smart_inject",
+   "version":"2.2.6",
+   "prio":2
   }
  ],
  "conflicts":[
