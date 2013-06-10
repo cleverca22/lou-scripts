@@ -96,6 +96,13 @@
    "prio":2,
    "type":"old",
    "version":"0.1.1"
+  },{
+   "name":"(untested) MERC Tools 4.4",
+   "filename":"merc4.user.js",
+   "type":"smart_inject",
+   "version":"4.4",
+   "prio":2,
+   "conflicts":[1]
   }
  ],
  "conflicts":[
