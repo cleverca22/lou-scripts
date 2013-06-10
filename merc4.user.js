@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        4.4
+// @version        4.4.1
 // ==/UserScript==
 /*
  * Changelog
@@ -843,7 +843,7 @@
 							allianceBtn.addListener("execute", function() {
 								webfrontend.data.Chat.getInstance().addMsg("/whisper MercBot !alliance," + aip.getWndParent()._data.sName);
 							});
-							aip._btnEditDiplomacy.$$parent.addAfter(row, aip._btnEditDiplomacy); // FIXED
+							// FIXME aip._btnEditDiplomacy.$$parent.addAfter(row, aip._btnEditDiplomacy); // FIXED
 							
 							//var cip = app.getCityInfoPage();
 							var pip = app.getPlayerInfoPage();
