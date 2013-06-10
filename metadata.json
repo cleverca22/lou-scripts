@@ -24,6 +24,7 @@
    "userscript":80532,
    "filename":"lou-tweak.js",
    "type":"smart_inject",
+   "prio":2,
    "version":"1.7.6.2"
   },{
    "name":"LoU winter disable",
