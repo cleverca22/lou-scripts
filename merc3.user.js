@@ -3226,15 +3226,11 @@ function pollCompleted(e) {
                     {
                         this.idleUnitsTable.removeDefoConsumer();
                     },
-          interceptSetDungeon: function(bi,bo)
-          {
-	  this.setIsBoss(bo);
-	  this.city = bi;
-	  this.showDungeon(bi);
-	  this.onTick();
-            this.mercRaid.curDungeon = bi;
-            this.mercRaid.addDungeonToRaid( bi );
-          },
+	interceptSetDungeon: function(bi,bo) {
+		this.originalSetDungeon(bi,bo);
+		this.mercRaid.curDungeon = bi;
+		this.mercRaid.addDungeonToRaid( bi );
+	},
           interceptSetCity: function(bT)
           {
             var app = qx.core.Init.getApplication();
@@ -3899,8 +3895,14 @@ alert(tmp);
             
             return pvpPage;
           },
-          createDungeonPage: function()
-          {
+          createDungeonPage: function() {
+		{
+			var dungeons = webfrontend.res.Main.getInstance().dungeons;
+			for (x in dungeons) {
+				var dunlist = dungeons[x];
+				//console.log(x,dunlist.length);
+			}
+		}
             var dungeonPage = new qx.ui.tabview.Page( "Dungeons" );
             dungeonPage.setLayout( new qx.ui.layout.Dock );
 
@@ -5337,9 +5339,11 @@ function waitForItem()
 			        returnRaidsBy:function () 
 					{
 			            var combatTools = paTweak.CombatTools;
+						// time in gmt
 						var returnBy = this._returnTime.getValue().getTime();
 						var st = webfrontend.data.ServerTime.getInstance();
 						var serverStep = st.getServerStep();
+						// time in server-time
 						var gameNow = webfrontend.Util.getCurrentTime().getTime();
 						var delta = Math.floor((returnBy - gameNow)/1000) + 1;
 						returnBy = serverStep + delta;

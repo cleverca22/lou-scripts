@@ -55,7 +55,7 @@
    "filename":"addon-base.js",
    "prio":1,
    "type":"smart_inject",
-   "version":"10",
+   "version":"11",
    "default":true
   },{
    "name":"LoU davelou TM Assist",
@@ -84,6 +84,12 @@
    "prio":2,
    "type":"smart_inject",
    "version":"4"
+  },{
+   "name":"LoUBBCode extend",
+   "filename":"134067.user.js",
+   "type":"smart_inject",
+   "version":"1.8",
+   "prio":"2"
   },{
    "name":"LoU davelou Shrine Planner",
    "filename":"165083.user.js",

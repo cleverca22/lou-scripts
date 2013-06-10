@@ -1,4 +1,4 @@
-// @version 10
+// @version 11
 // this script is built from stuff in another repo plus addon-base-in.js
 qx.event.GlobalError.observeMethod(function () {
 
@@ -1667,7 +1667,7 @@ qx.Class.define("dsislou.Scripts",{
 		},checkForUpdates: function (cb) {
 			dsisLouBridge.checkForUpdates(cb);
 		},setScriptEnabled: function (name,enabled) {
-			dsisLouBridge.setScriptEnabled(name,enabled);
+			dsisLouBridge.setScriptEnabled(name,enabled,true);
 		}
 	},
 	properties:{

@@ -114,7 +114,7 @@ qx.Class.define("dsislou.cityStarterWindow",{
 			this.lastChecker.fixit();
 		},
 		label:function (x) {
-			var b = new qx.ui.basic.Label(x+":");
+			var b = new qx.ui.basic.Label((x+1)+":");
 			this.add(b,{row:x,column:0});
 		},makeMsg: function (x) {
 			var b = new qx.ui.basic.Label("loading...");
