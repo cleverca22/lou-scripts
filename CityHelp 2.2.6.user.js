@@ -1,15 +1,12 @@
 // ==UserScript==
 // @name           CityHelp GUI
 // @namespace      CityHelpGUI
-// @version        2.2.6
+// @version        2.2.6.1
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
 // ==/UserScript==
 
 (
     function () {
-
-        var CH_mainfunction = function () {
-
             function createCtTweak() {
                 qx.Class.define("CityHelper.main", {
                     type: "singleton",
@@ -8489,46 +8486,8 @@
                     }
                 });
             }
-
-            function CH_checkIfLoaded() {
-                try {
-                    if (typeof qx != 'undefined') {
-                        a = qx.core.Init.getApplication();
-                        c = a.cityInfoView;
-                        ch = a.chat;
-                        wdst = webfrontend.data.ServerTime.getInstance().refTime;
-                        if (a && c && ch && wdst) {
-                            createCtTweak();
-                            window.CityHelper.main.getInstance().initialize();
-                        } else
-                            window.setTimeout(CH_checkIfLoaded, 1000);
-                    } else {
-                        window.setTimeout(CH_checkIfLoaded, 1000);
-                    }
-                } catch (e) {
-                    console.log(e);
-                }
-            }
-
-            if (/lordofultima\.com/i.test(document.domain))
-                window.setTimeout(CH_checkIfLoaded, 1000);
-
-        }
-        // injecting, because there seem to be problems when creating game interface with unsafeWindow
-        window.setTimeout(injectDarklightScript, 15000);
-
-        function injectDarklightScript() {
-            console.log("Injecting CityHelper GUI");
-
-            var CityHelperScript = document.createElement("script");
-            txt = CH_mainfunction.toString();
-            if (window.opera != undefined)
-                txt = txt.replace(/</g, "&lt;"); // rofl Opera
-            CityHelperScript.innerHTML = "(" + txt + ")();";
-            CityHelperScript.type = "text/javascript";
-            document.getElementsByTagName("head")[0].appendChild(CityHelperScript);
-            console.log("CityHelper GUI Injected");
-
-        }
-
-    })();
+	if (/lordofultima\.com/i.test(document.domain)) {
+		createCtTweak();
+		window.CityHelper.main.getInstance().initialize();
+	}
+})();
