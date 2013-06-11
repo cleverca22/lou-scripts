@@ -109,7 +109,7 @@
    "filename":"CityHelp2.2.6.user.js",
    "type":"smart_inject",
    "version":"2.2.6.1",
-   "prio":2
+   "prio":3
   }
  ],
  "conflicts":[
