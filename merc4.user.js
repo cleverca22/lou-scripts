@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        4.4.2
+// @version        4.4.3
 // ==/UserScript==
 /*
  * Changelog
@@ -11208,20 +11208,7 @@ try{
 		}
 	}
 
-	/* inject this script into the website */
-	function inject() {
-		paDebug('Injecting Maddock\'s script');
-		var script = document.createElement("script");
-		txt = main.toString();
-		if (window.opera != undefined)
-			txt = txt.replace(/</g, "&lt;");
-		script.innerHTML = "(" + txt + ")();";
-		script.type = "text/javascript";
-		document.getElementsByTagName("head")[0].appendChild(script);
-	}
-
-	if (/lordofultima\.com/i.test(document.domain))
-		inject();
+	if (/lordofultima\.com/i.test(document.domain)) main();
 
 })();
 
