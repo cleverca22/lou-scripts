@@ -106,7 +106,7 @@
    "conflicts":[1]
   },{
    "name":"(untested) CityHelp 2.2.6",
-   "filename":"CityHelp 2.2.6.user.js",
+   "filename":"CityHelp2.2.6.user.js",
    "type":"smart_inject",
    "version":"2.2.6.1",
    "prio":2
