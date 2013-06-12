@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           CityHelp GUI
 // @namespace      CityHelpGUI
-// @version        2.2.6.1
+// @version        2.2.6.2
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
 // ==/UserScript==
 
@@ -3578,7 +3578,7 @@
                                         var c;
                                         var ss;
                                         var cequal = true;
-                                        if (_LT.main.layoutWindow.cityLayouts[srvName].hasOwnProperty(cId)) {
+                                        if (_LT && _LT.main.layoutWindow.cityLayouts[srvName].hasOwnProperty(cId)) {
                                             ss = _LT.main.layoutWindow.cityLayouts[srvName][cId];
                                             c = this.layout.city;
                                             for (i = 0; i < 441; i++) {
