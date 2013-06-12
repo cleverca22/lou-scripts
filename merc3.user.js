@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        3.1.6
+// @version        3.1.7
 // ==/UserScript==
 /*
  * Changelog
@@ -1200,8 +1200,10 @@ qx.Class.define("paTweak.Main", {
             members: {
               init: function () {
                 qx.core.Init.getApplication().chat._outputMsg = this.outputMsgIntercept;
-                webfrontend.gui.Util._convertBBCode = webfrontend.gui.Util.convertBBCode;
-                webfrontend.gui.Util.convertBBCode = this.convertBBCode;
+		if (!webfrontend.gui.Util._convertBBCode) {
+                  webfrontend.gui.Util._convertBBCode = webfrontend.gui.Util.convertBBCode;
+                  webfrontend.gui.Util.convertBBCode = this.convertBBCode;
+		}
               },
               convertBBCode: function (pq, pr, ps) {
                 // place for various custom BBCodes
