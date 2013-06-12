@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           CityHelp GUI
 // @namespace      CityHelpGUI
-// @version        2.2.6.2
+// @version        2.2.6.3
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
 // ==/UserScript==
 
@@ -259,6 +259,7 @@
                             this.COTable.exclude();
 
                             this.distUpdating = false;
+                            this.ticks = 0;
                         },
                         loadOptions: function (reset) {
                             forceSave = false;
@@ -3260,13 +3261,15 @@
 
                         },
                         update: function () {
+                            this.ticks++;
+                            if (this.ticks > 20) this.ticks = 0;
+                            else return;
                             this.updateButtons();
                             //if (this.buildRoundActive == false) {
                             this.updateDistance();
                             //};
                             this.COUpdate();
                             //this.Updatetimer.start(this.update, null, this, null, 1000);
-
                         },
                         updateDistance: function () {
                             var resMain = webfrontend.res.Main.getInstance();
