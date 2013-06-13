@@ -58,7 +58,7 @@
    "prio":2,
    "type":"smart_inject",
    "userscript":158345,
-   "version":"0.3.3"
+   "version":"0.3.4"
   },{
    "name":"LoU davelou Raid Assistant",
    "filename":"154016.user.js",

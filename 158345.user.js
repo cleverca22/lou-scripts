@@ -3,7 +3,7 @@
 // @description    Trade Minister utility
 // @namespace      davelou
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        0.3.3
+// @version        0.3.4
 // ==/UserScript==
 
 (function() {
@@ -120,6 +120,7 @@
 			},
 			p: function(){
 				dsisLouBridge.storeConfig('tm_assist.js','config',JSON.stringify(this.o));
+			},
 			v: function () {
 				var j = dsisLouBridge.getConfig('tm_assist.js','config');
 				if (j) return JSON.parse(j);
