@@ -7,16 +7,10 @@
    "type":"dumb_inject",
    "version":"1.6.3"
   },{
-   "name":"LoU MERC Tools 3.0",
-   "userscript":152303,
-   "filename":"lou-merc.js",
-   "type":"old",
-   "version":"3.0.1"
-  },{
    "name":"LoU MERC Tools 3.1",
    "filename":"merc3.user.js",
    "type":"smart_inject",
-   "version":"3.1.7",
+   "version":"3.1.8",
    "prio":2,
    "conflicts":[1]
   },{
@@ -101,7 +95,7 @@
    "name":"(untested) MERC Tools 4.4",
    "filename":"merc4.user.js",
    "type":"smart_inject",
-   "version":"4.4.3",
+   "version":"4.4.4",
    "prio":2,
    "conflicts":[1]
   },{

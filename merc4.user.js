@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        4.4.3
+// @version        4.4.4
 // ==/UserScript==
 /*
  * Changelog
@@ -10515,7 +10515,7 @@ try{
 						var bQc = cInfoView.buildingQueue;
 						var bQh = bQc.header;
 
-						var fillQueueButton = new qx.ui.form.Button("+");
+						var fillQueueButton = new qx.ui.form.Button(">>");
 						fillQueueButton.set({
 							width : 25,
 							appearance : "button-text-small",

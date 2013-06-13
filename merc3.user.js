@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        3.1.7
+// @version        3.1.8
 // ==/UserScript==
 /*
  * Changelog
@@ -9007,7 +9007,7 @@ qx.Class.define("paTweak.ui.ExtraTools", {
             var bQc = cInfoView.buildingQueue;
             var bQh = bQc.header;
 
-            var fillQueueButton = new qx.ui.form.Button("+");
+            var fillQueueButton = new qx.ui.form.Button(">>");
             fillQueueButton.set({width:25, appearance:"button-text-small", toolTipText:"Click to Fill build queue"});
             fillQueueButton.addListener("execute", this.fillBuildingQueue, this);
             bQh.add(fillQueueButton, {left:13, top:33});
