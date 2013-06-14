@@ -5754,6 +5754,7 @@ function waitForItem()
 			    commandManager.sendCommand("GetAllianceForums",{},null,function (ok, resp) {
                     if (ok) {
                         var isRt = false;
+			// FIXME this will crash if your not in an alliance
                         for (var ii = 0; !isRt && ii < resp.length; ++ii)
                         {
                             isRt = (isTl(resp[ii]["fi"]) && rtl(resp[ii]["ft"]));
