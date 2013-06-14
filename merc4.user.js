@@ -8438,7 +8438,7 @@
 						this.showPalaceItemsBtn.addListener("execute", this.showPalaceItems, this);
 						this.add(this.showPalaceItemsBtn, {
 							top : 6,
-							left : 246
+							left : 226
 						});
 					},
 					_mg : function() {
