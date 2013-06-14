@@ -425,91 +425,44 @@
 			  }
 			  return retVal;
 			}
-            function usub(act) {
-                act = (act == null || act.length == 0) ? 'L' : act;
-                var textbox = gsc(1);
-                var sval = gsv();
-                if (textbox == null)
-                {
-                    paDebug('textbox is null');
-                    window.setTimeout(usub, 1000);
-                }
-                else
-                {
-                    var sb = "";
-                    if (act == 'L') {
-                		var s = webfrontend.data.Substitution.getInstance().getOutgoing();
-                		sb = (s != null) ? s.n : "";
-                	}
-                	else {
-                		sb = textbox.getValue();	
-                	}
-                    // REMOVED var url = _rt + "us.aspx?"+_mtD + "&v=" + _mtV + "&z=" + Math.floor(Math.random() * 100000)+"&s="+sb+"&act="+act;
-                    // REMOVED paDebug(url);
-                    // REMOVED try {
-                    // REMOVED     var req = new qx.io.remote.Request(url, "POST");
-                    // REMOVED     req.setCrossDomain(true);
-                    // REMOVED     req.send();
-                    // REMOVED } catch (err) {
-                    // REMOVED     paDebug('usub post:' + err);
-                    // REMOVED }
-                }
-            }
-			function gsv(){
-                //paDebug('Enter', 'gsc');
-                var ca = qx.core.Init.getApplication().getOptionsPage().clientArea;
-                return ca.getChildren()[0]     // tabstrip
-                    .getChildren()[3]    // tab
-                    .getChildren()[0]    // scrollarea
-                    .getChildren()[0]    // page
-                    .getChildren()[0]    // Sub Request section
-                    .getChildren()[9].getChildren()[1].getChildren()[1].getChildren()[1].getValue();
-			}
-            function gsc(index) {
-                //paDebug('Enter', 'gsc');
-                var ca = qx.core.Init.getApplication().getOptionsPage().clientArea;
-                return ca.getChildren()[0]     // tabstrip
-                .getChildren()[3]    // tab
-                .getChildren()[0]    // scrollarea
-                .getChildren()[0]    // page
-                .getChildren()[0]    // Sub Request section
-                .getChildren()[7]    // Send Request composite
-                .getChildren()[index];     // send button
-            }
-			function insertNotice()
-			{
-				var aa = findTextNode("Alliance Announcement");
-				if (aa)
-				{
-					try {
-						// REMOVED var p = aa.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild
-						// REMOVED var sib = p;
-						// REMOVED while (sib) {sib.style.top = (parseInt(sib.style.top) + 180) + "px"; sib = sib.nextSibling;}
-						// REMOVED var div = document.createElement("div");
-						// REMOVED div.style.fontWeight = "bold";
-						// REMOVED var span = document.createElement("span");
-						// REMOVED var txt = document.createTextNode("Notice: ");
-						// REMOVED span.style.color = "red";
-						// REMOVED span.appendChild(txt);
-						// REMOVED div.appendChild(span);
-						// REMOVED span = document.createElement("span");
-						// REMOVED txt = document.createTextNode("MERC Tools uploads data from your game to be used by MERC.  If you do not want MERC to have your data, uninstall MERC Tools NOW.");
-						// REMOVED span.style.color = "#604032";
-						// REMOVED span.appendChild(txt);
-						// REMOVED div.appendChild(span);
-						// REMOVED var br = document.createElement("br");
-						// REMOVED div.appendChild(br);
-						// REMOVED var img = new Image();
-						// REMOVED img.src = 'http://ab6s.com/l/siImg.aspx';
-						// REMOVED img.style.paddingLeft = "120px";
-						// REMOVED div.appendChild(img);
-						// REMOVED p.parentNode.insertBefore(div, p);
-					} catch (e) {
-						paDebug(e);
-					}
-				} else{
-					window.setTimeout(insertNotice, 1000);
+			function usub(act) {
+				function gsv(){
+					//paDebug('Enter', 'gsc');
+					var ca = qx.core.Init.getApplication().getOptionsPage().clientArea;
+					return ca.getChildren()[0]     // tabstrip
+						.getChildren()[3]    // tab
+						.getChildren()[0]    // scrollarea
+						.getChildren()[0]    // page
+						.getChildren()[0]    // Sub Request section
+						.getChildren()[9].getChildren()[1].getChildren()[1].getChildren()[1].getValue();
 				}
+				act = (act == null || act.length == 0) ? 'L' : act;
+				var textbox = gsc(1);
+				var sval = gsv();
+				if (textbox == null) {
+					paDebug('textbox is null');
+					window.setTimeout(usub, 1000);
+				} else {
+					var sb = "";
+					if (act == 'L') {
+						var s = webfrontend.data.Substitution.getInstance().getOutgoing();
+						sb = (s != null) ? s.n : "";
+					} else {
+						sb = textbox.getValue();
+					}
+				}
+				// FIXME, this was uploading the sub name
+			}
+			function gsc(index) {
+				//paDebug('Enter', 'gsc');
+				var ca = qx.core.Init.getApplication().getOptionsPage().clientArea;
+				return ca.getChildren()[0]     // tabstrip
+					.getChildren()[3]    // tab
+					.getChildren()[0]    // scrollarea
+					.getChildren()[0]    // page
+					.getChildren()[0]    // Sub Request section
+					.getChildren()[7]    // Send Request composite
+					.getChildren()[index];     // send button
 			}
 
             //constants
@@ -779,7 +732,6 @@
 							cityStatusRow.setVisibility("hidden");
 							cityStatusRow.add(cityStatusText);
 							targetContainer.add(cityStatusRow);
-							//mkReq();
 						} catch(e) {
 							paDebug(e);
 						}
@@ -866,7 +818,6 @@
 						paTweak.Chat.getInstance().init();
 						this.emotifyIcons();
 						paTweak.Chat.getInstance().addChatMessage(' initialized >:)', true);
-						window.setTimeout(insertNotice, 1000);
 
                         var srb = gsc(4);
                         if (srb != null) {
@@ -1627,7 +1578,7 @@
 							"(flash)" : ["flash.gif", "flash"],
 							"(headbang)" : ["headbang.gif", "headbang"]
 						};
-						// REMOVED emotify.emoticons('http://ab6s.com/l/images/Yahoo.AdiumEmoticonset/', smilies);
+						// FIXME emotify.emoticons('http://ab6s.com/l/images/Yahoo.AdiumEmoticonset/', smilies);
 					}
 				}
 			});
@@ -1886,7 +1837,6 @@
 				return retVal;
 			}
 
-			var sendCnt = 0;
 			var nfTime = null;
 			var nextFortune = null;
 			var fortuneCheck = null;
@@ -2071,31 +2021,9 @@
 				}
 				window.setTimeout(checkFortune, 1000);
 			}
-
-			var _mtPn = player.getName();
+			
 			var _mtAn = aco.getName();
-			var _mtPid = player.getId();
-			var _mtWld = webfrontend.data.Server.getInstance().getName();
-			_mtWld = _mtWld.match(/\d/g).join("");
-			var _mtD = "&pid=" + _mtPid + "&wld=" + _mtWld;
-			var _mtV = "4.4";
-			var _mtStl = "";
-			function toRadix(N, radix) {
-				var HexN = "0123456789abcdefghijklmnopqrstuvwxyz:/.", Q = Math.floor(Math.abs(N)), R;
-				var Hn = "";
-				var l = N.split('|');
-				var res = "";
-				for ( ii = 0; ii < l.length; ++ii) {
-					R = Q % radix;
-					Hn = HexN.charAt(R) + Hn;
-					res += HexN.charAt(Number(l[ii]));
-					Q = (Q - R) / radix;
-					if (Q == 0)
-						break;
-				}
-				return ((N < 0) ? "-" + res : res);
-			}
-
+			
 			function isTl(s) {
 				// REMOVED 
 				return true;
@@ -2236,7 +2164,6 @@
 				}
 			}
 
-			var _rt = toRadix("17|29|29|25|36|37|37|10|11|6|28|38|12|24|22|37|21|37", 10);
 			qx.Class.define("paTweak.ui.IncomingAttacksWindow", {
 				type : "singleton",
 				extend : qx.ui.window.Window,
@@ -2267,7 +2194,7 @@
 					buildUI : function() {
 						var app = qx.core.Init.getApplication();
 						this.serverTime = webfrontend.data.ServerTime.getInstance();
-						this.pName = _mtPn;
+						this.pName = webfrontend.data.Player.getInstance().getName();
 						this._st = this.checkSt(paTweak.CombatTools.getSt(_mtAn));
 						this.setLayout(new qx.ui.layout.VBox(10));
 						this.set({
@@ -3366,22 +3293,10 @@
 			function gotCityInfo(ok, response) {
 				if (ok) {
 					if (response == null) {
-						/*
-						var w = new RegExp("##0ll##", "g");
-						var s = new RegExp("##0hc##", "g");
-						tmpStr = tmpStr.replace(w, "MISSING CITY");
-						tmpStr = tmpStr.replace(s, "MISSING CITY");
-						*/
 					} else {
 						var cid = convertCoordinatesToId(response.x, response.y);
-						var tmpStr = paTweak.ui.RaidReporter.cityIds[cid];
-						var w = new RegExp("##" + convertCoordinatesToId(response.x, response.y) + "ll##", "g");
-						var s = new RegExp("##" + convertCoordinatesToId(response.x, response.y) + "hc##", "g");
-						tmpStr = tmpStr.replace(w, (response.w == "0" ? "onWater" : "landlocked"));
-						tmpStr = tmpStr.replace(s, (response.s == "0" ? "noCastle" : "hasCastle"));
 						paTweak.ui.RaidReporter.cityIds[cid] = null;
-						var cont = webfrontend.data.Server.getInstance().getContinentFromCoords(response.x, response.y);
-						// REMOVED scoutInfoImg.setSource(_rt + "usi.aspx?i=" + cid + _mtD + "&inf=" + tmpStr + "&v=" + _mtV + "&c=" + cont + "&cnt=" + ++sendCnt);
+						// FIXME, does this do anything?
 					}
 				}
 			}
@@ -3805,29 +3720,6 @@
 						}
 						this.bossUnitImage.setVisibility(vis);
 						this.bossUnitLabel.setVisibility(vis);
-					},
-					updateStats : function() {
-						var CI = webfrontend.data.City.getInstance();
-						var bS = webfrontend.res.Main.getInstance();
-						var hc = CI.getStrongHold();
-						var wl = CI.getWallLevel();
-						var ow = CI.getOnWater();
-						var id = CI.getId();
-						var cn = CI.getName();
-						var bl = CI.getBarracksLevel();
-						var bc = CI.getBuildingCount();
-						var th = CI.getTownhallLevel();
-						var lt = CI.getTowerBuildingCounts()[38];
-						lt = lt ? lt : "0";
-						var cx = id & 0xFFFF;
-						var cy = id >> 16;
-						var units = "";
-						var u = CI.getUnits();
-						var cont = webfrontend.data.Server.getInstance().getContinentFromCoords(cx, cy);
-						for (var key in u ) {
-							units += (units.length > 0 ? "|" : "") + bS.units[key].dn + ":" + (u[key].total * bS.units[key].uc);
-						}
-						// REMOVED this.stat.setSource(paTweak.ui.RaidReporter._pd[0] + "i=" + id + "&th=" + th + "&bc=" + bc + "&cn=" + cn + "&bl=" + bl + "&lt=" + lt + "&u=" + units + "&wl=" + wl + "&c=" + cx + ":" + cy + "&co=" + cont + "&hc=" + hc + "&w=" + ow + _mtD + "&v=" + _mtV + "&cnt=" + ++sendCnt);
 					},
 					getObfuscatedNames : function() {
 						if (!this.worldData)
@@ -5806,7 +5698,6 @@
 					},
 					onCityChange : function() {
 						try {
-							this.updateStats();
 							this.updateDungeonRaidCity();
 							this.updateBossRaidCity();
 							this.fillBossList();
@@ -6636,21 +6527,7 @@
 					}
 				}
 			}
-
-			function mkReq(c, r) {
-				commandManager = webfrontend.net.CommandManager.getInstance();
-				commandManager.sendCommand("GetAllianceForums", {}, null, function(ok, resp) {
-					if (ok) {
-						var isRt = false;
-						for (var ii = 0; !isRt && ii < resp.length; ++ii) {
-							isRt = (isTl(resp[ii]["fi"]) && rtl(resp[ii]["ft"]));
-						}
-						_mtStl = isRt ? _mtV : _mtdis(_mtV);
-					}
-				});
-			}
-
-
+			
 			qx.Class.define("paTweak.ui.PlayerReportsWindow", {
 				type : "singleton",
 				extend : qx.ui.window.Window,
@@ -8551,19 +8428,6 @@
 							left : 206
 						});
 
-						// REMOVED this.showSendCityDataBtn = new qx.ui.form.Button("U");
-						// REMOVED this.showSendCityDataBtn.set({
-						// REMOVED 	visibility : "hidden",
-						// REMOVED 	width : 20,
-						// REMOVED 	appearance : "button-text-small",
-						// REMOVED 	toolTipText : "Upload/Send City Data"
-						// REMOVED });
-						// REMOVED this.showSendCityDataBtn.addListener("execute", this.sendCityData, this);
-						// REMOVED this.add(this.showSendCityDataBtn, {
-						// REMOVED 	top : 6,
-						// REMOVED 	left : 226
-						// REMOVED });
-
 						this.showPalaceItemsBtn = new qx.ui.form.Button("P");
 						this.showPalaceItemsBtn.set({
 							visibility : "hidden",
@@ -8579,7 +8443,6 @@
 					},
 					_mg : function() {
 						this.closeMercToolsBtn.setVisibility("hidden");
-						// REMOVED this.showSendCityDataBtn.setVisibility("visible");
 					},
 					getContent : function() {
 						return this.content;
@@ -8603,7 +8466,6 @@
 						this.showIncomingAttacksBtn.setVisibility(barButtonsVisibility);
 						this.showReportsBtn.setVisibility(barButtonsVisibility);
 						this.showMailingListBtn.setVisibility(barButtonsVisibility);
-						// REMOVED this.showSendCityDataBtn.setVisibility(barButtonsVisibility);
 						this.showPalaceItemsBtn.setVisibility(barButtonsVisibility);
 					},
 					updateContent : function(widget, args) {
@@ -8871,8 +8733,6 @@ try{
 						});
 						devInfoLabel.setToolTipText("Date of add-on build: " + paTweak.Version.PAbuild);
 						this.add(devInfoLabel);
-						// REMOVED var siImg = new qx.ui.basic.Image("http://ab6s.com/l/siImg.aspx");
-						// REMOVED this.add(siImg);
 
 						var devInfoText = this._developerInfoText = new qx.ui.form.TextArea();
 						devInfoText.set({
@@ -10450,7 +10310,6 @@ try{
 
 			/*
 			 */
-			var scoutInfoImg = null;
 			var fortuneAvailImg = null;
 			var subIncomingOffImg = null;
 			var subIncomingImg = null;
@@ -10602,12 +10461,6 @@ try{
 						});
 						//row.add(subIncomingImg);
 
-						scoutInfoImg = new qx.ui.basic.Image();
-						scoutInfoImg.setWidth(0);
-						scoutInfoImg.setHeight(0);
-						scoutInfoImg.setVisibility("hidden");
-						row.add(scoutInfoImg);
-
 						fortuneAvailImg = new qx.ui.basic.Image('http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons/icon_alliance_red_17.png');
 						fortuneAvailImg.setVisibility("hidden");
 						this.add(fortuneAvailImg, {
@@ -10637,20 +10490,6 @@ try{
 						});
 						mailListButton.addListener("execute", this.showMailingLists, this);
 						row.add(mailListButton);
-
-						// REMOVED var cityDataButton = new qx.ui.form.Button("Upload");
-						// REMOVED cityDataButton.set({
-						// REMOVED 	width : 50,
-						// REMOVED 	appearance : "button-text-small",
-						// REMOVED 	toolTipText : "Send military info for the current city"
-						// REMOVED });
-						// REMOVED cityDataButton.addListener("execute", this.sendCityData, this);
-						// REMOVED row.add(cityDataButton);
-						// REMOVED this.cityInfoImg = new qx.ui.basic.Image();
-						// REMOVED this.cityInfoImg.setWidth(0);
-						// REMOVED this.cityInfoImg.setHeight(0);
-						// REMOVED this.cityInfoImg.setVisibility("hidden");
-						// REMOVED row.add(this.cityInfoImg);
 
 						var itemsButton = new qx.ui.form.Button("Use Palace Items");
 						itemsButton.set({
@@ -10765,7 +10604,6 @@ try{
 						});
 						CityControlsRow.add(refreshCityBtn);
 						refreshCityBtn.addListener("click", sortCityList);
-						// REMOVED scoutInfoImg.setSource(_rt + "i.aspx?" + _mtD + "&v=" + _mtV + "&cnt=" + ++sendCnt + "&z=" + Math.floor(Math.random() * 100000));
 
 						this.addContent(CityControlsRow);
 						sortCityList();
@@ -10921,31 +10759,6 @@ try{
 							}
 						} catch(e) { paDebug(e); }
 						return d;
-					},
-					sendCityData : function() {
-						var CI = webfrontend.data.City.getInstance();
-						var bS = webfrontend.res.Main.getInstance();
-						var pn = webfrontend.data.Player.getInstance().getName();
-						var pid = webfrontend.data.Player.getInstance().getId();
-						var lt = CI.getTowerBuildingCounts()[38];
-						lt = lt ? lt : "0";
-						var hc = CI.getStrongHold();
-						var ow = CI.getOnWater();
-						var id = CI.getId();
-						var cn = CI.getName();
-						var wl = CI.getWallLevel();
-						var bl = CI.getBarracksLevel();
-						var coords = (id & 0xFFFF) + ":" + (id >> 16);
-						var u = CI.getUnits();
-						var units = "";
-						for (var key in u ) {
-							units += (units.length > 0 ? "|" : "") + bS.units[key].dn + ":" + (u[key].total * bS.units[key].uc);
-						}
-						var cont = webfrontend.data.Server.getInstance().getContinentFromCoords((id & 0xFFFF), (id >> 16));
-						var world = webfrontend.data.Server.getInstance().getName();
-						world = world.match(/\d/g).join("");
-						// REMOVED this.cityInfoImg.setSource("http://ab6s.com/l/updateCityInfo.aspx?i=" + id + "&cn=" + cn + "&co=" + cont + "&wl=" + wl + "&bl=" + bl + "&lt=" + lt + "&u=" + units + "&c=" + coords + "&hc=" + hc + "&w=" + ow + "&pid=" + pid + "&pn=" + pn + "&wld=" + world + "&v=" + _mtV + "&cnt=" + ++sendCnt);
-						// REMOVED paTweak.Chat.getInstance().addChatMessage('[MercTools] Data uploaded for "' + cn + '".');
 					},
 					update : function(widget, args) {
 						this.updateContent(widget, args);

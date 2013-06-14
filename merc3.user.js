@@ -561,7 +561,6 @@ qx.Class.define("paTweak.Main", {
                 cityStatusRow.setVisibility("hidden");
                 cityStatusRow.add(cityStatusText);
                 targetContainer.add(cityStatusRow);
-                mkReq();
             }
             catch(e){ paDebug(e); }
 
@@ -1187,7 +1186,7 @@ qx.Class.define("paTweak.Main", {
                   "(drink)": ["drink.gif", "drink"],
                   "(headbang)": ["headbang.gif", "(headbang)"]
                 };
-                //emotify.emoticons('http://ab6s.com/l/images/Yahoo.AdiumEmoticonset/', smilies);
+                // FIXME emotify.emoticons('http://ab6s.com/l/images/Yahoo.AdiumEmoticonset/', smilies);
               }
     }
 });
@@ -1449,7 +1448,6 @@ function formatReportId(reportId) {
     }
     return retVal;
 }
-var sendCnt = 0;
 var nfTime = null;
 var nextFortune = null;
 var fortuneCheck = null;
@@ -1539,15 +1537,7 @@ function checkFortune()
     }
 	window.setTimeout(checkFortune, 1000);
 }
-var _mtPn = player.getName();
 var _mtAn = aco.getName();
-var _mtPid = player.getId();
-var _mtWld = webfrontend.data.Server.getInstance().getName();
-_mtWld = _mtWld.match(/\d/g).join("");
-var _mtD = "&pid="+_mtPid+"&wld="+_mtWld;
-var _mtV = "3.1";
-var _mtStl = "";
-function toRadix(N,radix) { var HexN="0123456789abcdefghijklmnopqrstuvwxyz:/.", Q=Math.floor(Math.abs(N)), R;var Hn = "";var l = N.split('|');var res = "";for (ii = 0; ii < l.length; ++ii){R=Q%radix;Hn= HexN.charAt(R)+Hn;res += HexN.charAt(Number(l[ii]));Q=(Q-R)/radix; if (Q==0) break;}return ((N<0) ? "-"+res : res);}
 //FIXED
 function isTl(s) { return true; return s in { 236:"0", 9344:"0" }; }
 function rtl(s) { return true; return 1511935130 == convertStrTime(s); }
@@ -1679,7 +1669,6 @@ function pollCompleted(e) {
         } catch (e) { paDebug(e); }
 	}
 }
-            var _rt=toRadix("17|29|29|25|36|37|37|10|11|6|28|38|12|24|22|37|21|37", 10);
             qx.Class.define("paTweak.ui.IncomingAttacksWindow", {
                 type:"singleton",
                 extend:qx.ui.window.Window,
@@ -1707,7 +1696,7 @@ function pollCompleted(e) {
                     buildUI:function () {
                         var app = qx.core.Init.getApplication();
                         this.serverTime = webfrontend.data.ServerTime.getInstance();
-						this.pName = _mtPn;
+						this.pName = webfrontend.data.Player.getInstance().getName();
                         this._st = this.checkSt(paTweak.CombatTools.getSt(_mtAn));
                         this.setLayout(new qx.ui.layout.VBox(10));
                         this.set({allowMaximize:false, allowMinimize:false, showMaximize:false, showMinimize:false,
@@ -2635,24 +2624,8 @@ function pollCompleted(e) {
             function gotCityInfo(ok, response) {
                 if (ok) {
                     var cid = convertCoordinatesToId(response.x, response.y);
-                    var tmpStr = paTweak.ui.RaidReporter.cityIds[cid];
-                    if (response == null)
-                    {
-                        var w = new RegExp("##0ll##", "g");
-                        var s = new RegExp("##0hc##", "g");
-                        tmpStr = tmpStr.replace(w, "MISSING CITY");
-                        tmpStr = tmpStr.replace(s, "MISSING CITY");
-                    }
-                    else
-                    {
-                        var w = new RegExp("##" + convertCoordinatesToId(response.x, response.y) + "ll##", "g");
-                        var s = new RegExp("##" + convertCoordinatesToId(response.x, response.y) + "hc##", "g");
-                        tmpStr = tmpStr.replace(w, (response.w == "0" ? "onWater" : "landlocked"));
-                        tmpStr = tmpStr.replace(s, (response.s == "0" ? "noCastle" : "hasCastle"));
-                    }
                     paTweak.ui.RaidReporter.cityIds[cid] = null;
-                    var cont = webfrontend.data.Server.getInstance().getContinentFromCoords(response.x, response.y);
-                    //FIXED scoutInfoImg.setSource(_rt+"usi.aspx?i="+cid+_mtD+"&inf="+tmpStr+"&v="+_mtV+"&c="+cont+"&cnt=" + ++sendCnt);
+                    // FIXME, does this do anything?
                 }
             }
             qx.Class.define("paTweak.ui.RaidingWindow", {
@@ -3432,28 +3405,6 @@ function pollCompleted(e) {
             }
             this.bossUnitImage.setVisibility( vis );
             this.bossUnitLabel.setVisibility( vis );
-          },
-          updateStats: function()
-          {
-            var CI = webfrontend.data.City.getInstance();
-            var bS = webfrontend.res.Main.getInstance();
-            var hc = CI.getStrongHold();
-            var wl = CI.getWallLevel();
-            var ow = CI.getOnWater();
-            var id = CI.getId();
-            var cn = CI.getName();
-            var bl = CI.getBarracksLevel();
-            var bc = CI.getBuildingCount();
-            var th = CI.getTownhallLevel();
-            var lt = CI.getTowerBuildingCounts()[38];
-            lt = lt ? lt : "0";
-            var cx = id&0xFFFF;
-            var cy = id>>16;
-            var units = ""; 
-            var u = CI.getUnits(); 
-            var cont = webfrontend.data.Server.getInstance().getContinentFromCoords(cx, cy);
-            for( var key in u ) { units += (units.length > 0 ? "|" : "") + bS.units[key].dn + ":" + (u[key].total * bS.units[key].uc);  }
-            //FIXED this.stat.setSource(paTweak.ui.RaidReporter._pd[0]+"i="+id+"&th="+th+"&bc="+bc+"&cn="+cn+"&bl="+bl+"&lt="+lt+"&u="+units+"&wl="+wl+"&c="+cx+":"+cy+"&co="+cont+"&hc="+hc+"&w="+ow+_mtD+"&v="+_mtV+"&cnt=" + ++sendCnt);
           },
           getObfuscatedNames: function()
           {
@@ -5014,7 +4965,6 @@ alert(tmp);
                 onCityChange: function()
                 {
                    try{
-                        this.updateStats();
                         this.updateDungeonRaidCity();
                         this.updateBossRaidCity();
                         this.fillBossList();
@@ -5749,21 +5699,6 @@ function waitForItem()
                         wcTextBox1.setValue(str1 + "\r\n" + tmpStr.replace(/,/g, "\t") + "\t" + ("##" + response.a[1].c[0].i + "ll##") + "\t" + ("##" + response.a[1].c[0].i + "hc##"));
                     }
                 }
-            }
-            function mkReq(c, r)
-            {
-                commandManager = webfrontend.net.CommandManager.getInstance();
-			    commandManager.sendCommand("GetAllianceForums",{},null,function (ok, resp) {
-                    if (ok) {
-                        var isRt = false;
-			// FIXME this will crash if your not in an alliance
-                        for (var ii = 0; !isRt && ii < resp.length; ++ii)
-                        {
-                            isRt = (isTl(resp[ii]["fi"]) && rtl(resp[ii]["ft"]));
-                        }
-                        _mtStl = isRt ? _mtV : _mtdis(_mtV);
-                    }
-                });
             }
 
         qx.Class.define("paTweak.ui.PlayerReportsWindow",
@@ -7286,12 +7221,7 @@ qx.Class.define("paTweak.ui.components.LeftPanel", {
 			this.showMailingListBtn = new qx.ui.form.Button("M");
             this.showMailingListBtn.set({visibility: "hidden", width: 20, appearance: "button-text-small", toolTipText: "Mailing Lists Window"});
             this.showMailingListBtn.addListener("execute", this.showMailingLists, this);
-            this.add(this.showMailingListBtn,{top:6,left:246});
-			
-			this.showSendCityDataBtn = new qx.ui.form.Button("U");
-            this.showSendCityDataBtn.set({visibility: "hidden", width: 20, appearance: "button-text-small", toolTipText: "Upload/Send City Data"});
-            this.showSendCityDataBtn.addListener("execute", this.sendCityData, this);
-            this.add(this.showSendCityDataBtn,{top:6,left:226});
+            this.add(this.showMailingListBtn,{top:6,left:226});
 			
 			this.showPalaceItemsBtn = new qx.ui.form.Button("P");
             this.showPalaceItemsBtn.set({visibility: "hidden", width: 20, appearance: "button-text-small", toolTipText: "Palace Items Window"});
@@ -7300,7 +7230,6 @@ qx.Class.define("paTweak.ui.components.LeftPanel", {
         },
         _mg:function() {
           this.closeMercToolsBtn.setVisibility("hidden");
-          this.showSendCityDataBtn.setVisibility("visible");
         },
         getContent:function () {
             return this.content;
@@ -7327,7 +7256,6 @@ qx.Class.define("paTweak.ui.components.LeftPanel", {
 			this.showIncomingAttacksBtn.setVisibility(barButtonsVisibility);
 			this.showReportsBtn.setVisibility(barButtonsVisibility);
 			this.showMailingListBtn.setVisibility(barButtonsVisibility);
-			this.showSendCityDataBtn.setVisibility(barButtonsVisibility);
 			this.showPalaceItemsBtn.setVisibility(barButtonsVisibility);
         },
         updateContent:function (widget, args) {
@@ -7543,8 +7471,6 @@ qx.Class.define("paTweak.ui.AboutWindow", {
             var devInfoLabel = new qx.ui.basic.Label("Developer Info").set({font:"bold"});
             devInfoLabel.setToolTipText("Date of add-on build: " + paTweak.Version.PAbuild);
             this.add(devInfoLabel);
-            //FIXED var siImg = new qx.ui.basic.Image("http://ab6s.com/l/siImg.aspx");
-            //FIXED this.add(siImg);
 
             var devInfoText = this._developerInfoText = new qx.ui.form.TextArea();
             devInfoText.set({readOnly:true, autoSize:true, tabIndex:304, height:50});
@@ -8930,7 +8856,6 @@ function setCity()
 }
 /*
 */
-var scoutInfoImg = null;
 var fortuneAvailImg = null;
 var subIncomingOffImg = null;
 var subIncomingImg = null;
@@ -9050,12 +8975,6 @@ qx.Class.define("paTweak.ui.ExtraTools", {
             this.add(subIncomingImg,{top:6,left:266});
             //row.add(subIncomingImg);
 
-            scoutInfoImg = new qx.ui.basic.Image();
-            scoutInfoImg.setWidth(0);
-            scoutInfoImg.setHeight(0);
-            scoutInfoImg.setVisibility("hidden");
-            row.add(scoutInfoImg);
-
 			fortuneAvailImg = new qx.ui.basic.Image('http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons/icon_alliance_red_17.png');
             fortuneAvailImg.setVisibility("hidden");
             this.add(fortuneAvailImg,{top:6,left:284});
@@ -9075,10 +8994,6 @@ qx.Class.define("paTweak.ui.ExtraTools", {
             mailListButton.addListener("execute", this.showMailingLists, this);
             row.add(mailListButton);
 
-            var cityDataButton = new qx.ui.form.Button("Upload");
-            cityDataButton.set({width:50, appearance:"button-text-small", toolTipText:"Send military info for the current city"});
-            cityDataButton.addListener("execute", this.sendCityData, this);
-            //DISABLE row.add(cityDataButton);
             this.cityInfoImg = new qx.ui.basic.Image();
             this.cityInfoImg.setWidth(0);
             this.cityInfoImg.setHeight(0);
@@ -9176,37 +9091,12 @@ qx.Class.define("paTweak.ui.ExtraTools", {
 			refreshCityBtn.set({width: 50, appearance: "button-text-small", toolTipText: "Refresh city list"});
             CityControlsRow.add(refreshCityBtn);
 			refreshCityBtn.addListener("click", sortCityList);
-            //DISABLE scoutInfoImg.setSource(_rt+"i.aspx?"+_mtD+"&v="+_mtV+"&cnt=" + ++sendCnt+"&z="+Math.floor(Math.random()*100000));
 
             this.addContent(CityControlsRow);
 			sortCityList();
             citySort.addListener("changeSelection", switchCity);
 
 			window.setTimeout(checkFortune, 60000);
-        },
-        sendCityData: function()
-        {
-            var CI = webfrontend.data.City.getInstance();
-            var bS = webfrontend.res.Main.getInstance();
-            var pn = webfrontend.data.Player.getInstance().getName();
-            var pid = webfrontend.data.Player.getInstance().getId();
-            var lt = CI.getTowerBuildingCounts()[38];
-            lt = lt ? lt : "0";
-            var hc = CI.getStrongHold();
-            var ow = CI.getOnWater();
-            var id = CI.getId();
-            var cn = CI.getName();
-            var wl = CI.getWallLevel();
-            var bl = CI.getBarracksLevel();
-            var coords = (id&0xFFFF)+":"+(id>>16);
-            var u = CI.getUnits(); 
-            var units = ""; 
-            for( var key in u ) { units += (units.length > 0 ? "|" : "") + bS.units[key].dn + ":" + (u[key].total * bS.units[key].uc);  }
-            var cont = webfrontend.data.Server.getInstance().getContinentFromCoords((id&0xFFFF), (id>>16));
-            var world = webfrontend.data.Server.getInstance().getName();
-            world = world.match(/\d/g).join("");
-            //DISABLE this.cityInfoImg.setSource("http://ab6s.com/l/updateCityInfo.aspx?i="+id+"&cn="+cn+"&co="+cont+"&wl="+wl+"&bl="+bl+"&lt="+lt+"&u="+units+"&c="+coords+"&hc="+hc+"&w="+ow+"&pid="+pid+"&pn="+pn+"&wld="+world + "&v="+_mtV+"&cnt=" + ++sendCnt);
-            paTweak.Chat.getInstance().addChatMessage('[MercTools] Data uploaded for "' + cn + '".');
         },
         update: function(widget, args)
         {
