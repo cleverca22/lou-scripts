@@ -95,7 +95,7 @@
    "name":"(untested) MERC Tools 4.4",
    "filename":"merc4.user.js",
    "type":"smart_inject",
-   "version":"4.4.5",
+   "version":"4.4.6",
    "prio":2,
    "conflicts":[1]
   },{
