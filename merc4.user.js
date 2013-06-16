@@ -5549,7 +5549,7 @@
 									logEntry = "Delayed order in the past";
 									break;
 								default:
-									logEntry = "Unknown Error: " + result;
+									logEntry = "Unknown Error: " + result +', '+JSON.stringify(result);
 									break;
 							}
 
