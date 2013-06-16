@@ -815,7 +815,7 @@ this.j.selectAllText();
 }
 		});
 		var a,b,i,m,p,r,y,d,s,j,l,v,c,t,x,z=false,tmc;
-		try {
+		//try {
 			b=webfrontend;
 			p=qx.core.Init.getApplication();
 			b=b.data;
@@ -824,9 +824,9 @@ this.j.selectAllText();
 			a=b.Server.getInstance();
 			tmc = new dave.lou.TMC();
 			new dave.lou.L();
-		} catch (e) {
-			console.error(e);
-		}
+		//} catch (e) {
+			//console.error(e);
+		//}
 	} // </inject>
 	inject();
 })();

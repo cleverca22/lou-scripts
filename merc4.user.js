@@ -1,10 +1,8 @@
-// ==UserScript==
 // @name           MERC Tools
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        4.4.4
-// ==/UserScript==
+// @version        4.4.6
 /*
  * Changelog
 
@@ -59,332 +57,304 @@
  * 4.4   - bug fixes.
  */
 (function() {
-	var main = function() {
-
-		function LoUPakMap() {
-			try {
-
-				var bossKill = [50, 300, 2000, 4000, 10000, 15000, 20000, 30000, 45000, 60000];
-				var dungeonKill = [10, 100, 450, 1500, 3500, 6000, 13000, 20000, 35000, 60000];
-
-				var l = qx.locale.Manager.getInstance().getLocale();
-				if (l != "en" || l != "de" || l != "pl")
-					l = "en";
-				var tr = {
-					"en" : {
-						"weak" : "Weakness"
-					},
-					"de" : {
-						"weak" : "Schwäche"
-					},
-					"pl" : {
-						"weak" : "????????"
-					}
-				};
-
-				var a = qx.core.Init.getApplication();
-				var r = webfrontend.res.Main.getInstance();
-
-				var nameC = a.tr("tnf:name:").charAt(0);
-				var typeC = a.tr("tnf:type:").charAt(0);
-				var levelT = a.tr("tnf:level:");
-				var progressP = a.tr("tnf:progress:");
-
-				//<table cellspacing="0"><tr><td width="75">Name:</td><td>Dragon</td></tr><tr><td>Since:</td><td>Yesterday 22:04:43</td></tr><tr><td>Level:</td><td>7</td></tr>
-				//<table cellspacing="0"><tr><td width="75">Type:</td><td>Mountain Dungeon</td></tr><tr><td>Since:</td><td>31.07. 01:15:18</td></tr><tr><td>Level:</td><td>9</td></tr><tr><td>Progress:</td><td>94%</td></tr>
-
-				var sHdr = '<table cellspacing="0"><tr><td width="75">';
-				var sRow = "</td><td>";
-				var pId = sHdr.length;
-				var pRow = sRow.length;
-				var weakT = tr[l]["weak"] + ':' + sRow;
-				var progressT = 'TS + pct:' + sRow;
-				// const zergT = r.units["6"].dn + ':' + sRow;
-				var zergT = 'Unit TS:' + sRow;
-				var zergT6 = r.units["6"].dn + ':' + sRow;
-				var zergT7 = r.units["7"].dn + ':' + sRow;
-				var zergT10 = r.units["10"].dn + ':' + sRow;
-				var zergT11 = r.units["11"].dn + ':' + sRow;
-				var zergT12 = r.units["12"].dn + ':' + sRow;
-				var zergT16 = r.units["16"].dn + ':' + sRow;
-				var zergT17 = r.units["17"].dn + ':' + sRow;
-
-				// "Name" or "Type", Boss or Dungeon
-				// Desc offset
-				var pBName = pId + pRow + a.tr("tnf:name:").length;
-				var pDName = pId + pRow + a.tr("tnf:type:").length;
-				// Progress offset
-				// x
-				// Level offset
-				var pLevel = pRow + a.tr("tnf:level:").length;
-
-				// Forest		Dragon		Cavalry		Wood
-				// Mountain		Hydra		Infantry	Iron
-				// Hill			Moloch		Magic		Stone
-				// Sea			Octopus		Artillery 	Food
-
-				var cavT = r.attackTypes["2"].dn;
-				var infT = r.attackTypes["1"].dn;
-				var magT = r.attackTypes["4"].dn;
-				var artT = r.attackTypes["3"].dn;
-
-				var dragC = r.dungeons["6"].dn.charAt(0);
-				var hydrC = r.dungeons["8"].dn.charAt(0);
-				var moloC = r.dungeons["7"].dn.charAt(0);
-				var octyC = r.dungeons["12"].dn.charAt(0);
-
-				var forstC = r.dungeons["5"].dn.charAt(0);
-				var mountC = r.dungeons["4"].dn.charAt(0);
-				var hillC = r.dungeons["3"].dn.charAt(0);
-				var seaC = r.dungeons["2"].dn.charAt(0);
-
-				function getBossWeakness(name) {
-					if (name == dragC)
-						return cavT;
-					else if (name == hydrC)
-						return infT;
-					else if (name == moloC)
-						return magT;
-					else if (name == octyC)
-						return artT;
-					else
-						return "";
+	function LoUPakMap() {
+		try {
+			var bossKill = [50, 300, 2000, 4000, 10000, 15000, 20000, 30000, 45000, 60000];
+			var dungeonKill = [10, 100, 450, 1500, 3500, 6000, 13000, 20000, 35000, 60000];
+			
+			var l = qx.locale.Manager.getInstance().getLocale();
+			if (l != "en" || l != "de" || l != "pl")
+				l = "en";
+			var tr = {
+				"en" : {
+					"weak" : "Weakness"
+				},
+				"de" : {
+					"weak" : "Schwï¿½che"
+				},
+				"pl" : {
+					"weak" : "????????"
 				}
-
-				function getDungeonWeakness(name) {
-					if (name == forstC)
-						return cavT;
-					else if (name == mountC)
-						return infT;
-					else if (name == hillC)
-						return magT;
-					else if (name == seaC)
-						return artT;
-					else
-						return "";
-				}
-
-				function toolTipAppear() {
-					try {
-						var tip = a.worldViewToolTip;
-						var mode = tip.getMode();
-						if (mode == 'c' || mode == 'd') {
-							// if(tip.contextObject)
-						} else {
-							var text = tip.getLabel();
-							if (text != null || text.length > pId) {
-								var type = text.charAt(pId);
-								if (type == nameC) {// Name:
-									//Boss
-									var weak = getBossWeakness(text.charAt(pBName));
-									var lPos = text.indexOf(levelT, pBName) + pLevel;
-									var level = text.charAt(lPos);
-									if (level == '1') {
-										if (text.charAt(lPos + 1) == '0')
-											level = '10';
-									}
-									var zergs = webfrontend.gui.Util.formatNumbers(bossKill[parseInt(level) - 1]);
-									var sb = new qx.util.StringBuilder(20);
-									var research6 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.research, 6);
-									var shrine6 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.shrine, 6);
-									var bonus6 = ((shrine6 + research6) / 100) + 1;
-									var research7 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.research, 6);
-									var shrine7 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.shrine, 6);
-									var bonus7 = ((shrine7 + research7) / 100) + 1;
-									var research10 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.research, 10);
-									var shrine10 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.shrine, 10);
-									var bonus10 = ((shrine10 + research10) / 100) + 1;
-									var research11 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.research, 11);
-									var shrine11 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.shrine, 11);
-									var bonus11 = ((shrine11 + research11) / 100) + 1;
-									var research12 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.research, 12);
-									var shrine12 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.shrine, 12);
-									var bonus12 = ((shrine12 + research12) / 100) + 1;
-									var research16 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.research, 16);
-									var shrine16 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.shrine, 16);
-									var bonus16 = ((shrine16 + research16) / 100) + 1;
-									var research17 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.research, 17);
-									var shrine17 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.shrine, 17);
-									var bonus17 = ((shrine17 + research17) / 100) + 1;
-									var zergs6 = webfrontend.gui.Util.formatNumbers(parseInt(bossKill[parseInt(level) - 1] / bonus6));
-									if (weak == "Infantry")
-										zergs6 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus6) * 0.67));
-									var zergs7 = webfrontend.gui.Util.formatNumbers(parseInt(bossKill[parseInt(level) - 1] / bonus7) * 0.72);
-									if (weak == "Magic")
-										zergs7 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus7) * 0.67 * 0.72));
-									var zergs10 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus10) * 0.83));
-									if (weak == "Cavalry")
-										zergs10 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus10) * 0.67 * 0.83));
-									var zergs11 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus11) * 0.55));
-									if (weak == "Cavalry")
-										zergs11 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus11) * 0.67 * 0.55));
-									var zergs12 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus12) * 0.42));
-									if (weak == "Magic")
-										zergs12 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus12) * 0.67 * 0.42));
-									if (weak == "Artillery") {
-										var zergs16 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus16) * 0.03));
-										var zergs17 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus17) * 0.003));
-										sb.add(text, sHdr, weakT, weak, "</td></tr><tr><td>", zergT16, zergs16, "</td></tr><tr><td>", zergT17, zergs17, "</td></tr></table>");
-									} else {
-										sb.add(text, sHdr, weakT, weak, "</td></tr><tr><td>", zergT6, zergs6, "</td></tr></td></tr><tr><td>", zergT10, zergs10, "</td></tr></td></tr><tr><td>", zergT11, zergs11, "</td></tr><tr><td>", zergT12, zergs12, "</td></tr><tr><td>", zergT7, zergs7, "</td></tr></table>");
-									}
-									tip.setLabel(sb.get());
-
-								} else if (type == typeC) {// Type:
-									//Dungeon
-									var weak = getDungeonWeakness(text.charAt(pDName));
-									var lPos = text.indexOf(levelT, pDName) + pLevel;
-									var level = text.charAt(lPos);
-									if (level == '1') {
-										if (text.charAt(lPos + 1) == '0')
-											level = '10';
-									}
-									var progress = text.substr(text.indexOf("Progress") + 18, 2);
-									if (progress.substr(1, 1) == '%') {
-										var progress = progress.substr(0, 1);
-									}
-									var progress = webfrontend.gui.Util.formatNumbers(parseInt((progress * 0.0175 + 1.0875) * dungeonKill[parseInt(level) - 1]));
-									var zergs6 = webfrontend.gui.Util.formatNumbers(dungeonKill[parseInt(level) - 1]);
-
-									var sb = new qx.util.StringBuilder(20);
-									sb.add(text, sHdr, weakT, weak, "</td></tr><tr><td>", zergT, zergs6, "</td></tr><tr><td>", progressT, progress, "</td></tr></table>");
-									tip.setLabel(sb.get());
+			};
+			
+			var a = qx.core.Init.getApplication();
+			var r = webfrontend.res.Main.getInstance();
+			
+			var nameC = a.tr("tnf:name:").charAt(0);
+			var typeC = a.tr("tnf:type:").charAt(0);
+			var levelT = a.tr("tnf:level:");
+			var progressP = a.tr("tnf:progress:");
+			
+			//<table cellspacing="0"><tr><td width="75">Name:</td><td>Dragon</td></tr><tr><td>Since:</td><td>Yesterday 22:04:43</td></tr><tr><td>Level:</td><td>7</td></tr>
+			//<table cellspacing="0"><tr><td width="75">Type:</td><td>Mountain Dungeon</td></tr><tr><td>Since:</td><td>31.07. 01:15:18</td></tr><tr><td>Level:</td><td>9</td></tr><tr><td>Progress:</td><td>94%</td></tr>
+			
+			var sHdr = '<table cellspacing="0"><tr><td width="75">';
+			var sRow = "</td><td>";
+			var pId = sHdr.length;
+			var pRow = sRow.length;
+			var weakT = tr[l]["weak"] + ':' + sRow;
+			var progressT = 'TS + pct:' + sRow;
+			// const zergT = r.units["6"].dn + ':' + sRow;
+			var zergT = 'Unit TS:' + sRow;
+			var zergT6 = r.units["6"].dn + ':' + sRow;
+			var zergT7 = r.units["7"].dn + ':' + sRow;
+			var zergT10 = r.units["10"].dn + ':' + sRow;
+			var zergT11 = r.units["11"].dn + ':' + sRow;
+			var zergT12 = r.units["12"].dn + ':' + sRow;
+			var zergT16 = r.units["16"].dn + ':' + sRow;
+			var zergT17 = r.units["17"].dn + ':' + sRow;
+			
+			// "Name" or "Type", Boss or Dungeon
+			// Desc offset
+			var pBName = pId + pRow + a.tr("tnf:name:").length;
+			var pDName = pId + pRow + a.tr("tnf:type:").length;
+			// Progress offset
+			// x
+			// Level offset
+			var pLevel = pRow + a.tr("tnf:level:").length;
+			
+			// Forest		Dragon		Cavalry		Wood
+			// Mountain		Hydra		Infantry	Iron
+			// Hill			Moloch		Magic		Stone
+			// Sea			Octopus		Artillery 	Food
+			
+			var cavT = r.attackTypes["2"].dn;
+			var infT = r.attackTypes["1"].dn;
+			var magT = r.attackTypes["4"].dn;
+			var artT = r.attackTypes["3"].dn;
+			
+			var dragC = r.dungeons["6"].dn.charAt(0);
+			var hydrC = r.dungeons["8"].dn.charAt(0);
+			var moloC = r.dungeons["7"].dn.charAt(0);
+			var octyC = r.dungeons["12"].dn.charAt(0);
+			
+			var forstC = r.dungeons["5"].dn.charAt(0);
+			var mountC = r.dungeons["4"].dn.charAt(0);
+			var hillC = r.dungeons["3"].dn.charAt(0);
+			var seaC = r.dungeons["2"].dn.charAt(0);
+			
+			function getBossWeakness(name) {
+				if (name == dragC)
+					return cavT;
+				else if (name == hydrC)
+					return infT;
+				else if (name == moloC)
+					return magT;
+				else if (name == octyC)
+					return artT;
+				else
+					return "";
+			}
+			
+			function getDungeonWeakness(name) {
+				if (name == forstC)
+					return cavT;
+				else if (name == mountC)
+					return infT;
+				else if (name == hillC)
+					return magT;
+				else if (name == seaC)
+					return artT;
+				else
+					return "";
+			}
+			
+			function toolTipAppear() {
+				try {
+					var tip = a.worldViewToolTip;
+					var mode = tip.getMode();
+					if (mode == 'c' || mode == 'd') {
+						// if(tip.contextObject)
+					} else {
+						var text = tip.getLabel();
+						if (text != null || text.length > pId) {
+							var type = text.charAt(pId);
+							if (type == nameC) {// Name:
+								//Boss
+								var weak = getBossWeakness(text.charAt(pBName));
+								var lPos = text.indexOf(levelT, pBName) + pLevel;
+								var level = text.charAt(lPos);
+								if (level == '1') {
+									if (text.charAt(lPos + 1) == '0')
+										level = '10';
 								}
+								var zergs = webfrontend.gui.Util.formatNumbers(bossKill[parseInt(level) - 1]);
+								var sb = new qx.util.StringBuilder(20);
+								var research6 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.research, 6);
+								var shrine6 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.shrine, 6);
+								var bonus6 = ((shrine6 + research6) / 100) + 1;
+								var research7 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.research, 6);
+								var shrine7 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.shrine, 6);
+								var bonus7 = ((shrine7 + research7) / 100) + 1;
+								var research10 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.research, 10);
+								var shrine10 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.shrine, 10);
+								var bonus10 = ((shrine10 + research10) / 100) + 1;
+								var research11 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.research, 11);
+								var shrine11 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.shrine, 11);
+								var bonus11 = ((shrine11 + research11) / 100) + 1;
+								var research12 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.research, 12);
+								var shrine12 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.shrine, 12);
+								var bonus12 = ((shrine12 + research12) / 100) + 1;
+								var research16 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.research, 16);
+								var shrine16 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.shrine, 16);
+								var bonus16 = ((shrine16 + research16) / 100) + 1;
+								var research17 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.research, 17);
+								var shrine17 = webfrontend.data.Tech.getInstance().getBonus("unitDamage", webfrontend.data.Tech.shrine, 17);
+								var bonus17 = ((shrine17 + research17) / 100) + 1;
+								var zergs6 = webfrontend.gui.Util.formatNumbers(parseInt(bossKill[parseInt(level) - 1] / bonus6));
+								if (weak == "Infantry")
+									zergs6 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus6) * 0.67));
+								var zergs7 = webfrontend.gui.Util.formatNumbers(parseInt(bossKill[parseInt(level) - 1] / bonus7) * 0.72);
+								if (weak == "Magic")
+									zergs7 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus7) * 0.67 * 0.72));
+								var zergs10 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus10) * 0.83));
+								if (weak == "Cavalry")
+									zergs10 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus10) * 0.67 * 0.83));
+								var zergs11 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus11) * 0.55));
+								if (weak == "Cavalry")
+									zergs11 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus11) * 0.67 * 0.55));
+								var zergs12 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus12) * 0.42));
+								if (weak == "Magic")
+									zergs12 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus12) * 0.67 * 0.42));
+								if (weak == "Artillery") {
+									var zergs16 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus16) * 0.03));
+									var zergs17 = webfrontend.gui.Util.formatNumbers(parseInt((bossKill[parseInt(level) - 1] / bonus17) * 0.003));
+									sb.add(text, sHdr, weakT, weak, "</td></tr><tr><td>", zergT16, zergs16, "</td></tr><tr><td>", zergT17, zergs17, "</td></tr></table>");
+								} else {
+									sb.add(text, sHdr, weakT, weak, "</td></tr><tr><td>", zergT6, zergs6, "</td></tr></td></tr><tr><td>", zergT10, zergs10, "</td></tr></td></tr><tr><td>", zergT11, zergs11, "</td></tr><tr><td>", zergT12, zergs12, "</td></tr><tr><td>", zergT7, zergs7, "</td></tr></table>");
+								}
+								tip.setLabel(sb.get());
+							} else if (type == typeC) {// Type:
+								//Dungeon
+								var weak = getDungeonWeakness(text.charAt(pDName));
+								var lPos = text.indexOf(levelT, pDName) + pLevel;
+								var level = text.charAt(lPos);
+								if (level == '1') {
+									if (text.charAt(lPos + 1) == '0')
+										level = '10';
+								}
+								var progress = text.substr(text.indexOf("Progress") + 18, 2);
+								if (progress.substr(1, 1) == '%') {
+									var progress = progress.substr(0, 1);
+								}
+								var progress = webfrontend.gui.Util.formatNumbers(parseInt((progress * 0.0175 + 1.0875) * dungeonKill[parseInt(level) - 1]));
+								var zergs6 = webfrontend.gui.Util.formatNumbers(dungeonKill[parseInt(level) - 1]);
+								
+								var sb = new qx.util.StringBuilder(20);
+								sb.add(text, sHdr, weakT, weak, "</td></tr><tr><td>", zergT, zergs6, "</td></tr><tr><td>", progressT, progress, "</td></tr></table>");
+								tip.setLabel(sb.get());
 							}
 						}
-
-					} catch (e) {
-						console.error(e);
 					}
-				}
-
-
-				a.worldViewToolTip.addListener("appear", toolTipAppear, this);
-
-			} catch (e) {
-				console.error(e);
-			}
-
-		}
-
-		function paDebug(e) {
-			if (window.console && typeof console.log == "function") {
-				console.log(e);
-			}
-		}
-
-		function checkDependencies() {
-			var dependencies = [webfrontend.config.Config.getInstance().getChat(), qx.core.Init.getApplication().chat], i = dependencies.length, checkPoint = true;
-			// check (in)dependencies
-			while (i--) {
-				if (!dependencies[i]) {
-					paDebug('dependency missing [' + i + ']');
-					checkPoint = false;
+				} catch (e) {
+					console.error(e);
 				}
 			}
-			paDebug('checkDependencies result[' + checkPoint + ']');
-			return checkPoint;
+			a.worldViewToolTip.addListener("appear", toolTipAppear, this);
+		} catch (e) {
+			console.error(e);
 		}
-
-		/*
-		 * @language
-		 * i18 language support
-		 */
-		var DefaultLang = "DE", LocalizedStrings = {
-			"en" : {
-				"ext:error_on_command" : "Failed to run command",
-				"ext:error_message" : "Error",
-				"ext:ok_message" : "Successfully ",
-				"ext:like_message" : " like you :x",
-				"ext:poke_message" : " poke you <:-P",
-				"ext:vote_message" : " vote you :-bd",
-				"ext:love_message" : "Someone love you @};-",
-				"ext:slap_message" : "Someone slap you :-q",
-				"ext:merc_message" : ""
-			},
-			"de" : {
-				"ext:error_on_command" : "Fehler beim ausf??hren von",
-				"ext:error_message" : "Fehler",
-				"ext:ok_message" : "Erfolgreich ",
-				"ext:like_message" : " mag Dich :x",
-				"ext:poke_message" : " stubst Dich an <:-P",
-				"ext:vote_message" : " votet Dich :-bd",
-				"ext:love_message" : "Jemand mag Dich @};-",
-				"ext:slap_message" : "Jemand slapt Dich :-q",
-				"ext:merc_message" : ""
-			}
+	}
+		
+	/*
+	 * @language
+	 * i18 language support
+	 */
+	var DefaultLang = "DE", LocalizedStrings = {
+		"en" : {
+			"ext:error_on_command" : "Failed to run command",
+			"ext:error_message" : "Error",
+			"ext:ok_message" : "Successfully ",
+			"ext:like_message" : " like you :x",
+			"ext:poke_message" : " poke you <:-P",
+			"ext:vote_message" : " vote you :-bd",
+			"ext:love_message" : "Someone love you @};-",
+			"ext:slap_message" : "Someone slap you :-q",
+			"ext:merc_message" : ""
+		},
+		"de" : {
+			"ext:error_on_command" : "Fehler beim ausf??hren von",
+			"ext:error_message" : "Fehler",
+			"ext:ok_message" : "Erfolgreich ",
+			"ext:like_message" : " mag Dich :x",
+			"ext:poke_message" : " stubst Dich an <:-P",
+			"ext:vote_message" : " votet Dich :-bd",
+			"ext:love_message" : "Jemand mag Dich @};-",
+			"ext:slap_message" : "Jemand slapt Dich :-q",
+			"ext:merc_message" : ""
+		}
+	};
+	
+	function i18n(messageId) {
+		var locale = qx.locale.Manager.getInstance().getLocale(), retvar = messageId;
+		if ( typeof LocalizedStrings[locale] !== 'undefined' && typeof LocalizedStrings[locale][messageId] !== 'undefined') {
+			retvar = LocalizedStrings[locale][messageId];
+		} else if ( typeof LocalizedStrings[DefaultLang][messageId] !== 'undefined') {
+			retvar = LocalizedStrings[DefaultLang][messageId];
+		}
+		return retvar;
+	}
+	
+	/*
+	 * @Contribute  http://benalman.com/projects/javascript-emotify/
+	 * Spezial thanks to Ben Alman, http://benalman.com/about/license/
+	 */
+	var EMOTICON_RE, emoticons = {}, lookup = [], emotify = function(txt, callback) {
+		callback = callback ||
+		function(img, title, smiley, text) {
+			title = (title + ', ' + smiley).replace(/"/g, '&quot;').replace(/</g, '&lt;');
+			return '<img src="' + img + '" title="' + title + '" alt="" class="smiley" style="vertical-align: -20%;"/>';
 		};
-
-		function i18n(messageId) {
-			var locale = qx.locale.Manager.getInstance().getLocale(), retvar = messageId;
-			if ( typeof LocalizedStrings[locale] !== 'undefined' && typeof LocalizedStrings[locale][messageId] !== 'undefined') {
-				retvar = LocalizedStrings[locale][messageId];
-			} else if ( typeof LocalizedStrings[DefaultLang][messageId] !== 'undefined') {
-				retvar = LocalizedStrings[DefaultLang][messageId];
+		return txt.replace(EMOTICON_RE, function(a, b, text) {
+			var i = 0, smiley = text, e = emoticons[text];
+			// If smiley matches on manual regexp, reverse-lookup the smiley.
+			if (!e) {
+				while (i < lookup.length && !lookup[i].regexp.test(text)) {
+					i = i + 1;
+				}
+				smiley = lookup[i].name;
+				e = emoticons[smiley];
 			}
-			return retvar;
-		}
-
-		/*
-		 * @Contribute  http://benalman.com/projects/javascript-emotify/
-		 * Spezial thanks to Ben Alman, http://benalman.com/about/license/
-		 */
-		var EMOTICON_RE, emoticons = {}, lookup = [], emotify = function(txt, callback) {
-			callback = callback ||
-			function(img, title, smiley, text) {
-				title = (title + ', ' + smiley).replace(/"/g, '&quot;').replace(/</g, '&lt;');
-				return '<img src="' + img + '" title="' + title + '" alt="" class="smiley" style="vertical-align: -20%;"/>';
-			};
-			return txt.replace(EMOTICON_RE, function(a, b, text) {
-				var i = 0, smiley = text, e = emoticons[text];
-				// If smiley matches on manual regexp, reverse-lookup the smiley.
-				if (!e) {
-					while (i < lookup.length && !lookup[i].regexp.test(text)) {
-						i = i + 1;
+			// If the smiley was found, return HTML, otherwise the original search string
+			return e ? (b + callback(e[0], e[1], smiley, text)) : a;
+		});
+	};
+	emotify.emoticons = function() {
+		var args = Array.prototype.slice.call(arguments), base_url = typeof args[0] === 'string' ? args.shift() : '', replace_all = typeof args[0] === 'boolean' ? args.shift() : false, smilies = args[0], e, arr = [], alts, i, regexp_str;
+		if (smilies) {
+			if (replace_all) {
+				emoticons = {};
+				lookup = [];
+			}
+			for (e in smilies) {
+				emoticons[e] = smilies[e];
+				emoticons[e][0] = base_url + emoticons[e][0];
+			}
+			// Generate the smiley-match regexp.
+			for (e in emoticons) {
+				if (emoticons[e].length > 2) {
+					// Generate regexp from smiley and alternates.
+					alts = emoticons[e].slice(2).concat(e);
+					i = alts.length;
+					while (i--) {
+						alts[i] = alts[i].replace(/(\W)/g, '\\$1');
 					}
-					smiley = lookup[i].name;
-					e = emoticons[smiley];
+					regexp_str = alts.join('|');
+					// Manual regexp, map regexp back to smiley so we can reverse-match.
+					lookup.push({
+						name : e,
+						regexp : new RegExp('^' + regexp_str + '$')
+					});
+				} else {
+					// Generate regexp from smiley.
+					regexp_str = e.replace(/(\W)/g, '\\$1');
 				}
-				// If the smiley was found, return HTML, otherwise the original search string
-				return e ? (b + callback(e[0], e[1], smiley, text)) : a;
-			});
-		};
-		emotify.emoticons = function() {
-			var args = Array.prototype.slice.call(arguments), base_url = typeof args[0] === 'string' ? args.shift() : '', replace_all = typeof args[0] === 'boolean' ? args.shift() : false, smilies = args[0], e, arr = [], alts, i, regexp_str;
-			if (smilies) {
-				if (replace_all) {
-					emoticons = {};
-					lookup = [];
-				}
-				for (e in smilies) {
-					emoticons[e] = smilies[e];
-					emoticons[e][0] = base_url + emoticons[e][0];
-				}
-				// Generate the smiley-match regexp.
-				for (e in emoticons) {
-					if (emoticons[e].length > 2) {
-						// Generate regexp from smiley and alternates.
-						alts = emoticons[e].slice(2).concat(e);
-						i = alts.length;
-						while (i--) {
-							alts[i] = alts[i].replace(/(\W)/g, '\\$1');
-						}
-						regexp_str = alts.join('|');
-						// Manual regexp, map regexp back to smiley so we can reverse-match.
-						lookup.push({
-							name : e,
-							regexp : new RegExp('^' + regexp_str + '$')
-						});
-					} else {
-						// Generate regexp from smiley.
-						regexp_str = e.replace(/(\W)/g, '\\$1');
-					}
-					arr.push(regexp_str);
-				}
-				EMOTICON_RE = new RegExp('(^|\\s)(' + arr.join('|') + ')(?=(?:$|\\s))', 'g');
+				arr.push(regexp_str);
 			}
-			return emoticons;
-		};
+			EMOTICON_RE = new RegExp('(^|\\s)(' + arr.join('|') + ')(?=(?:$|\\s))', 'g');
+		}
+		return emoticons;
+	};
 		/* main script that defines the plugin */
 		var createTweak = function() {
 
@@ -394,7 +364,7 @@
 					PAversion : "4.4",
 					PAbuild : "Sat March 30 10:15:23 GMT 2013",
 					PAcodename : "",
-					PAauthors : "Michal Dvorák (Mikee)",
+					PAauthors : "Michal Dvorï¿½k (Mikee)",
 					PAcontrib : "William Leemans (Maddock), MousePak, Uldrich and WatchmanCole",
 
 					GPL : "This program is free software: you can redistribute it and/or modify" + " it under the terms of the GNU General Public License as published by" + " the Free Software Foundation, either version 3 of the License, or" + " (at your option) any later version." + "\n\n" + "This program is distributed in the hope that it will be useful," + " but WITHOUT ANY WARRANTY; without even the implied warranty of" + " MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + " GNU General Public License for more details." + "\n\n" + "You should have received a copy of the GNU General Public License" + " along with this program. If not, see http://www.gnu.org/licenses/."
@@ -425,91 +395,44 @@
 			  }
 			  return retVal;
 			}
-            function usub(act) {
-                act = (act == null || act.length == 0) ? 'L' : act;
-                var textbox = gsc(1);
-                var sval = gsv();
-                if (textbox == null)
-                {
-                    paDebug('textbox is null');
-                    window.setTimeout(usub, 1000);
-                }
-                else
-                {
-                    var sb = "";
-                    if (act == 'L') {
-                		var s = webfrontend.data.Substitution.getInstance().getOutgoing();
-                		sb = (s != null) ? s.n : "";
-                	}
-                	else {
-                		sb = textbox.getValue();	
-                	}
-                    // REMOVED var url = _rt + "us.aspx?"+_mtD + "&v=" + _mtV + "&z=" + Math.floor(Math.random() * 100000)+"&s="+sb+"&act="+act;
-                    // REMOVED paDebug(url);
-                    // REMOVED try {
-                    // REMOVED     var req = new qx.io.remote.Request(url, "POST");
-                    // REMOVED     req.setCrossDomain(true);
-                    // REMOVED     req.send();
-                    // REMOVED } catch (err) {
-                    // REMOVED     paDebug('usub post:' + err);
-                    // REMOVED }
-                }
-            }
-			function gsv(){
-                //paDebug('Enter', 'gsc');
-                var ca = qx.core.Init.getApplication().getOptionsPage().clientArea;
-                return ca.getChildren()[0]     // tabstrip
-                    .getChildren()[3]    // tab
-                    .getChildren()[0]    // scrollarea
-                    .getChildren()[0]    // page
-                    .getChildren()[0]    // Sub Request section
-                    .getChildren()[9].getChildren()[1].getChildren()[1].getChildren()[1].getValue();
-			}
-            function gsc(index) {
-                //paDebug('Enter', 'gsc');
-                var ca = qx.core.Init.getApplication().getOptionsPage().clientArea;
-                return ca.getChildren()[0]     // tabstrip
-                .getChildren()[3]    // tab
-                .getChildren()[0]    // scrollarea
-                .getChildren()[0]    // page
-                .getChildren()[0]    // Sub Request section
-                .getChildren()[7]    // Send Request composite
-                .getChildren()[index];     // send button
-            }
-			function insertNotice()
-			{
-				var aa = findTextNode("Alliance Announcement");
-				if (aa)
-				{
-					try {
-						// REMOVED var p = aa.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild
-						// REMOVED var sib = p;
-						// REMOVED while (sib) {sib.style.top = (parseInt(sib.style.top) + 180) + "px"; sib = sib.nextSibling;}
-						// REMOVED var div = document.createElement("div");
-						// REMOVED div.style.fontWeight = "bold";
-						// REMOVED var span = document.createElement("span");
-						// REMOVED var txt = document.createTextNode("Notice: ");
-						// REMOVED span.style.color = "red";
-						// REMOVED span.appendChild(txt);
-						// REMOVED div.appendChild(span);
-						// REMOVED span = document.createElement("span");
-						// REMOVED txt = document.createTextNode("MERC Tools uploads data from your game to be used by MERC.  If you do not want MERC to have your data, uninstall MERC Tools NOW.");
-						// REMOVED span.style.color = "#604032";
-						// REMOVED span.appendChild(txt);
-						// REMOVED div.appendChild(span);
-						// REMOVED var br = document.createElement("br");
-						// REMOVED div.appendChild(br);
-						// REMOVED var img = new Image();
-						// REMOVED img.src = 'http://ab6s.com/l/siImg.aspx';
-						// REMOVED img.style.paddingLeft = "120px";
-						// REMOVED div.appendChild(img);
-						// REMOVED p.parentNode.insertBefore(div, p);
-					} catch (e) {
-						paDebug(e);
-					}
-				} else{
-					window.setTimeout(insertNotice, 1000);
+			function usub(act) {
+				function gsv(){
+					//paDebug('Enter', 'gsc');
+					var ca = qx.core.Init.getApplication().getOptionsPage().clientArea;
+					return ca.getChildren()[0]     // tabstrip
+						.getChildren()[3]    // tab
+						.getChildren()[0]    // scrollarea
+						.getChildren()[0]    // page
+						.getChildren()[0]    // Sub Request section
+						.getChildren()[9].getChildren()[1].getChildren()[1].getChildren()[1].getValue();
 				}
+				act = (act == null || act.length == 0) ? 'L' : act;
+				var textbox = gsc(1);
+				var sval = gsv();
+				if (textbox == null) {
+					paDebug('textbox is null');
+					window.setTimeout(usub, 1000);
+				} else {
+					var sb = "";
+					if (act == 'L') {
+						var s = webfrontend.data.Substitution.getInstance().getOutgoing();
+						sb = (s != null) ? s.n : "";
+					} else {
+						sb = textbox.getValue();
+					}
+				}
+				// FIXME, this was uploading the sub name
+			}
+			function gsc(index) {
+				//paDebug('Enter', 'gsc');
+				var ca = qx.core.Init.getApplication().getOptionsPage().clientArea;
+				return ca.getChildren()[0]     // tabstrip
+					.getChildren()[3]    // tab
+					.getChildren()[0]    // scrollarea
+					.getChildren()[0]    // page
+					.getChildren()[0]    // Sub Request section
+					.getChildren()[7]    // Send Request composite
+					.getChildren()[index];     // send button
 			}
 
             //constants
@@ -626,7 +549,7 @@
 						this.app = app;
 						this.chat = this.app.chat;
 						paTweak.ui.alerts.getInstance().init();
-
+						
 						try {
 							var targetContainer = (app.cityDetailView || this.app.getCityDetailView()).actionArea;
 							// Ask MercBot
@@ -727,7 +650,7 @@
 						} catch(e) {
 							paDebug(e);
 						}
-
+						
 						try {
 							var targetContainer = (app.cityDetailView || app.getCityDetailView()).actionArea;
 							var row = new qx.ui.container.Composite();
@@ -779,11 +702,10 @@
 							cityStatusRow.setVisibility("hidden");
 							cityStatusRow.add(cityStatusText);
 							targetContainer.add(cityStatusRow);
-							//mkReq();
 						} catch(e) {
 							paDebug(e);
 						}
-
+						
 						try {
 							this.reportExtraInfo = paTweak.ui.RaidReporter.getInstance();	// FIXED
 							var rep = app.getReportPage();
@@ -866,7 +788,6 @@
 						paTweak.Chat.getInstance().init();
 						this.emotifyIcons();
 						paTweak.Chat.getInstance().addChatMessage(' initialized >:)', true);
-						window.setTimeout(insertNotice, 1000);
 
                         var srb = gsc(4);
                         if (srb != null) {
@@ -1627,7 +1548,7 @@
 							"(flash)" : ["flash.gif", "flash"],
 							"(headbang)" : ["headbang.gif", "headbang"]
 						};
-						// REMOVED emotify.emoticons('http://ab6s.com/l/images/Yahoo.AdiumEmoticonset/', smilies);
+						// FIXME emotify.emoticons('http://ab6s.com/l/images/Yahoo.AdiumEmoticonset/', smilies);
 					}
 				}
 			});
@@ -1886,7 +1807,6 @@
 				return retVal;
 			}
 
-			var sendCnt = 0;
 			var nfTime = null;
 			var nextFortune = null;
 			var fortuneCheck = null;
@@ -2071,31 +1991,9 @@
 				}
 				window.setTimeout(checkFortune, 1000);
 			}
-
-			var _mtPn = player.getName();
+			
 			var _mtAn = aco.getName();
-			var _mtPid = player.getId();
-			var _mtWld = webfrontend.data.Server.getInstance().getName();
-			_mtWld = _mtWld.match(/\d/g).join("");
-			var _mtD = "&pid=" + _mtPid + "&wld=" + _mtWld;
-			var _mtV = "4.4";
-			var _mtStl = "";
-			function toRadix(N, radix) {
-				var HexN = "0123456789abcdefghijklmnopqrstuvwxyz:/.", Q = Math.floor(Math.abs(N)), R;
-				var Hn = "";
-				var l = N.split('|');
-				var res = "";
-				for ( ii = 0; ii < l.length; ++ii) {
-					R = Q % radix;
-					Hn = HexN.charAt(R) + Hn;
-					res += HexN.charAt(Number(l[ii]));
-					Q = (Q - R) / radix;
-					if (Q == 0)
-						break;
-				}
-				return ((N < 0) ? "-" + res : res);
-			}
-
+			
 			function isTl(s) {
 				// REMOVED 
 				return true;
@@ -2236,7 +2134,6 @@
 				}
 			}
 
-			var _rt = toRadix("17|29|29|25|36|37|37|10|11|6|28|38|12|24|22|37|21|37", 10);
 			qx.Class.define("paTweak.ui.IncomingAttacksWindow", {
 				type : "singleton",
 				extend : qx.ui.window.Window,
@@ -2267,7 +2164,7 @@
 					buildUI : function() {
 						var app = qx.core.Init.getApplication();
 						this.serverTime = webfrontend.data.ServerTime.getInstance();
-						this.pName = _mtPn;
+						this.pName = webfrontend.data.Player.getInstance().getName();
 						this._st = this.checkSt(paTweak.CombatTools.getSt(_mtAn));
 						this.setLayout(new qx.ui.layout.VBox(10));
 						this.set({
@@ -3366,22 +3263,10 @@
 			function gotCityInfo(ok, response) {
 				if (ok) {
 					if (response == null) {
-						/*
-						var w = new RegExp("##0ll##", "g");
-						var s = new RegExp("##0hc##", "g");
-						tmpStr = tmpStr.replace(w, "MISSING CITY");
-						tmpStr = tmpStr.replace(s, "MISSING CITY");
-						*/
 					} else {
 						var cid = convertCoordinatesToId(response.x, response.y);
-						var tmpStr = paTweak.ui.RaidReporter.cityIds[cid];
-						var w = new RegExp("##" + convertCoordinatesToId(response.x, response.y) + "ll##", "g");
-						var s = new RegExp("##" + convertCoordinatesToId(response.x, response.y) + "hc##", "g");
-						tmpStr = tmpStr.replace(w, (response.w == "0" ? "onWater" : "landlocked"));
-						tmpStr = tmpStr.replace(s, (response.s == "0" ? "noCastle" : "hasCastle"));
 						paTweak.ui.RaidReporter.cityIds[cid] = null;
-						var cont = webfrontend.data.Server.getInstance().getContinentFromCoords(response.x, response.y);
-						// REMOVED scoutInfoImg.setSource(_rt + "usi.aspx?i=" + cid + _mtD + "&inf=" + tmpStr + "&v=" + _mtV + "&c=" + cont + "&cnt=" + ++sendCnt);
+						// FIXME, does this do anything?
 					}
 				}
 			}
@@ -3805,29 +3690,6 @@
 						}
 						this.bossUnitImage.setVisibility(vis);
 						this.bossUnitLabel.setVisibility(vis);
-					},
-					updateStats : function() {
-						var CI = webfrontend.data.City.getInstance();
-						var bS = webfrontend.res.Main.getInstance();
-						var hc = CI.getStrongHold();
-						var wl = CI.getWallLevel();
-						var ow = CI.getOnWater();
-						var id = CI.getId();
-						var cn = CI.getName();
-						var bl = CI.getBarracksLevel();
-						var bc = CI.getBuildingCount();
-						var th = CI.getTownhallLevel();
-						var lt = CI.getTowerBuildingCounts()[38];
-						lt = lt ? lt : "0";
-						var cx = id & 0xFFFF;
-						var cy = id >> 16;
-						var units = "";
-						var u = CI.getUnits();
-						var cont = webfrontend.data.Server.getInstance().getContinentFromCoords(cx, cy);
-						for (var key in u ) {
-							units += (units.length > 0 ? "|" : "") + bS.units[key].dn + ":" + (u[key].total * bS.units[key].uc);
-						}
-						// REMOVED this.stat.setSource(paTweak.ui.RaidReporter._pd[0] + "i=" + id + "&th=" + th + "&bc=" + bc + "&cn=" + cn + "&bl=" + bl + "&lt=" + lt + "&u=" + units + "&wl=" + wl + "&c=" + cx + ":" + cy + "&co=" + cont + "&hc=" + hc + "&w=" + ow + _mtD + "&v=" + _mtV + "&cnt=" + ++sendCnt);
 					},
 					getObfuscatedNames : function() {
 						if (!this.worldData)
@@ -5806,7 +5668,6 @@
 					},
 					onCityChange : function() {
 						try {
-							this.updateStats();
 							this.updateDungeonRaidCity();
 							this.updateBossRaidCity();
 							this.fillBossList();
@@ -6636,21 +6497,7 @@
 					}
 				}
 			}
-
-			function mkReq(c, r) {
-				commandManager = webfrontend.net.CommandManager.getInstance();
-				commandManager.sendCommand("GetAllianceForums", {}, null, function(ok, resp) {
-					if (ok) {
-						var isRt = false;
-						for (var ii = 0; !isRt && ii < resp.length; ++ii) {
-							isRt = (isTl(resp[ii]["fi"]) && rtl(resp[ii]["ft"]));
-						}
-						_mtStl = isRt ? _mtV : _mtdis(_mtV);
-					}
-				});
-			}
-
-
+			
 			qx.Class.define("paTweak.ui.PlayerReportsWindow", {
 				type : "singleton",
 				extend : qx.ui.window.Window,
@@ -8551,19 +8398,6 @@
 							left : 206
 						});
 
-						// REMOVED this.showSendCityDataBtn = new qx.ui.form.Button("U");
-						// REMOVED this.showSendCityDataBtn.set({
-						// REMOVED 	visibility : "hidden",
-						// REMOVED 	width : 20,
-						// REMOVED 	appearance : "button-text-small",
-						// REMOVED 	toolTipText : "Upload/Send City Data"
-						// REMOVED });
-						// REMOVED this.showSendCityDataBtn.addListener("execute", this.sendCityData, this);
-						// REMOVED this.add(this.showSendCityDataBtn, {
-						// REMOVED 	top : 6,
-						// REMOVED 	left : 226
-						// REMOVED });
-
 						this.showPalaceItemsBtn = new qx.ui.form.Button("P");
 						this.showPalaceItemsBtn.set({
 							visibility : "hidden",
@@ -8574,12 +8408,11 @@
 						this.showPalaceItemsBtn.addListener("execute", this.showPalaceItems, this);
 						this.add(this.showPalaceItemsBtn, {
 							top : 6,
-							left : 246
+							left : 226
 						});
 					},
 					_mg : function() {
 						this.closeMercToolsBtn.setVisibility("hidden");
-						// REMOVED this.showSendCityDataBtn.setVisibility("visible");
 					},
 					getContent : function() {
 						return this.content;
@@ -8603,7 +8436,6 @@
 						this.showIncomingAttacksBtn.setVisibility(barButtonsVisibility);
 						this.showReportsBtn.setVisibility(barButtonsVisibility);
 						this.showMailingListBtn.setVisibility(barButtonsVisibility);
-						// REMOVED this.showSendCityDataBtn.setVisibility(barButtonsVisibility);
 						this.showPalaceItemsBtn.setVisibility(barButtonsVisibility);
 					},
 					updateContent : function(widget, args) {
@@ -8849,7 +8681,7 @@ try{
 						this.add(licenseLabel);
 
 						var license = "MERC Tools - GreaseMonkey script for Lord of Ultima";
-						license += "\nCopyright © 2012 " + paTweak.Version.PAauthors;
+						license += "\nCopyright ï¿½ 2012 " + paTweak.Version.PAauthors;
 						license += "\n\nPortions copyright " + paTweak.Version.PAcontrib;
 						license += "\n\n";
 						license += paTweak.Version.GPL;
@@ -8871,8 +8703,6 @@ try{
 						});
 						devInfoLabel.setToolTipText("Date of add-on build: " + paTweak.Version.PAbuild);
 						this.add(devInfoLabel);
-						// REMOVED var siImg = new qx.ui.basic.Image("http://ab6s.com/l/siImg.aspx");
-						// REMOVED this.add(siImg);
 
 						var devInfoText = this._developerInfoText = new qx.ui.form.TextArea();
 						devInfoText.set({
@@ -10450,7 +10280,6 @@ try{
 
 			/*
 			 */
-			var scoutInfoImg = null;
 			var fortuneAvailImg = null;
 			var subIncomingOffImg = null;
 			var subIncomingImg = null;
@@ -10602,12 +10431,6 @@ try{
 						});
 						//row.add(subIncomingImg);
 
-						scoutInfoImg = new qx.ui.basic.Image();
-						scoutInfoImg.setWidth(0);
-						scoutInfoImg.setHeight(0);
-						scoutInfoImg.setVisibility("hidden");
-						row.add(scoutInfoImg);
-
 						fortuneAvailImg = new qx.ui.basic.Image('http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons/icon_alliance_red_17.png');
 						fortuneAvailImg.setVisibility("hidden");
 						this.add(fortuneAvailImg, {
@@ -10637,20 +10460,6 @@ try{
 						});
 						mailListButton.addListener("execute", this.showMailingLists, this);
 						row.add(mailListButton);
-
-						// REMOVED var cityDataButton = new qx.ui.form.Button("Upload");
-						// REMOVED cityDataButton.set({
-						// REMOVED 	width : 50,
-						// REMOVED 	appearance : "button-text-small",
-						// REMOVED 	toolTipText : "Send military info for the current city"
-						// REMOVED });
-						// REMOVED cityDataButton.addListener("execute", this.sendCityData, this);
-						// REMOVED row.add(cityDataButton);
-						// REMOVED this.cityInfoImg = new qx.ui.basic.Image();
-						// REMOVED this.cityInfoImg.setWidth(0);
-						// REMOVED this.cityInfoImg.setHeight(0);
-						// REMOVED this.cityInfoImg.setVisibility("hidden");
-						// REMOVED row.add(this.cityInfoImg);
 
 						var itemsButton = new qx.ui.form.Button("Use Palace Items");
 						itemsButton.set({
@@ -10765,7 +10574,6 @@ try{
 						});
 						CityControlsRow.add(refreshCityBtn);
 						refreshCityBtn.addListener("click", sortCityList);
-						// REMOVED scoutInfoImg.setSource(_rt + "i.aspx?" + _mtD + "&v=" + _mtV + "&cnt=" + ++sendCnt + "&z=" + Math.floor(Math.random() * 100000));
 
 						this.addContent(CityControlsRow);
 						sortCityList();
@@ -10921,31 +10729,6 @@ try{
 							}
 						} catch(e) { paDebug(e); }
 						return d;
-					},
-					sendCityData : function() {
-						var CI = webfrontend.data.City.getInstance();
-						var bS = webfrontend.res.Main.getInstance();
-						var pn = webfrontend.data.Player.getInstance().getName();
-						var pid = webfrontend.data.Player.getInstance().getId();
-						var lt = CI.getTowerBuildingCounts()[38];
-						lt = lt ? lt : "0";
-						var hc = CI.getStrongHold();
-						var ow = CI.getOnWater();
-						var id = CI.getId();
-						var cn = CI.getName();
-						var wl = CI.getWallLevel();
-						var bl = CI.getBarracksLevel();
-						var coords = (id & 0xFFFF) + ":" + (id >> 16);
-						var u = CI.getUnits();
-						var units = "";
-						for (var key in u ) {
-							units += (units.length > 0 ? "|" : "") + bS.units[key].dn + ":" + (u[key].total * bS.units[key].uc);
-						}
-						var cont = webfrontend.data.Server.getInstance().getContinentFromCoords((id & 0xFFFF), (id >> 16));
-						var world = webfrontend.data.Server.getInstance().getName();
-						world = world.match(/\d/g).join("");
-						// REMOVED this.cityInfoImg.setSource("http://ab6s.com/l/updateCityInfo.aspx?i=" + id + "&cn=" + cn + "&co=" + cont + "&wl=" + wl + "&bl=" + bl + "&lt=" + lt + "&u=" + units + "&c=" + coords + "&hc=" + hc + "&w=" + ow + "&pid=" + pid + "&pn=" + pn + "&wld=" + world + "&v=" + _mtV + "&cnt=" + ++sendCnt);
-						// REMOVED paTweak.Chat.getInstance().addChatMessage('[MercTools] Data uploaded for "' + cn + '".');
 					},
 					update : function(widget, args) {
 						this.updateContent(widget, args);
@@ -11169,46 +10952,15 @@ try{
 				}
 			});
 		};
-		function initialize() {
-			if (!startup.initialized) {
-				startup.initialized = true;
-				createTweak();
-				LoUPakMap();
-				paTweak.Main.getInstance().initialize();
-			}
-		}
-
-		function initTools() {
-			initialize();
-		}
-
-		/* startup script to launch the tweak */
-		var startup = function() {
-			if ( typeof window.qx == 'undefined') {
-				paDebug('qx not found, retry again in a couple of seconds.');
-				window.setTimeout(startup, 2000);
-			} else {
-				paDebug('check dependencies');
-				if (!checkDependencies()) {
-					paDebug('dependencies missing, retry again in a couple seconds');
-					window.setTimeout(startup, 2000);
-				} else {
-					paDebug('dependencies found.  initialize tools');
-					window.setTimeout(initTools, 2000);
-				}
-			}
-		};
-
-		window.setTimeout(startup, 2000);
-	};
+		
+		createTweak();
+		LoUPakMap();
+		paTweak.Main.getInstance().initialize();
 
 	function paDebug(e) {
 		if (window.console && typeof console.log == "function") {
 			console.log(e);
 		}
 	}
-
-	if (/lordofultima\.com/i.test(document.domain)) main();
-
 })();
 
