@@ -4,7 +4,7 @@
 // @namespace      BoS
 // @author         Urthadar
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.6.4
+// @version        1.6.5
 // @require        http://sizzlemctwizzle.com/updater.php?id=84343&days=1
 // ==/UserScript==
 
@@ -1656,7 +1656,7 @@ qx.Class.define("bos.Storage", {
 		_intelligence: null,
 		_player: "",
 		_getValue: function(key, namespace) {
-			return dsisLouBridge.getConfig('lou-bos.js'this._calculateKey(key, namespace));
+			return dsisLouBridge.getConfig('lou-bos.js',this._calculateKey(key, namespace));
 		},
 		_setValue: function(key, value, namespace) {
 			dsisLouBridge.storeConfig('lou-bos.js',this._calculateKey(key, namespace), value);
