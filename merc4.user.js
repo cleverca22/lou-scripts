@@ -2,7 +2,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        4.4.6
+// @version        4.4.7
 /*
  * Changelog
 
@@ -1561,8 +1561,10 @@
 				members : {
 					init : function() {
 						qx.core.Init.getApplication().chat._outputMsg = this.outputMsgIntercept;
-						webfrontend.gui.Util._convertBBCode = webfrontend.gui.Util.convertBBCode;
-						webfrontend.gui.Util.convertBBCode = this.convertBBCode;
+						if (!webfrontend.gui.Util._convertBBCode) {
+							webfrontend.gui.Util._convertBBCode = webfrontend.gui.Util.convertBBCode;
+							webfrontend.gui.Util.convertBBCode = this.convertBBCode;
+						}
 					},
 					convertBBCode : function(pq, pr, ps) {
 						// place for various custom BBCodes
