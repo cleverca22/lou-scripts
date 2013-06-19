@@ -4,24 +4,12 @@
 // @namespace      BoS
 // @author         Urthadar
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.6.3
+// @version        1.6.4
 // @require        http://sizzlemctwizzle.com/updater.php?id=84343&days=1
 // ==/UserScript==
 
 (function wholeBosScriptFunc(){
 
-var main = function bosMainFunc() {
-
-function bosStartIfQooxoodoIsAvailable() {
-    if (typeof qx != 'undefined') {
-		bosAddMissingQooxoodo();
-		bosScript();		    
-    } else {
-		window.setTimeout(bosStartIfQooxoodoIsAvailable, 5000);    
-    }
-}
-
-function bosAddMissingQooxoodo() {
 	/*
 	webfrontend.gui.SpinnerInt
 qx.util.Json.parse
@@ -73,11 +61,6 @@ webfrontend.gui.CellRendererHtmlCustom
 			extend: webfrontend.gui.CellRendererHtmlCustom
 		});		
 	}	
-}
-
-window.setTimeout(bosStartIfQooxoodoIsAvailable, 5000);
-
-var bosScript = function() {
 
 qx.Class.define("bos.Const", {
 	statics: {	
@@ -15031,11 +15014,4 @@ function sprintf() {
 	return o.join("");
 }
 
-
-
-//---------------------- END OF INJECTED PART -----------------------------------
-}
-};
-
-main();
-})();
+})(); // wholeBosScriptFunc
