@@ -212,7 +212,7 @@ var bosLocalizedStrings = {
 	"btnLoadCities_toolTip": "Manually loads cities data saved during previous game sessions",
 	"btnDeleteAllSavedData": "Delete all saved data",
 	"btnDeleteAllSavedData_confirmation": "All saved data has been deleted",
-	"persistHelp": "When web browser session ends all data about visited cities are lost. Because of that on next game session summary widget doesn't contain a lot data. To enable better game experience there is possibility to save in persistent browser storage all data about visited cities and load them manually or automaticaly before showing summary. This feature works best if used together with 'Refresh resources' button.",	
+	"persistHelp": "When web browser session ends all data about visited cities are lost. Because of that on next game session summary widget doesn't contain a lot data. To enable better game experience there is possibility to save in persistent browser storage all data about visited cities and load them manually or automaticaly before showing summary. This feature works best if used together with 'Refresh resources' button.",
 	"all": "All",
 	"building": "Building",
 	"castles": "Castles",
@@ -1673,28 +1673,17 @@ qx.Class.define("bos.Storage", {
 		_intelligence: null,
 		_player: "",
 		_getValue: function(key, namespace) {
-			var result = GM_getValue(this._calculateKey(key, namespace, true));
-			if (result == null) {
-				result = GM_getValue(this._calculateKey(key, namespace, false));
-			}
-			return result;
-		}, 
+			return dsisLouBridge.getConfig('lou-bos.js'this._calculateKey(key, namespace));
+		},
 		_setValue: function(key, value, namespace) {
-			GM_setValue(this._calculateKey(key, namespace, true), value);		
-		}, 
-		_calculateKey: function(key, namespace, withPlayer) {
+			dsisLouBridge.storeConfig('lou-bos.js',this._calculateKey(key, namespace), value);
+		},
+		_calculateKey: function(key, namespace) {
 			if (namespace == undefined) {
 				namespace = "Storage";
-			}		
-			if (withPlayer == undefined) {
-				withPlayer = true;
 			}
-			if (withPlayer) {
-				return "bos." + this._player + "." + namespace + "." + key;				
-			} else {
-				return "bos." + namespace + "." + key;
-			}
-		}, 
+			return this._player + "." + namespace + "." + key;
+		},
 		_loadOptions: function() {
 			var json = this._getValue("options");
 			var options = null;
@@ -1702,7 +1691,7 @@ qx.Class.define("bos.Storage", {
 				options = qx.lang.Json.parse(json);
 			}
 			return options;
-		}, 
+		},
 		_applyOptions: function(options) {
 			this.setOptionsFormatVersion(options.optionsFormatVersion);
 			this.setPersistingCitiesEnabled(options.persistingCitiesEnabled);
@@ -11188,10 +11177,10 @@ qx.Class.define("bos.gui.OptionsPage", {
 
 		var btnDeleteAllSavedData = new qx.ui.form.Button(tr("btnDeleteAllSavedData"));
 		btnDeleteAllSavedData.addListener("execute", function(event) {
-			storage.getInstance().deleteAllSavedData();			
+			storage.getInstance().deleteAllSavedData();
 			bos.Utils.handleInfo(tr("btnDeleteAllSavedData_confirmation"));
 		}, this);
-		container.add(btnDeleteAllSavedData);
+		// container.add(btnDeleteAllSavedData); FIXME, re-enable when deletion works
 		
 		var btnSaveAllCities = new qx.ui.form.Button(tr("btnSaveAllCities"));
 		btnSaveAllCities.addListener("execute", function(event) {
@@ -14947,51 +14936,6 @@ qx.Class.define("bos.ui.table.cellrenderer.Resource", {
 		}
 	}
 });
-
-//------------------------------------------------------------------------------------------------------------
-//taken from http://userscripts.org/topics/41177
-// @copyright      2009, 2010 James Campos
-// @license        cc-by-3.0; http://creativecommons.org/licenses/by/3.0/
-if (typeof GM_deleteValue == 'undefined') {
-	GM_addStyle = function(css) {
-		var style = document.createElement('style');
-		style.textContent = css;
-		document.getElementsByTagName('head')[0].appendChild(style);
-	}
-
-	GM_deleteValue = function(name) {
-		localStorage.removeItem(name);
-	}
-
-	GM_getValue = function(name, defaultValue) {
-		var value = localStorage.getItem(name);
-		if (!value)
-				return defaultValue;
-		var type = value[0];
-		value = value.substring(1);
-		switch (type) {
-			case 'b':
-					return value == 'true';
-			case 'n':
-					return Number(value);
-			default:
-					return value;
-		}
-	}
-
-	GM_log = function(message) {
-		console.log(message);
-	}
-
-	GM_registerMenuCommand = function(name, funk) {
-	//todo
-	}
-
-	GM_setValue = function(name, value) {
-		value = (typeof value)[0] + value;
-		localStorage.setItem(name, value);
-	}
-}
 
 				/**
 sprintf() for JavaScript 0.5
