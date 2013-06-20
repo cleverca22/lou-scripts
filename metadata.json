@@ -16,7 +16,7 @@
   },{
    "name":"LoU Tweak",
    "userscript":80532,
-   "filename":"lou-itweak.js",
+   "filename":"lou-tweak.js",
    "type":"smart_inject",
    "prio":2,
    "version":"1.7.6.4"
