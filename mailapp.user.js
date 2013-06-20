@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           LoU Mail App
 // @description    UI Extension for LordOfUltima
-// @version        1.9.3
+// @version        1.9.4
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
 // ==/UserScript==
 
@@ -505,11 +505,13 @@ qx.Class.define("MailApp",{
 				ss = ss.substring(0,10) + "...";
 			}
 			var cc = "";
-			for (var ii = 0; ii < bw.cc.length; ii++) {
-				if (ii > 0) {
-					cc = cc + "; ";
+			if (bw.cc) {
+				for (var ii = 0; ii < bw.cc.length; ii++) {
+					if (ii > 0) {
+						cc = cc + "; ";
+					}
+					cc = cc + bw.cc[ii];
 				}
-				cc = cc + bw.cc[ii];
 			}
 			this.tabPages[i] = {name:ss, page:null, vbox:null};
 			var page = new qx.ui.tabview.Page(this.tabPages[i].name);
