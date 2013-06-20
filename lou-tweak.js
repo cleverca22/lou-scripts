@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      AmpliDude
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.7.6.2
+// @version        1.7.6.3
 // @grant          GM_log
 // ==/UserScript==
 
@@ -3257,6 +3257,7 @@
 				
 				LT.a.getRoot().add(this.win, {left:250, top:200});
 				this.srvName = webfrontend.data.Server.getInstance().getName();
+				this.update();
 				this.loadCityLayouts();
 			},
 			members: {
@@ -3272,33 +3273,31 @@
 				win: null,
 				oObjs: null,
 				srvName: null,
+				update: function () {
+					if (this.cityLayouts.hasOwnProperty(this.srvName)) { // FIXME, remove later
+						this.cityLayouts = this.cityLayouts[this.srvName];
+					}
+				},
 				open: function() {
 					this.win.open();
 					this.ssTa1.setValue(this.cityLayout.s);
 					this.ssTa2.setValue(this.cityLayout.u);
 					this.ssTa3.setValue(this.cityLayout.u2);
-					if (this.cityLayouts[this.srvName].hasOwnProperty(webfrontend.data.City.getInstance().getId() + "o"))
-						this.olTa.setValue(this.cityLayouts[this.srvName][webfrontend.data.City.getInstance().getId() + "o"]);
+					if (this.cityLayouts.hasOwnProperty(webfrontend.data.City.getInstance().getId() + "o"))
+						this.olTa.setValue(this.cityLayouts[webfrontend.data.City.getInstance().getId() + "o"]);
 					else this.olTa.setValue("");
 					this.errorLabel.setValue("");
 				},
 				loadCityLayouts: function() {
-					_str = dsisLouBridge.getConfig("lou-tweak.js","LT_cityLayouts");
+					var _str = dsisLouBridge.getConfig("lou-tweak.js","LT_cityLayouts");
 					this.cityLayouts = {};
-					this.cityLayouts[this.srvName] = {};
 					if (_str) {
-						_scl = qx.lang.Json.parse(_str);
-						if (_scl.hasOwnProperty(this.srvName))
-							this.cityLayouts[this.srvName] = _scl[this.srvName];
+						var _scl = qx.lang.Json.parse(_str);
+						if (_scl) this.cityLayouts = _scl;
 					}
 				},
 				saveCityLayouts: function() {
-					_str = dsisLouBridge.getConfig("lou-tweak.js","LT_cityLayouts");
-					if (_str == null) _str = '{"' + this.srvName + '":{}}';
-					_scl = qx.lang.Json.parse(_str);
-					_scl[this.srvName] = this.cityLayouts[this.srvName];
-					_str = qx.lang.Json.stringify(_scl);
-					dsisLouBridge.storeConfig("lou-tweak.js","LT_cityLayouts", _str);
+					dsisLouBridge.storeConfig("lou-tweak.js","LT_cityLayouts", qx.lang.Json.stringify(this.cityLayouts));
 				},
 				removeObjects: function() {
 					if (this.oObjs != null) {
@@ -3330,8 +3329,8 @@
 						return;
 					}
 					
-					if (this.cityLayouts[this.srvName].hasOwnProperty(cId))
-						ss = this.cityLayouts[this.srvName][cId];
+					if (this.cityLayouts.hasOwnProperty(cId))
+						ss = this.cityLayouts[cId];
 					if (ss == null || ss == undefined) {
 						cnt = cgi.getText();
 						ss = cnt.match(/\[LTS\](.+)\[\/LTS\]/);
@@ -3348,9 +3347,9 @@
 					// !this.validateSharestring(ss) || 
 					if (ss == undefined || ss == null || LT.a.visMain.mapmode != "c") return;
 
-					if (!this.cityLayouts[this.srvName].hasOwnProperty(cId)) {
-						this.cityLayouts[this.srvName][cId] = ss;
-						this.cityLayouts[this.srvName][cId + "o"] = or;
+					if (!this.cityLayouts.hasOwnProperty(cId)) {
+						this.cityLayouts[cId] = ss;
+						this.cityLayouts[cId + "o"] = or;
 						this.saveCityLayouts();
 					}
 
@@ -3457,8 +3456,8 @@
 					cId = webfrontend.data.City.getInstance().getId();
 					this.errorLabel.setValue("");
 					this.removeObjects();
-					delete this.cityLayouts[this.srvName][cId];
-					delete this.cityLayouts[this.srvName][cId + "o"];
+					delete this.cityLayouts[cId];
+					delete this.cityLayouts[cId + "o"];
 					this.saveToCityNotes("r", "");
 					this.olTa.setValue("");
 					this.saveCityLayouts();
@@ -3547,8 +3546,8 @@
 							} catch(e) { obj = "error"; }
 							if (typeof obj == "object" && obj != null) {
 								_icl = qx.lang.Json.parse(txt); // imp ss
-								if (_icl.hasOwnProperty(LT.main.layoutWindow.srvName)) {
-									LT.main.layoutWindow.cityLayouts[LT.main.layoutWindow.srvName] = _icl[LT.main.layoutWindow.srvName];
+								if (_icl) {
+									LT.main.layoutWindow.cityLayouts = _icl;
 									LT.main.layoutWindow.saveCityLayouts();
 								}
 								this.close();

@@ -16,10 +16,10 @@
   },{
    "name":"LoU Tweak",
    "userscript":80532,
-   "filename":"lou-tweak.js",
+   "filename":"lou-itweak.js",
    "type":"smart_inject",
    "prio":2,
-   "version":"1.7.6.2"
+   "version":"1.7.6.3"
   },{
    "name":"LoU winter disable",
    "userscript":153096,
