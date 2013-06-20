@@ -58,11 +58,11 @@ qx.Class.define("MailApp",{
 		this.___jG=new qx.ui.tree.Tree().set({height:54,width:130,font:"font_headline_serif_groupbox",textColor:"textcol-groupbox",openMode:"none"});
 		this.___jG.addListener("changeSelection",this.___jV,this);
 		this.add(this.___jG,{left:5,top:5});
-		this.___jH=new webfrontend.data.MailHeaderDataModel().set({blockConcurrentLoadRowCount:false});
+		this.mailHeaderDataModel=new webfrontend.data.MailHeaderDataModel().set({blockConcurrentLoadRowCount:false});
 
-		this.___jH.setColumns(["","Subject","From","Received"],["c","s","f","d"]);
-		this.___jH.sortByColumn(3,false);
-		this.___jI=new webfrontend.ui.CustomTable(this.___jH).set({columnVisibilityButtonVisible:false,statusBarVisible:false,width:420});
+		this.mailHeaderDataModel.setColumns(["","Subject","From","Received"],["c","s","f","d"]);
+		this.mailHeaderDataModel.sortByColumn(3,false);
+		this.___jI=new webfrontend.ui.CustomTable(this.mailHeaderDataModel).set({columnVisibilityButtonVisible:false,statusBarVisible:false,width:420});
 		this.___jI.addListener("cellClick",this.___jS,this);
 		this.___jI.setAllowGrowX(false);
 		this.___jI.setAllowShrinkX(false);
@@ -76,7 +76,7 @@ qx.Class.define("MailApp",{
 		bm.setDataCellRenderer(2,new qx.ui.table.cellrenderer.Html());
 		bm.setDataCellRenderer(3,new qx.ui.table.cellrenderer.Html());
 		this.add(this.___jI,{left:5,top:60,right:5,bottom:39});
-		this.___jH.addListener("loadRowComplete", this.__ka, this);
+		this.mailHeaderDataModel.addListener("loadRowComplete", this.__ka, this);
 		this.___jDD=true;
 		this.___jM = 0;
 		this.___jN = 0;
@@ -184,17 +184,17 @@ qx.Class.define("MailApp",{
 			return bM;
 		},
 		__kc:function(){
-			var bN=this.___jH.hasSelected();
+			var bN=this.mailHeaderDataModel.hasSelected();
 			this.___jK.setEnabled(bN);
 			this.___jL.setEnabled(bN);
 			this.___jL2.setEnabled(bN);
 		},
 		___jP:function(){
-			var bp=!this.___jH.getSelectAll();
-			this.___jH.resetSelected(false);
-			this.___jH.setSelectAll(bp);
-			this.___jH.iterateCachedRows(this.__kb,{s:bp});
-			this.___jH.fireDataEvent("dataChanged",{firstColumn:0,lastColumn:0,firstRow:0,lastRow:this.___jH.getRowCount()});
+			var bp=!this.mailHeaderDataModel.getSelectAll();
+			this.mailHeaderDataModel.resetSelected(false);
+			this.mailHeaderDataModel.setSelectAll(bp);
+			this.mailHeaderDataModel.iterateCachedRows(this.__kb,{s:bp});
+			this.mailHeaderDataModel.fireDataEvent("dataChanged",{firstColumn:0,lastColumn:0,firstRow:0,lastRow:this.mailHeaderDataModel.getRowCount()});
 			this.__kc();
 		},
 		___jQ:function(r,bq,br){
@@ -203,8 +203,8 @@ qx.Class.define("MailApp",{
 			}
 			var bs=qx.core.Init.getApplication();
 			bs.getInfoNavigatorWidget().bulkRemovePages(bs.getMailPage(),br);
-			this.___jH.setSelectAll(false);
-			this.___jH.resetSelected(true,true);
+			this.mailHeaderDataModel.setSelectAll(false);
+			this.mailHeaderDataModel.resetSelected(true,true);
 			this.___jI.getSelectionModel().resetSelection();
 			this.___jJ.setValue(false);
 			this.__kc();
@@ -217,8 +217,8 @@ qx.Class.define("MailApp",{
 			if(!r||bu.cnt!=this.___jN){
 				return;
 			}
-			this.___jH.setSelectAll(false);
-			this.___jH.resetSelected(true,false);
+			this.mailHeaderDataModel.setSelectAll(false);
+			this.mailHeaderDataModel.resetSelected(true,false);
 			this.___jJ.setValue(false);
 			this.__kc();
 			if(!r){
@@ -226,13 +226,13 @@ qx.Class.define("MailApp",{
 			}
 		},
 		___jS:function(e) {
-			var bw=this.___jH.getRowData(e.getRow());
+			var bw=this.mailHeaderDataModel.getbw(e.getRow());
 
 			if(bw!=null){
 				if(e.getColumn()==0){
 					bw.c=!bw.c;
-					this.___jH.setValue(0,e.getRow(),bw.c);
-					this.___jH.setSelected(bw.i,bw.c);
+					this.mailHeaderDataModel.setValue(0,e.getRow(),bw.c);
+					this.mailHeaderDataModel.setSelected(bw.i,bw.c);
 					this.__kc();
 					return;
 				}
@@ -242,7 +242,7 @@ qx.Class.define("MailApp",{
 					bw.s=bw.s.substring(3,bw.s.length-4);
 					bw.f=bw.f.substring(3,bw.f.length-4);
 					bw.d=bw.d.substring(3,bw.d.length-4);
-					this.___jH.setValue(1,e.getRow(),bw.s);
+					this.mailHeaderDataModel.setValue(1,e.getRow(),bw.s);
 					webfrontend.net.CommandManager.getInstance().sendCommand("IGMSetReadFlag", {msgId:bw.i,flag:1}, this, function(e){});
 					bv.title.resetUnreadMailMarker();
 				}
@@ -262,58 +262,58 @@ qx.Class.define("MailApp",{
 			this.___jM++;
 			var bx=new Array();
 
-			if(this.___jH.hasSelected()) {
-				bx = this.___jH.getSelectedIds();
+			if(this.mailHeaderDataModel.hasSelected()) {
+				bx = this.mailHeaderDataModel.getSelectedIds();
 			} else {
-				bx=[this.___jH.getRowData(this.___jI.getFocusedRow()).id];
+				bx=[this.mailHeaderDataModel.getRowData(this.___jI.getFocusedRow()).id];
 				this.___jI.setFocusedCell(0,-1,false);
 			}
-			webfrontend.net.CommandManager.getInstance().sendCommand("IGMBulkDeleteMsg",{ids:bx,f:this.___jH.getFolder(),a:this.___jH.getSelectAll()},this,this.___jQ,{cnt:this.___jM,ids:bx,a:this.___jH.getSelectAll()});
+			webfrontend.net.CommandManager.getInstance().sendCommand("IGMBulkDeleteMsg",{ids:bx,f:this.mailHeaderDataModel.getFolder(),a:this.mailHeaderDataModel.getSelectAll()},this,this.___jQ,{cnt:this.___jM,ids:bx,a:this.mailHeaderDataModel.getSelectAll()});
 		},
 		___jU:function(e){
 			this.___jN++;
 			var by=new Array();
 
-			if(this.___jH.hasSelected()) {
-				by=this.___jH.getSelectedIds();
+			if(this.mailHeaderDataModel.hasSelected()) {
+				by=this.mailHeaderDataModel.getSelectedIds();
 			} else {
-				by=[this.___jH.getRowData(this.___jI.getFocusedRow()).id];
+				by=[this.mailHeaderDataModel.getRowData(this.___jI.getFocusedRow()).id];
 				this.___jI.setFocusedCell(0,-1,false);
 			}
-			webfrontend.net.CommandManager.getInstance().sendCommand("IGMBulkSetReadFlag",{msgIds:by,flag:0,f:this.___jH.getFolder(),all:this.___jH.getSelectAll()},this,this.___jR,{cnt:this.___jN,ids:by,a:this.___jH.getSelectAll()});
+			webfrontend.net.CommandManager.getInstance().sendCommand("IGMBulkSetReadFlag",{msgIds:by,flag:0,f:this.mailHeaderDataModel.getFolder(),all:this.mailHeaderDataModel.getSelectAll()},this,this.___jR,{cnt:this.___jN,ids:by,a:this.mailHeaderDataModel.getSelectAll()});
 		},
 		___jU2:function(e){
 			this.___jN++;
 			var by=new Array();
 
-			if(this.___jH.hasSelected()) {
-				by=this.___jH.getSelectedIds();
+			if(this.mailHeaderDataModel.hasSelected()) {
+				by=this.mailHeaderDataModel.getSelectedIds();
 			} else {
-				by=[this.___jH.getRowData(this.___jI.getFocusedRow()).id];
+				by=[this.mailHeaderDataModel.getRowData(this.___jI.getFocusedRow()).id];
 				this.___jI.setFocusedCell(0,-1,false);
 			}
-			webfrontend.net.CommandManager.getInstance().sendCommand("IGMBulkSetReadFlag",{msgIds:by,flag:1,f:this.___jH.getFolder(),all:this.___jH.getSelectAll()},this,this.___jR,{cnt:this.___jN,ids:by,a:this.___jH.getSelectAll()});
+			webfrontend.net.CommandManager.getInstance().sendCommand("IGMBulkSetReadFlag",{msgIds:by,flag:1,f:this.mailHeaderDataModel.getFolder(),all:this.mailHeaderDataModel.getSelectAll()},this,this.___jR,{cnt:this.___jN,ids:by,a:this.mailHeaderDataModel.getSelectAll()});
 		},
 		___jV:function(e){
 			this.___jI.getSelectionModel().resetSelection();
 			var bA=e.getData();
-			this.___jH.resetSelected(false);
-			this.___jH.setSelectAll(false);
+			this.mailHeaderDataModel.resetSelected(false);
+			this.mailHeaderDataModel.setSelectAll(false);
 
 			if(bA[0].getUserData("name")=="@Out"){
 				this.___jDD=false;
-				this.___jH.setColumns(["","Subject","To","Message Sent"],["c","s","to","d"]);
-				this.___jH.setDirection(false);
+				this.mailHeaderDataModel.setColumns(["","Subject","To","Message Sent"],["c","s","to","d"]);
+				this.mailHeaderDataModel.setDirection(false);
 			}else if(!this.___jDD){
 				this.___jDD=true;
-				this.___jH.setColumns(["","Subject","From","Received"],["c","s","f","d"]);
-				this.___jH.setDirection(true);
+				this.mailHeaderDataModel.setColumns(["","Subject","From","Received"],["c","s","f","d"]);
+				this.mailHeaderDataModel.setDirection(true);
 			}
 			var bz=bA[0].getUserData("ID");
 
 			if(bA.length>0&&bz){
 				this.currentFolder=bz;
-				this.___jH.setFolder(bz);
+				this.mailHeaderDataModel.setFolder(bz);
 			}
 			this.___jI.setFocusedCell(0,-1,false);
 			//this.___jJ.setValue(false);
@@ -357,9 +357,9 @@ qx.Class.define("MailApp",{
 			}
 		},
 		___jY:function(bI){
-			var bJ=this.___jH.getSelectAll();
+			var bJ=this.mailHeaderDataModel.getSelectAll();
 			if(this.___jDD && bI.getData() > bI.getOldData()){
-				this.___jH.reloadData();
+				this.mailHeaderDataModel.reloadData();
 			}
 		},
 		__ES: function(cB, cC) {
@@ -857,9 +857,9 @@ qx.Class.define("MailApp",{
 		DeleteFromMessage:function() {
 			var msg = this.tabView.getSelection()[0];
 			var id = [msg.id];
-			webfrontend.net.CommandManager.getInstance().sendCommand("IGMBulkDeleteMsg",{ids:id,f:this.___jH.getFolder(),a:this.___jH.getSelectAll()},this);
+			webfrontend.net.CommandManager.getInstance().sendCommand("IGMBulkDeleteMsg",{ids:id,f:this.mailHeaderDataModel.getFolder(),a:this.mailHeaderDataModel.getSelectAll()},this);
 			this.CloseTab();
-			this.___jH.reloadData();
+			this.mailHeaderDataModel.reloadData();
 		},
 		ForwardFromMessage:function() {
 			var id = this.tabView.getSelection()[0].id;
@@ -920,7 +920,7 @@ qx.Class.define("MailApp",{
 			if (this.isVisible()) {
 				this.close();
 			} else {
-				this.___jH.reloadData();
+				this.mailHeaderDataModel.reloadData();
 				this.open();
 			}
 		},
