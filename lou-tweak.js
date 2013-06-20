@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      AmpliDude
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.7.6.3
+// @version        1.7.6.4
 // @grant          GM_log
 // ==/UserScript==
 
@@ -3257,8 +3257,8 @@
 				
 				LT.a.getRoot().add(this.win, {left:250, top:200});
 				this.srvName = webfrontend.data.Server.getInstance().getName();
-				this.update();
 				this.loadCityLayouts();
+				this.update();
 			},
 			members: {
 				cityLayout: null,
