@@ -104,6 +104,12 @@
    "type":"smart_inject",
    "version":"2.2.6.3",
    "prio":3
+  },{
+   "name":"(untested) SkraggleSkript",
+   "filename":"142304.user.js",
+   "type":"old",
+   "version":"1",
+   "prio":2
   }
  ],
  "conflicts":[
