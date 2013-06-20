@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           CityHelp GUI
 // @namespace      CityHelpGUI
-// @version        2.2.6.3
+// @version        2.2.6.4
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
 // ==/UserScript==
 
@@ -3560,7 +3560,6 @@
                             var cVer = cgi.getVersion();
                             if ((currentTime > (this.lastUpdate + 1000)) || !(this.layout.cityId == cId) || !(cVer == this.layout.cv)) { // 
                                 if (this.app.visMain.mapmode == "c") {
-                                    var srvName = webfrontend.data.Server.getInstance().getName();
                                     buildQueue = webfrontend.data.City.getInstance().buildQueue;
                                     if (buildQueue == null) {
                                         buildQueue = [];
@@ -3581,8 +3580,8 @@
                                         var c;
                                         var ss;
                                         var cequal = true;
-                                        if (_LT && _LT.main.layoutWindow.cityLayouts[srvName].hasOwnProperty(cId)) {
-                                            ss = _LT.main.layoutWindow.cityLayouts[srvName][cId];
+                                        if (_LT && _LT.main.layoutWindow.cityLayouts.hasOwnProperty(cId)) {
+                                            ss = _LT.main.layoutWindow.cityLayouts[cId];
                                             c = this.layout.city;
                                             for (i = 0; i < 441; i++) {
                                                 if (this.layout.cc == null || c== null) {
@@ -3683,8 +3682,8 @@
                                         var cequal = true;
                                         this.layout.cityId = cId;
                                         this.activeButton = new Array(true, true, true, false, false, false, false, false);
-                                        if (_LT.main.layoutWindow.cityLayouts[srvName].hasOwnProperty(cId)) {
-                                            ss = _LT.main.layoutWindow.cityLayouts[srvName][cId];
+                                        if (_LT.main.layoutWindow.cityLayouts.hasOwnProperty(cId)) {
+                                            ss = _LT.main.layoutWindow.cityLayouts[cId];
                                             c = _LT.city;
                                             for (i = 0; i < 441; i++) {
                                                 if (this.layout.cc == null) {
