@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name       Dada's Raiding Master 
 // @namespace  ds
-// @version    0.0.1
+// @version    0.0.2
 // @description  Automate the raiding process in LOU as much as possible. (derived from SkraggleSkript, credit goes to the SkraggleRock as well). Updated to fix code break on Newer worlds.
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
 // @copyright  2013+, Omer Saeed
@@ -582,7 +582,7 @@ DEALINGS IN THE SOFTWARE.
 						}
                     },
 
-					interceptOnReport: function(r,fm,fn)
+					interceptOnReport4: function(r,fm,fn)
                     {
                         // DONT FORGET THAT THIS RUNS ON THE REPORT PAGE, NOT THE MOD
 						var cfg = sks.loua.ConfigManager.getInstance().getConfig(this.sksRaidReporterMod);
@@ -813,7 +813,7 @@ DEALINGS IN THE SOFTWARE.
                         var rep = $SKSU.getApp().getReportPage();
 						rep.sksRaidReporterMod = this;
 						rep.sksOriginalOnReport = $SKSU.getApp().getReportPage()._onReport;
-                        rep._onReport = this.interceptOnReport;
+                        rep._onReport = this.interceptOnReport4;
 
 						info( "Adding MOD" );
                     },

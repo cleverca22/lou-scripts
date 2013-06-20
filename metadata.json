@@ -10,7 +10,7 @@
    "name":"LoU MERC Tools 3.1",
    "filename":"merc3.user.js",
    "type":"smart_inject",
-   "version":"3.1.9",
+   "version":"3.1.10",
    "prio":2,
    "conflicts":[1]
   },{
@@ -31,7 +31,7 @@
    "userscript":160990,
    "filename":"160990.user.js",
    "type":"old",
-   "version":"0.0.1"
+   "version":"0.0.2"
   },{
    "name":"LoU Mail App",
    "filename":"mailapp.user.js",
@@ -95,7 +95,7 @@
    "name":"(untested) MERC Tools 4.4",
    "filename":"merc4.user.js",
    "type":"smart_inject",
-   "version":"4.4.7",
+   "version":"4.4.8",
    "prio":2,
    "conflicts":[1]
   },{

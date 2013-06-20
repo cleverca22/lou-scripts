@@ -1,8 +1,9 @@
+/*jslint eqeq: true, vars: true, white: true */
 // @name           MERC Tools
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        4.4.7
+// @version        4.4.8
 /*
  * Changelog
 
@@ -710,7 +711,7 @@
 							this.reportExtraInfo = paTweak.ui.RaidReporter.getInstance();	// FIXED
 							var rep = app.getReportPage();
 							rep.origOnReport = rep._onReport;
-							rep._onReport = this.reportExtraInfo.interceptOnReport;
+							rep._onReport = this.reportExtraInfo.interceptOnReport2;
 						} catch(e) {
 							paDebug(e);
 						}
@@ -2787,7 +2788,7 @@
 				},
 				members : {
 
-					interceptOnReport : function(r, fm, fn) {
+					interceptOnReport2 : function(r, fm, fn) {
 						var app = qx.core.Init.getApplication();
 						var rep = app.getReportPage();
 						rep.origOnReport(r, fm, fn);

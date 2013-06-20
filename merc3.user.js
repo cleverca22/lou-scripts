@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        3.1.9
+// @version        3.1.10
 // ==/UserScript==
 /*
  * Changelog
@@ -568,7 +568,7 @@ qx.Class.define("paTweak.Main", {
                 this.reportExtraInfo = paTweak.ui.RaidReporter.getInstance()
                 var rep = app.getReportPage();
                 rep.origOnReport = rep._onReport;
-                rep._onReport = this.reportExtraInfo.interceptOnReport;
+                rep._onReport = this.reportExtraInfo.interceptOnReport1;
             }catch(e){ paDebug(e); }
 
             // Boss button
@@ -2211,7 +2211,7 @@ function pollCompleted(e) {
                 },
                 members: {
 
-                    interceptOnReport: function(r,fm,fn)
+                    interceptOnReport1: function(r,fm,fn)
                     {
                         var app = qx.core.Init.getApplication();
                         var rep = app.getReportPage();
