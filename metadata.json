@@ -72,7 +72,7 @@
    "filename":"LoUDefiant_script.js",
    "prio":2,
    "type":"smart_inject",
-   "version":"0.0.32"
+   "version":"0.0.33"
   },{
    "name":"city startup helper",
    "filename":"city-starter.js",

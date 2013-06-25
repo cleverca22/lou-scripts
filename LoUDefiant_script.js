@@ -1,11 +1,11 @@
-// @version 0.0.32
+// @version 0.0.33
 var com_senocular_LoUDefiant_pageScript = function(){
 	
 function debug(msg){ 
 	if (msg instanceof Error) {
 		qx.event.GlobalError.handleError(new qx.core.GlobalError(msg));
 	}
-	msg = (msg instanceof Error && msg.stack) ? msg.stack : String(msg);
+	msg = (msg instanceof Error && msg.stack) ? (String(msg)+msg.stack) : String(msg);
 	if (console) console.log("LoU TDK: " + msg);
 }
 
