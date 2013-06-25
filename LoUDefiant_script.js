@@ -1,4 +1,4 @@
-// @version 0.0.34
+// @version 0.0.35
 var com_senocular_LoUDefiant_pageScript = function(){
 	
 function debug(msg){ 
@@ -802,7 +802,7 @@ debug('in init');
 				
 				if (notesData.length){
 					var exportWindow = senocular.tdk.GenericPageImportExportWindow.getInstance();
-					exportWindow.display( "Export", qx.util.Json.stringify(notesData) );
+					exportWindow.display( "Export", JSON.stringify(notesData) );
 				}else{
 					alert("Please select the notes you wish to export.");
 				}
@@ -1061,7 +1061,7 @@ debug('in init');
 				}
 				if (tradesData.length){ 
 					var exportWindow = senocular.tdk.GenericPageImportExportWindow.getInstance();
-					exportWindow.display( "Export", qx.util.Json.stringify(tradesData) );
+					exportWindow.display( "Export", JSON.stringify(tradesData) );
 				}else{
 					alert("Please select the trades you wish to export.");
 				}
@@ -1565,7 +1565,7 @@ debug('in init');
 				var data
 				try {
 					
-					data = qx.util.Json.parse( dataStr );
+					data = JSON.parse( dataStr );
 					if (data instanceof Object == false)
 						throw new Error("Invalid data type");
 					

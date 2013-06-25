@@ -4,7 +4,7 @@
 // @namespace      BoS
 // @author         Urthadar
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.6.5
+// @version        1.6.6
 // @require        http://sizzlemctwizzle.com/updater.php?id=84343&days=1
 // ==/UserScript==
 
@@ -12,26 +12,10 @@
 
 	/*
 	webfrontend.gui.SpinnerInt
-qx.util.Json.parse
-qx.util.Json.stringify
 webfrontend.gui.RowRendererCustom
 webfrontend.gui.MessageBox
 webfrontend.gui.CellRendererHtmlCustom
 	*/
-	if (typeof qx.lang == 'undefined' || typeof qx.lang.Json == 'undefined') {
-		qx.Class.define("qx.lang.Json", {
-			type: "singleton",
-			extend: qx.core.Object,
-			statics: {
-				parse: function(s) {
-					return qx.util.Json.parse(s);
-				},
-				stringify: function(o) {
-					return qx.util.Json.stringify(o);
-				}
-			}
-		});
-	}
 	
 	if (typeof webfrontend.ui == 'undefined' || typeof webfrontend.ui.SpinnerInt == 'undefined') {
 		qx.Class.define("webfrontend.ui.SpinnerInt", {			
@@ -1671,7 +1655,7 @@ qx.Class.define("bos.Storage", {
 			var json = this._getValue("options");
 			var options = null;
 			if (json != null) {
-				options = qx.lang.Json.parse(json);
+				options = JSON.parse(json);
 			}
 			return options;
 		},
@@ -1708,7 +1692,7 @@ qx.Class.define("bos.Storage", {
 		}, 
 		saveCity: function(city) {
 			var simple = city.toSimpleObject();
-			var json = qx.lang.Json.stringify(simple);
+			var json = JSON.stringify(simple);
 			this._setValue(city.getId(), json, "City");
 
 			this._savedCities["c" + city.getId()] = city.getId();
@@ -1718,7 +1702,7 @@ qx.Class.define("bos.Storage", {
 			var json = this._getValue(cityId, "City");
 			if (json == null)
 				return null;
-			var parsed = qx.lang.Json.parse(json);
+			var parsed = JSON.parse(json);
 			var city = bos.City.createFromSimpleObject(parsed);
 			return city;
 		}, 
@@ -1729,7 +1713,7 @@ qx.Class.define("bos.Storage", {
 			var s = this._getValue("index", "City");
 			var cities = [];
 			if (s != null) {
-				cities = qx.lang.Json.parse(s);
+				cities = JSON.parse(s);
 			}
 			return cities;
 		}, 
@@ -1745,7 +1729,7 @@ qx.Class.define("bos.Storage", {
 				}
 			}
 
-			var json = qx.lang.Json.stringify(cities);
+			var json = JSON.stringify(cities);
 			this._setValue("index", json, "City");
 		}, 
 		deleteAllSavedData: function() {
@@ -1776,7 +1760,7 @@ qx.Class.define("bos.Storage", {
 				customCityTypes: this.getCustomCityTypes(),
 				optionsFormatVersion: bos.Storage.OPTIONS_FORMAT_VERSION
 			}
-			var json = qx.lang.Json.stringify(o);
+			var json = JSON.stringify(o);
 			this._setValue("options", json);
 						
 		}, 
@@ -1881,9 +1865,9 @@ qx.Class.define("bos.Storage", {
 		}, 
 		loadTradeRoutes: function() {
 			this._tradeRoutes = [];
-			var json = this._getValue("tradeRoutes");			
+			var json = this._getValue("tradeRoutes");
 			if (json != null) {
-				this._tradeRoutes = qx.lang.Json.parse(json);
+				this._tradeRoutes = JSON.parse(json);
 			}
 			return this._tradeRoutes;
 		}, 
@@ -1894,8 +1878,8 @@ qx.Class.define("bos.Storage", {
 			return this._tradeRoutes;		
 		}, 
 		saveTradeRoutes: function() {
-			var json = qx.lang.Json.stringify(this._tradeRoutes);
-			this._setValue("tradeRoutes", json);			
+			var json = JSON.stringify(this._tradeRoutes);
+			this._setValue("tradeRoutes", json);
 		}, 
 		addTradeRoute: function(route) {
 			route.id = this._tradeRoutes.length + 1;
@@ -1928,7 +1912,7 @@ qx.Class.define("bos.Storage", {
 		importTradeRoutes: function(json) {
 			try {
 				var required = ["from", "to", "wood", "stone", "iron", "food", "transport", "group"];
-				var orders = qx.lang.Json.parse(json);
+				var orders = JSON.parse(json);
 				for (var i = 0; i < orders.length; i++) {
 					var order = orders[i];
 					for (var j = 0; j < required.length; j++) {
@@ -1949,9 +1933,9 @@ qx.Class.define("bos.Storage", {
 		},		
 		loadRecruitmentOrders: function() {
 			this._recruitmentOrders = [];
-			var json = this._getValue("recruitmentOrders");			
+			var json = this._getValue("recruitmentOrders");
 			if (json != null) {
-				this._recruitmentOrders = qx.lang.Json.parse(json);
+				this._recruitmentOrders = JSON.parse(json);
 			}
 			return this._recruitmentOrders;
 		}, 
@@ -1962,10 +1946,10 @@ qx.Class.define("bos.Storage", {
 			return this._recruitmentOrders;		
 		}, 
 		saveRecruitmentOrders: function() {
-			var json = qx.lang.Json.stringify(this._recruitmentOrders);
-			this._setValue("recruitmentOrders", json);			
+			var json = JSON.stringify(this._recruitmentOrders);
+			this._setValue("recruitmentOrders", json);
 		}, 
-		addRecruitmentOrder: function(order) {			
+		addRecruitmentOrder: function(order) {
 			this._recruitmentOrders.push(order);
 			this.setRecruitmentOrdersVersion(this.getRecruitmentOrdersVersion() + 1);
 			this.saveRecruitmentOrders();
@@ -1994,7 +1978,7 @@ qx.Class.define("bos.Storage", {
 		importRecruitmentOrders: function(json) {
 			try {
 				var required = ["cityId", "units"];
-				var orders = qx.lang.Json.parse(json);
+				var orders = JSON.parse(json);
 				for (var i = 0; i < orders.length; i++) {
 					var order = orders[i];
 					for (var j = 0; j < required.length; j++) {
@@ -2005,7 +1989,7 @@ qx.Class.define("bos.Storage", {
 							return;
 						}
 					}
-				}				
+				}
 				
 				this._recruitmentOrders = orders;
 				this.saveRecruitmentOrders();
@@ -2016,9 +2000,9 @@ qx.Class.define("bos.Storage", {
 
 		loadIntelligence: function() {
 			this._intelligence = [];
-			var json = this._getValue("intelligence");			
+			var json = this._getValue("intelligence");
 			if (json != null) {
-				this._intelligence = qx.lang.Json.parse(json);
+				this._intelligence = JSON.parse(json);
 			}
 			return this._intelligence;
 		}, 
@@ -2029,7 +2013,7 @@ qx.Class.define("bos.Storage", {
 			return this._intelligence;		
 		}, 
 		saveIntelligence: function() {
-			var json = qx.lang.Json.stringify(this._intelligence);
+			var json = JSON.stringify(this._intelligence);
 			this._setValue("intelligence", json);			
 		}, 
 		addIntelligence: function(intel) {			
@@ -2061,7 +2045,7 @@ qx.Class.define("bos.Storage", {
 		mergeIntelligence: function(json) {
 			try {
 				var required = ["cityId", "name", "isLandlocked", "hasCastle", "owner", "description", "lastModified", "modifiedBy"];
-				var intelligence = qx.lang.Json.parse(json);
+				var intelligence = JSON.parse(json);
 				for (var i = 0; i < intelligence.length; i++) {
 					var intel = intelligence[i];
 					for (var j = 0; j < required.length; j++) {
@@ -2102,7 +2086,7 @@ qx.Class.define("bos.Storage", {
 			var json = this._getValue("purifyOptions");
 			var options;
 			if (json != null) {
-				options = qx.lang.Json.parse(json);
+				options = JSON.parse(json);
 			} else {
 				options = {					
 					includeCastles: false,
@@ -2120,7 +2104,7 @@ qx.Class.define("bos.Storage", {
 		},
 		savePurifyOptions: function(options) {
 			options.ministerBuildPresent = webfrontend.data.Player.getInstance().getMinisterTradePresent();
-			var json = qx.lang.Json.stringify(options);
+			var json = JSON.stringify(options);
 			this._setValue("purifyOptions", json);
 		}
 	}
@@ -2195,7 +2179,7 @@ qx.Class.define("bos.net.CommandManager", {
 			var updateManager = webfrontend.net.UpdateManager.getInstance();
 			
 			var data = new qx.util.StringBuilder(2048);
-			data.add('{"session":"', updateManager.getInstanceGuid(), '","requestid":"', updateManager.requestCounter, '","requests":', qx.lang.Json.stringify(requests), "}");
+			data.add('{"session":"', updateManager.getInstanceGuid(), '","requestid":"', updateManager.requestCounter, '","requests":', JSON.stringify(requests), "}");
 			updateManager.requestCounter++;			
 			
 			var req = new qx.io.remote.Request(updateManager.getUpdateService() + "/Service.svc/ajaxEndpoint/Poll", "POST", "application/json");
@@ -2565,7 +2549,7 @@ qx.Class.define("bos.Tweaks", {
 			}
 			
 			if (params.state.errors + params.state.ok >= params.state.reports) {
-				var json = qx.lang.Json.stringify(params);
+				var json = JSON.stringify(params);
 				bos.Utils.displayLongText(json);
 			}
 		},
@@ -4869,7 +4853,7 @@ qx.Class.define("bos.gui.TradeOrdersPage", {
 					return this.tr("tnf:returns");			
 			}
 
-			return "??? " + state;			
+			return "???1 " + state;
 		}, 
 		translateType: function(type) {
 			switch (type) {
@@ -4894,7 +4878,7 @@ qx.Class.define("bos.gui.TradeOrdersPage", {
 			}
 	
 
-			return "??? " + type;
+			return "???3 " + type + ' '+transport;
 		}, 
 		_handleCellClick: function(event) {
 			var row = event.getRow();
@@ -7004,7 +6988,7 @@ qx.Class.define("bos.gui.TradeRoutesPage", {
 			var storage = bos.Storage.getInstance();
 			var orders = storage.getTradeRoutes();
 			
-			var json = qx.lang.Json.stringify(orders);
+			var json = JSON.stringify(orders);
 			bos.Utils.displayLongText(json);
 		},
 		importSettings: function() {
@@ -7588,7 +7572,7 @@ qx.Class.define("bos.gui.IntelligencePage", {
 			var storage = bos.Storage.getInstance();
 			var intel = storage.getIntelligence();
 			
-			var json = qx.lang.Json.stringify(intel);
+			var json = JSON.stringify(intel);
 			bos.Utils.displayLongText(json);
 		},
 		importSettings: function() {			
@@ -9549,7 +9533,7 @@ qx.Class.define("bos.gui.MassRecruitmentPage", {
 			var storage = bos.Storage.getInstance();
 			var orders = storage.getRecruitmentOrders();
 			
-			var json = qx.lang.Json.stringify(orders);
+			var json = JSON.stringify(orders);
 			bos.Utils.displayLongText(json);
 		},
 		importSettings: function() {			
@@ -12557,7 +12541,7 @@ function handleError(dp) {
 		if (dp.getLineNumber != null) dq += cx + dp.getLineNumber();
 		if (dp.hasOwnProperty("stack")) dq += cx + dp.stack;
 
-		dq = qx.lang.Json.stringify(dq);
+		dq = JSON.stringify(dq);
 
 		var msg = "{error:" + dq + "}";
 		
@@ -12988,7 +12972,7 @@ function debug(sMsg) {
 }
 
 function dumpObject(obj) {
-	debug(qx.lang.Json.stringify(obj));
+	debug(JSON.stringify(obj));
 }
 
 function trace(sMsg) {

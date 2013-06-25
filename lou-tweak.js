@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      AmpliDude
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.7.6.4
+// @version        1.7.6.5
 // @grant          GM_log
 // ==/UserScript==
 
@@ -1150,8 +1150,6 @@
 				cCmdInfoView: null,
 				moveBuildingDetView: null,
 				initialize: function() {
-					if (typeof qx.lang.Json == "undefined")
-						qx.lang.Json = qx.util.Json;
 					if (typeof webfrontend.ui.SpinnerInt == "undefined")
 						webfrontend.ui.SpinnerInt = webfrontend.gui.SpinnerInt;
 					
@@ -2130,7 +2128,7 @@
 					forceSave = false;
 					_str = dsisLouBridge.getConfig("lou-tweak.js","LT_options");
 					if (_str)
-						this.options = qx.lang.Json.parse(_str);
+						this.options = JSON.parse(_str);
 					else {
 						this.options = {
 							"thousandsSeparator": 0,
@@ -2233,8 +2231,8 @@
 					
 					this.app.setUserData("LT_options", this.options);
 					if (forceSave) {
-						str = qx.lang.Json.stringify(this.options);
-						dsisLouBridge.storeConfig("lou-tweak.js","LT_options", str);
+						str = JSON.stringify(this.options);
+						dsisLouBridge.storeConfig("lou-tweak.js","LT_options", str, 100);
 					}
 				},
 				getLang: function() {
@@ -2929,7 +2927,7 @@
 					this.expImpWin.setCaption(L("opts")['export']);
 					this.expImpWin.setUserData("id", 2);
 					this.expImpWin.getUserData("lab").setValue(L("opts").export_lab);
-					this.expImpWin.getUserData("ta").setValue(qx.lang.Json.stringify(LT.options));
+					this.expImpWin.getUserData("ta").setValue(JSON.stringify(LT.options));
 					this.expImpWin.open();
 				}, this);
 				cont.add(btn);
@@ -3014,8 +3012,8 @@
 					cs.show();
 				},
 				saveOptions: function() {
-					str = qx.lang.Json.stringify(LT.options);
-					dsisLouBridge.storeConfig("lou-tweak.js","LT_options", str);
+					str = JSON.stringify(LT.options);
+					dsisLouBridge.storeConfig("lou-tweak.js","LT_options", str, 50);
 					LT.a.switchOverlay(null);
 				},
 				createExpImpWindow: function() {
@@ -3031,7 +3029,7 @@
 					win.add(lab);
 					win.setUserData("lab", lab);
 					
-					ta = new qx.ui.form.TextArea(qx.lang.Json.stringify(LT.options));
+					ta = new qx.ui.form.TextArea(JSON.stringify(LT.options));
 					ta.addListener("click", function(){this.selectAllText();});
 					win.add(ta, {height: 65});
 					win.setUserData("ta", ta);
@@ -3041,11 +3039,11 @@
 						if (id == 1) {
 							txt = this.getUserData("ta").getValue();
 							try {
-								obj = qx.lang.Json.parse(txt);
+								obj = JSON.parse(txt);
 							} catch(e) { obj = "error"; }
 							if (typeof obj == "object" && obj != null) {
-								LT.options = qx.lang.Json.parse(txt);
-								dsisLouBridge.storeConfig("lou-tweak.js","LT_options", txt);
+								LT.options = JSON.parse(txt);
+								dsisLouBridge.storeConfig("lou-tweak.js","LT_options", txt, 50);
 								this.close();
 							} else {
 								alert(L("opts").import_invalid);
@@ -3230,7 +3228,7 @@
 				btn.addListener("click", function(){
 					this.expImpWin.setCaption(L("opts")['export']);
 					this.expImpWin.setUserData("id", 2);
-					this.expImpWin.getUserData("ta").setValue(qx.lang.Json.stringify(this.cityLayouts));
+					this.expImpWin.getUserData("ta").setValue(JSON.stringify(this.cityLayouts));
 					this.expImpWin.open();
 				}, this);
 				cont.add(btn);
@@ -3292,12 +3290,12 @@
 					var _str = dsisLouBridge.getConfig("lou-tweak.js","LT_cityLayouts");
 					this.cityLayouts = {};
 					if (_str) {
-						var _scl = qx.lang.Json.parse(_str);
+						var _scl = JSON.parse(_str);
 						if (_scl) this.cityLayouts = _scl;
 					}
 				},
 				saveCityLayouts: function() {
-					dsisLouBridge.storeConfig("lou-tweak.js","LT_cityLayouts", qx.lang.Json.stringify(this.cityLayouts));
+					dsisLouBridge.storeConfig("lou-tweak.js","LT_cityLayouts", JSON.stringify(this.cityLayouts), 60);
 				},
 				removeObjects: function() {
 					if (this.oObjs != null) {
@@ -3542,10 +3540,10 @@
 						if (id == 1) {
 							txt = this.getUserData("ta").getValue();
 							try {
-								obj = qx.lang.Json.parse(txt);
+								obj = JSON.parse(txt);
 							} catch(e) { obj = "error"; }
 							if (typeof obj == "object" && obj != null) {
-								_icl = qx.lang.Json.parse(txt); // imp ss
+								_icl = JSON.parse(txt); // imp ss
 								if (_icl) {
 									LT.main.layoutWindow.cityLayouts = _icl;
 									LT.main.layoutWindow.saveCityLayouts();
