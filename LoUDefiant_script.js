@@ -1,4 +1,4 @@
-// @version 0.0.33
+// @version 0.0.34
 var com_senocular_LoUDefiant_pageScript = function(){
 	
 function debug(msg){ 
@@ -5157,7 +5157,7 @@ function new_Array(length, fill){
 
 function saveData(name, value){
 	try {
-		dsisLouBridge.storeConfig('LoUDefiant_script.js',name,qx.util.Json.stringify(value));
+		dsisLouBridge.storeConfig('LoUDefiant_script.js',name,JSON.stringify(value));
 	}catch(e){ 
 		debug(e); 
 		return false;
@@ -5168,11 +5168,11 @@ function saveData(name, value){
 function loadSavedData(name){
 	try {
 		var savedData = dsisLouBridge.getConfig('LoUDefiant_script.js',name);
-		if (savedData) return qx.util.Json.parse(savedData);
+		if (savedData) return JSON.parse(savedData);
 
 		savedData = window.localStorage[STORAGE_PREFIX + name];
 		if (savedData)
-			return qx.util.Json.parse( savedData );
+			return JSON.parse( savedData );
 	}catch(e){ debug(e); }
 	
 	return null;
