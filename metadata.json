@@ -110,6 +110,12 @@
    "type":"old",
    "version":"1",
    "prio":2
+  },{
+   "name":"improve mail performance",
+   "filename":"mailfix.js",
+   "version":"1",
+   "type":"smart_inject",
+   "default":true
   }
  ],
  "conflicts":[
