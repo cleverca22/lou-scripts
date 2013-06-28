@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        4.4.8
+// @version        4.4.9
 /*
  * Changelog
 
@@ -42,7 +42,7 @@
  * 3.0   - Added filters for the idle troops tab.  toolbar buttons when merc tools window collapsed, thanks to WatchmanCole.
  *         Right click context menu in world and region view. Added Boss item to raiding summary. dungeon and idle unit tabs allow ships.
  * 3.1   - Remove delayed orders from idle troops, boss and dungeon tabs.  raiding window always opens as height 500.
- * 		   Added delay 5s option.  Added staggered raids option. Added 72 hrs return time option.  Added "eye" button for find city in combat tools
+ *         Added delay 5s option.  Added staggered raids option. Added 72 hrs return time option.  Added "eye" button for find city in combat tools
  *         Changed so orders section of combat tool scrolls.  Moved buttons in command queue to a dropdown with "go" button.  added additional return options
  *         and "complete" option.  Idle units tab no longer looses sort and position when refreshing.  Added emoticons from LoUBBCode extend script and some others.
  *         Added city groups dropdown in idle units.
@@ -58,6 +58,7 @@
  * 4.4   - bug fixes.
  */
 (function() {
+	var louConfig = webfrontend.config.Config.getInstance();
 	function LoUPakMap() {
 		try {
 			var bossKill = [50, 300, 2000, 4000, 10000, 15000, 20000, 30000, 45000, 60000];
@@ -117,7 +118,7 @@
 			// Forest		Dragon		Cavalry		Wood
 			// Mountain		Hydra		Infantry	Iron
 			// Hill			Moloch		Magic		Stone
-			// Sea			Octopus		Artillery 	Food
+			// Sea			Octopus		Artillery	Food
 			
 			var cavT = r.attackTypes["2"].dn;
 			var infT = r.attackTypes["1"].dn;
@@ -1660,7 +1661,7 @@
 					},
 					addChatMessage : function(message, prefix) {
 						prefix = (prefix) ? 'MERC Tools ' + paTweak.Version.PAversion : '';
-						var eV = webfrontend.config.Config.getInstance().getChat(), eN = '<font size="' + eV.getFontSize() + '" color="' + eV.getChannelColor('Info') + '" style="word-wrap: break-word;">' + prefix + emotify(message) + '</font>', eO, eU;
+						var eV = louConfig.getChat(), eN = '<font size="' + eV.getFontSize() + '" color="' + eV.getChannelColor('Info') + '" style="word-wrap: break-word;">' + prefix + emotify(message) + '</font>', eO, eU;
 						if (eV.getTimeStamp()) {
 							eO = webfrontend.data.ServerTime.getInstance();
 							eU = eO.getServerStep();
@@ -1784,7 +1785,7 @@
 
 			function formatIncomingDate(dte) {
 				var serverDiff = webfrontend.data.ServerTime.getInstance().getDiff();
-				var timeZoneOffset = webfrontend.config.Config.getInstance().getTimeZoneOffset();
+				var timeZoneOffset = louConfig.getTimeZoneOffset();
 				var serverOffset = webfrontend.data.ServerTime.getInstance().getServerOffset();
 				var localOffset = -new Date().getTimezoneOffset() * 60000;
 				// Its in minutes
@@ -1823,7 +1824,7 @@
 			function checkFortuneTime() {
 				var tokenStep = player.getFortuneNextFreeTokenStep();
 				var serverDiff = webfrontend.data.ServerTime.getInstance().getDiff(); // FIXED
-				var timeZoneOffset = webfrontend.config.Config.getInstance().getTimeZoneOffset(); // FIXED
+				var timeZoneOffset = louConfig.getTimeZoneOffset(); // FIXED
 				var serverOffset = webfrontend.data.ServerTime.getInstance().getServerOffset(); // FIXED
 				var localOffset = -new Date().getTimezoneOffset() * 60000; // FIXED
 				fortuneCheck = serverTime.getStepTime(tokenStep);
@@ -1833,7 +1834,7 @@
 			function setNextFortuneTime() {
 				var tokenStep = player.getFortuneNextFreeTokenStep();
 				var serverDiff = webfrontend.data.ServerTime.getInstance().getDiff(); // FIXED
-				var timeZoneOffset = webfrontend.config.Config.getInstance().getTimeZoneOffset(); // FIXED
+				var timeZoneOffset = louConfig.getTimeZoneOffset(); // FIXED
 				var serverOffset = webfrontend.data.ServerTime.getInstance().getServerOffset(); // FIXED
 				var localOffset = -new Date().getTimezoneOffset() * 60000; // FIXED
 				nextFortune = serverTime.getStepTime(tokenStep);
@@ -1949,7 +1950,7 @@
 				
 				var tokenStep = player.getFortuneNextFreeTokenStep();
 				var serverDiff = webfrontend.data.ServerTime.getInstance().getDiff(); // FIXED
-				var timeZoneOffset = webfrontend.config.Config.getInstance().getTimeZoneOffset(); // FIXED
+				var timeZoneOffset = louConfig.getTimeZoneOffset(); // FIXED
 				var serverOffset = webfrontend.data.ServerTime.getInstance().getServerOffset(); // FIXED
 				var localOffset = -new Date().getTimezoneOffset() * 60000; // FIXED
 				var dNow = new Date();
@@ -2749,7 +2750,7 @@
 						this._msgWin.lbl.setValue(this._msgWin.lbl.getValue() + msg + "<br>");
 					},
 					addChatMessage : function(message) {
-						var eV = webfrontend.config.Config.getInstance().getChat(), eN = '<font size="' + eV.getFontSize() + '" color="' + eV.getChannelColor('Info') + '" style="word-wrap: break-word;">' + message + '</font>', eO, eU;
+						var eV = louConfig.getChat(), eN = '<font size="' + eV.getFontSize() + '" color="' + eV.getChannelColor('Info') + '" style="word-wrap: break-word;">' + message + '</font>', eO, eU;
 						if (eV.getTimeStamp()) {
 							eO = webfrontend.data.ServerTime.getInstance();
 							eU = eO.getServerStep();
@@ -2927,10 +2928,10 @@
 										}
 										var img;
 										if (rindex == 5) {
-											img = new qx.ui.basic.Image(webfrontend.config.Config.getInstance().getUIImagePath("ui/icons_ressource_gold.png"));
+											img = new qx.ui.basic.Image(louConfig.getUIImagePath("ui/icons_ressource_gold.png"));
 										} else {
 											var fileInfo = kp.getFileInfo(kp.resources[rindex].i);
-											img = new qx.ui.basic.Image(webfrontend.config.Config.getInstance().getUIImagePath(fileInfo.url));
+											img = new qx.ui.basic.Image(louConfig.getUIImagePath(fileInfo.url));
 										}
 										img.setWidth(30);
 										img.setHeight(30);
@@ -5425,14 +5426,14 @@
 						var curTime = webfrontend.Util.getCurrentTime();
 						var hourOffset = 0;
 
-						if (webfrontend.config.Config.getInstance().getTimeZone() > 0) {
+						if (louConfig.getTimeZone() > 0) {
 							//curTime.setHours(curTime.getHours() + curTime.getTimezoneOffset() / 60);
 							hourOffset += curTime.getTimezoneOffset() / 60;
 
-							if (webfrontend.config.Config.getInstance().getTimeZone() == 1)
+							if (louConfig.getTimeZone() == 1)
 								hourOffset += webfrontend.data.ServerTime.getInstance().getServerOffset() / 1000 / 60 / 60;
-							else if (webfrontend.config.Config.getInstance().getTimeZone() == 2)
-								hourOffset += webfrontend.config.Config.getInstance().getTimeZoneOffset() / 1000 / 60 / 60;
+							else if (louConfig.getTimeZone() == 2)
+								hourOffset += louConfig.getTimeZoneOffset() / 1000 / 60 / 60;
 						}
 
 						var hI = new Date(curTime.getTime());
@@ -5442,21 +5443,21 @@
 						hI.setSeconds(secs);
 						hI.setMilliseconds(500);
 
-						if (webfrontend.config.Config.getInstance().getTimeZone() == 0)
+						if (louConfig.getTimeZone() == 0)
 							hI = new Date(hI.getTime() - webfrontend.data.ServerTime.getInstance().getDiff());
 						return hI.getTime();
 					},
 					getDelay72HrOffsetTime : function() {
 						var curTime = webfrontend.Util.getCurrentTime();
 						var hourOffset = 0;
-						if (webfrontend.config.Config.getInstance().getTimeZone() > 0) {
+						if (louConfig.getTimeZone() > 0) {
 							//curTime.setHours(curTime.getHours() + curTime.getTimezoneOffset() / 60);
 							hourOffset += curTime.getTimezoneOffset() / 60;
 
-							if (webfrontend.config.Config.getInstance().getTimeZone() == 1)
+							if (louConfig.getTimeZone() == 1)
 								hourOffset += webfrontend.data.ServerTime.getInstance().getServerOffset() / 1000 / 60 / 60;
-							else if (webfrontend.config.Config.getInstance().getTimeZone() == 2)
-								hourOffset += webfrontend.config.Config.getInstance().getTimeZoneOffset() / 1000 / 60 / 60;
+							else if (louConfig.getTimeZone() == 2)
+								hourOffset += louConfig.getTimeZoneOffset() / 1000 / 60 / 60;
 						}
 
 						var hI = new Date(curTime.getTime());
@@ -5464,21 +5465,21 @@
 						hI.setHours(hI.getHours() - hourOffset);
 						hI.setSeconds(hI.getSeconds());
 						hI.setMilliseconds(500);
-						if (webfrontend.config.Config.getInstance().getTimeZone() == 0)
+						if (louConfig.getTimeZone() == 0)
 							hI = new Date(hI.getTime() - webfrontend.data.ServerTime.getInstance().getDiff());
 						return hI.getTime();
 					},
 					getDelay5sOffsetTime : function() {
 						var curTime = webfrontend.Util.getCurrentTime();
 						var hourOffset = 0;
-						if (webfrontend.config.Config.getInstance().getTimeZone() > 0) {
+						if (louConfig.getTimeZone() > 0) {
 							//curTime.setHours(curTime.getHours() + curTime.getTimezoneOffset() / 60);
 							hourOffset += curTime.getTimezoneOffset() / 60;
 
-							if (webfrontend.config.Config.getInstance().getTimeZone() == 1)
+							if (louConfig.getTimeZone() == 1)
 								hourOffset += webfrontend.data.ServerTime.getInstance().getServerOffset() / 1000 / 60 / 60;
-							else if (webfrontend.config.Config.getInstance().getTimeZone() == 2)
-								hourOffset += webfrontend.config.Config.getInstance().getTimeZoneOffset() / 1000 / 60 / 60;
+							else if (louConfig.getTimeZone() == 2)
+								hourOffset += louConfig.getTimeZoneOffset() / 1000 / 60 / 60;
 						}
 
 						var hI = new Date(curTime.getTime());
@@ -5486,7 +5487,7 @@
 						hI.setHours(hI.getHours() - hourOffset);
 						hI.setSeconds(hI.getSeconds() + 5);
 						hI.setMilliseconds(500);
-						if (webfrontend.config.Config.getInstance().getTimeZone() == 0)
+						if (louConfig.getTimeZone() == 0)
 							hI = new Date(hI.getTime() - webfrontend.data.ServerTime.getInstance().getDiff());
 						return hI.getTime();
 					},
@@ -6082,7 +6083,7 @@
 				var dte = new Date();
 				dte.setTime(tme);
 				var serverDiff = webfrontend.data.ServerTime.getInstance().getDiff();
-				var timeZoneOffset = webfrontend.config.Config.getInstance().getTimeZoneOffset();
+				var timeZoneOffset = louConfig.getTimeZoneOffset();
 				var serverOffset = webfrontend.data.ServerTime.getInstance().getServerOffset();
 				var localOffset = -new Date().getTimezoneOffset() * 60000;
 				// Its in minutes
@@ -7653,8 +7654,8 @@
 							return null;
 						}
 
-						timeType = timeType != null ? timeType : webfrontend.config.Config.getInstance().getTimeZone();
-						var timeZoneOffset = webfrontend.config.Config.getInstance().getTimeZoneOffset();
+						timeType = timeType != null ? timeType : louConfig.getTimeZone();
+						var timeZoneOffset = louConfig.getTimeZoneOffset();
 						var serverOffset = webfrontend.data.ServerTime.getInstance().getServerOffset();
 						var localOffset = -new Date().getTimezoneOffset() * 60000;
 						// Its in minutes
@@ -7686,8 +7687,8 @@
 							return null;
 						}
 
-						timeType = timeType != null ? timeType : webfrontend.config.Config.getInstance().getTimeZone();
-						var timeZoneOffset = webfrontend.config.Config.getInstance().getTimeZoneOffset();
+						timeType = timeType != null ? timeType : louConfig.getTimeZone();
+						var timeZoneOffset = louConfig.getTimeZoneOffset();
 						var serverOffset = webfrontend.data.ServerTime.getInstance().getServerOffset();
 						var localOffset = -new Date().getTimezoneOffset() * 60000;
 						// Its in minutes
@@ -8254,7 +8255,7 @@
 							marginBottom : 3
 						});
 
-						var background = new qx.ui.basic.Image('http://prodcdngame.lordofultima.com/cdn/340089/resource/webfrontend/ui/menues/main_menu/bgr_subheader_citinfo_scaler.png');
+						var background = new qx.ui.basic.Image(louConfig.getImagePath('ui/menues/main_menu/bgr_subheader_citinfo_scaler.png'));
 						background.set({
 							width : 338,
 							scale : true,
@@ -8266,7 +8267,7 @@
 							bottom : 34
 						});
 
-						background = new qx.ui.basic.Image('http://prodcdngame.lordofultima.com/cdn/335296/resource/webfrontend/ui/menues/main_menu/bgr_subheader_citinfo_end.png');
+						background = new qx.ui.basic.Image(louConfig.getImagePath('ui/menues/main_menu/bgr_subheader_citinfo_end.png'));
 						background.set({
 							width : 338,
 							height : 35
@@ -8276,7 +8277,7 @@
 							bottom : 0
 						});
 
-						background = new qx.ui.basic.Image("http://prodcdngame.lordofultima.com/cdn/335296/resource/webfrontend/ui/menues/main_menu/bgr_subheader_citinfo_wide.png");
+						background = new qx.ui.basic.Image(louConfig.getImagePath("ui/menues/main_menu/bgr_subheader_citinfo_wide.png"));
 						background.set({
 							width : 338,
 							height : 32
@@ -8945,14 +8946,14 @@ try{
 					getDelayOffsetTime : function(hrs) {
 						var curTime = webfrontend.Util.getCurrentTime();
 						var hourOffset = 0;
-						if (webfrontend.config.Config.getInstance().getTimeZone() > 0) {
+						if (louConfig.getTimeZone() > 0) {
 							curTime.setHours(curTime.getHours() + curTime.getTimezoneOffset() / 60);
 							hourOffset += curTime.getTimezoneOffset() / 60;
 
-							if (webfrontend.config.Config.getInstance().getTimeZone() == 1)
+							if (louConfig.getTimeZone() == 1)
 								hourOffset += webfrontend.data.ServerTime.getInstance().getServerOffset() / 1000 / 60 / 60;
-							else if (webfrontend.config.Config.getInstance().getTimeZone() == 2)
-								hourOffset += webfrontend.config.Config.getInstance().getTimeZoneOffset() / 1000 / 60 / 60;
+							else if (louConfig.getTimeZone() == 2)
+								hourOffset += louConfig.getTimeZoneOffset() / 1000 / 60 / 60;
 						}
 
 						var hI = new Date(curTime.getTime());
@@ -8960,7 +8961,7 @@ try{
 						hI.setHours(hI.getHours() - hourOffset + parseInt(hrs));
 						hI.setSeconds(hI.getSeconds());
 						hI.setMilliseconds(500);
-						if (webfrontend.config.Config.getInstance().getTimeZone() == 0)
+						if (louConfig.getTimeZone() == 0)
 							hI = new Date(hI.getTime() - webfrontend.data.ServerTime.getInstance().getDiff());
 
 						var h = hI.getHours();
@@ -10313,11 +10314,11 @@ try{
 					}
 					if (hasAttacks.length > 0) {
 						if (subIncomingImg.getToolTipText() != "Incoming for " + hasAttacks) {
-							subIncomingImg.setSource('http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons/icon_attack_warning.gif');
+							subIncomingImg.setSource(louConfig.getImagePath('ui/icons/icon_attack_warning.gif'));
 							subIncomingImg.setToolTipText("Incoming for " + hasAttacks);
 						}
 					} else {
-						subIncomingImg.setSource('http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons/icon_alliance_outgoing_attack_warning_inactive.png');
+						subIncomingImg.setSource(louConfig.getImagePath('ui/icons/icon_alliance_outgoing_attack_warning_inactive.png'));
 						var sub = subNames.join(',');
 						subIncomingImg.setToolTipText("No incomings for " + sub);
 					}
@@ -10423,7 +10424,7 @@ try{
 							flex : 1
 						});
 
-						subIncomingImg = new qx.ui.basic.Image('http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons/icon_attack_warning.gif');
+						subIncomingImg = new qx.ui.basic.Image(louConfig.getImagePath('ui/icons/icon_attack_warning.gif'));
 						subIncomingImg.setScale(true);
 						subIncomingImg.setVisibility("hidden");
 						subIncomingImg.setMaxWidth(17);
@@ -10434,7 +10435,7 @@ try{
 						});
 						//row.add(subIncomingImg);
 
-						fortuneAvailImg = new qx.ui.basic.Image('http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons/icon_alliance_red_17.png');
+						fortuneAvailImg = new qx.ui.basic.Image(louConfig.getImagePath('ui/icons/icon_alliance_red_17.png'));
 						fortuneAvailImg.setVisibility("hidden");
 						this.add(fortuneAvailImg, {
 							top : 6,
@@ -10553,7 +10554,7 @@ try{
 						citySort.setMaxWidth(400);
 						citySort.setMaxListHeight(500);
 						CityControlsRow.add(citySort);
-						prevCityBtn = new qx.ui.form.Button("", 'http://prodcdngame.lordofultima.com/cdn/367505/resource/webfrontend/theme/scrollbar/scrollbar-left.png');
+						prevCityBtn = new qx.ui.form.Button("", louConfig.getImagePath('theme/scrollbar/scrollbar-left.png'));
 						prevCityBtn.set({
 							width : 10,
 							appearance : "button-text-small",
@@ -10561,7 +10562,7 @@ try{
 						});
 						prevCityBtn.addListener("click", gotoPreviousCity);
 						CityControlsRow.add(prevCityBtn);
-						nextCityBtn = new qx.ui.form.Button("", 'http://prodcdngame.lordofultima.com/cdn/367505/resource/webfrontend/theme/scrollbar/scrollbar-right.png');
+						nextCityBtn = new qx.ui.form.Button("", louConfig.getImagePath('theme/scrollbar/scrollbar-right.png'));
 						nextCityBtn.set({
 							width : 10,
 							appearance : "button-text-small",
