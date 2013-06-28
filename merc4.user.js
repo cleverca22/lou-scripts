@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        4.4.9
+// @version        4.4.10
 /*
  * Changelog
 
@@ -10487,7 +10487,7 @@ try{
 
 							BaronLabel = new qx.ui.basic.Label(" ");
 							BaronLabel.setRich(true);
-							BaronLabel.setValue('<div style="-moz-transform: scaleX(1);background-image:url(http://prodcdngame.lordofultima.com/cdn/367505/resource/webfrontend/theme/tree/open.png);background-repeat:no-repeat;width:16px;height:16px;font-weight:bold;padding-left:15px;"><img src="http://prodcdngame.lordofultima.com/cdn/371812/resource/webfrontend/ui/icons/units/icon_units_baron.png"  style="align:absmiddle;-moz-transform: scaleX(1); width: 16px; height: 16px; padding-left:4px;" /></div>');
+							BaronLabel.setValue('<div style="-moz-transform: scaleX(1);background-image:' + louConfig.getImageUrl('theme/tree/open.png') + ';background-repeat:no-repeat;width:16px;height:16px;font-weight:bold;padding-left:15px;"><img src="http://prodcdngame.lordofultima.com/cdn/371812/resource/webfrontend/ui/icons/units/icon_units_baron.png"  style="align:absmiddle;-moz-transform: scaleX(1); width: 16px; height: 16px; padding-left:4px;" /></div>');
 							BaronLabel.setToolTipText(ToolTip);
 							BaronLabel.addListener("click", this.toggleTable);
 
@@ -10501,7 +10501,7 @@ try{
 							var cToolTip = "Current/Needed";
 							CastleLabel = new qx.ui.basic.Label(" ");
 							CastleLabel.setRich(true);
-							CastleLabel.setValue('<div style="-moz-transform: scaleX(1);background-image:url(http://prodcdngame.lordofultima.com/cdn/371812/resource/webfrontend/ui/icons/icon_playerinfo_townicon_castle_land.png);background-repeat:no-repeat;;width:21px;height:16px;font-weight:bold;margin-left:10px;"></div>');
+							CastleLabel.setValue('<div style="-moz-transform: scaleX(1);background-image:' + louConfig.getImageUrl('ui/icons/icon_playerinfo_townicon_castle_land.png')+';background-repeat:no-repeat;;width:21px;height:16px;font-weight:bold;margin-left:10px;"></div>');
 							CastleLabel.setToolTipText(cToolTip);
 
 							row.add(CastleLabel);
@@ -10762,10 +10762,10 @@ try{
 					toggleTable : function() {
 						var mr = MissingResourcesValue.getValue();
 						if (BaronLabel.getValue().indexOf('open') >= 0) {
-							BaronLabel.setValue('<div style="-moz-transform: scaleX(1);background-image:url(http://prodcdngame.lordofultima.com/cdn/367505/resource/webfrontend/theme/tree/closed.png);background-repeat:no-repeat;width:16px;height:16px;font-weight:bold;padding-left:15px;"><img src="http://prodcdngame.lordofultima.com/cdn/371812/resource/webfrontend/ui/icons/units/icon_units_baron.png"  style="align:absmiddle;-moz-transform: scaleX(1); width: 16px; height: 16px; padding-left:4px;" /></div>');
+							BaronLabel.setValue('<div style="-moz-transform: scaleX(1);background-image:' + louConfig.getImageUrl('theme/tree/closed.png') + ';background-repeat:no-repeat;width:16px;height:16px;font-weight:bold;padding-left:15px;"><img src="http://prodcdngame.lordofultima.com/cdn/371812/resource/webfrontend/ui/icons/units/icon_units_baron.png"  style="align:absmiddle;-moz-transform: scaleX(1); width: 16px; height: 16px; padding-left:4px;" /></div>');
 							MissingResourcesValue.setValue(mr.replace("margin-left: 5px", "display:none;margin-left: 5px"));
 						} else {
-							BaronLabel.setValue('<div style="-moz-transform: scaleX(1);background-image:url(http://prodcdngame.lordofultima.com/cdn/367505/resource/webfrontend/theme/tree/open.png);background-repeat:no-repeat;width:16px;height:16px;font-weight:bold;padding-left:15px;"><img src="http://prodcdngame.lordofultima.com/cdn/371812/resource/webfrontend/ui/icons/units/icon_units_baron.png"  style="align:absmiddle;-moz-transform: scaleX(1); width: 16px; height: 16px; padding-left:4px;" /></div>');
+							BaronLabel.setValue('<div style="-moz-transform: scaleX(1);background-image:' + louConfig.getImageUrl('theme/tree/open.png') + ';background-repeat:no-repeat;width:16px;height:16px;font-weight:bold;padding-left:15px;"><img src="http://prodcdngame.lordofultima.com/cdn/371812/resource/webfrontend/ui/icons/units/icon_units_baron.png"  style="align:absmiddle;-moz-transform: scaleX(1); width: 16px; height: 16px; padding-left:4px;" /></div>');
 							MissingResourcesValue.setValue(mr.replace("display:none;margin-left: 5px", "margin-left: 5px"));
 						}
 					},
