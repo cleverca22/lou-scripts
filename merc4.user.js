@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        4.4.10
+// @version        4.4.11
 /*
  * Changelog
 
@@ -10487,7 +10487,7 @@ try{
 
 							BaronLabel = new qx.ui.basic.Label(" ");
 							BaronLabel.setRich(true);
-							BaronLabel.setValue('<div style="-moz-transform: scaleX(1);background-image:' + louConfig.getImageUrl('theme/tree/open.png') + ';background-repeat:no-repeat;width:16px;height:16px;font-weight:bold;padding-left:15px;"><img src="http://prodcdngame.lordofultima.com/cdn/371812/resource/webfrontend/ui/icons/units/icon_units_baron.png"  style="align:absmiddle;-moz-transform: scaleX(1); width: 16px; height: 16px; padding-left:4px;" /></div>');
+							BaronLabel.setValue('<div style="-moz-transform: scaleX(1);background-image:' + louConfig.getImageUrl('theme/tree/open.png') + ';background-repeat:no-repeat;width:16px;height:16px;font-weight:bold;padding-left:15px;"><img src="'+louConfig.getImagePath('ui/icons/units/icon_units_baron.png')+'"  style="align:absmiddle;-moz-transform: scaleX(1); width: 16px; height: 16px; padding-left:4px;" /></div>');
 							BaronLabel.setToolTipText(ToolTip);
 							BaronLabel.addListener("click", this.toggleTable);
 
@@ -10963,7 +10963,7 @@ try{
 
 	function paDebug(e) {
 		if (window.console && typeof console.log == "function") {
-			console.log(e);
+			console.error(e);
 		}
 	}
 })();
