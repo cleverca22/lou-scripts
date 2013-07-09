@@ -10,7 +10,7 @@
    "name":"LoU MERC Tools 3.1",
    "filename":"merc3.user.js",
    "type":"smart_inject",
-   "version":"3.1.10",
+   "version":"3.1.11",
    "prio":2,
    "conflicts":[1]
   },{
@@ -95,7 +95,7 @@
    "name":"(untested) MERC Tools 4.4",
    "filename":"merc4.user.js",
    "type":"smart_inject",
-   "version":"4.4.11",
+   "version":"4.4.12",
    "prio":2,
    "conflicts":[1]
   },{
