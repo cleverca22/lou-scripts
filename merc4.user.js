@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        4.4.15
+// @version        4.4.16
 /*
  * Changelog
 
@@ -10827,10 +10827,10 @@ try{
 							if (pr) {
 								if (!this.TACosts) this.extractTechCosts();
 								var curGold = oPlayer.getGold();
-								var woodImg = '<img src="'+louConfig.getUIImagePath('ui/icons_ressource_voidWood_16.png')+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
-								var stoneImg = '<img src="'+louConfig.getUIImagePath('ui/icons_ressource_voidStone_16.png')+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
-								var ironImg = '<img src="'+louConfig.getUIImagePath('ui/icons_ressource_voidIron_16.png')+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
-								var foodImg = '<img src="'+louConfig.getUIImagePath('ui/icons_ressource_voidFood_16.png')+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
+								var woodImg = '<img src="'+louConfig.getUIImagePath('ui/icons_ressource_voidWood.png')+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
+								var stoneImg = '<img src="'+louConfig.getUIImagePath('ui/icons_ressource_voidStone.png')+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
+								var ironImg = '<img src="'+louConfig.getUIImagePath('ui/icons_ressource_voidIron.png')+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
+								var foodImg = '<img src="'+louConfig.getUIImagePath('ui/icons_ressource_voidFood.png')+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
 								var goldImg = '<img src="'+louConfig.getUIImagePath('ui/icons_ressource_gold.png')+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
 								var goldNeeded = this.TACosts[numBarons].g;
 								var resNeeded = this.TACosts[numBarons].r['5'];
