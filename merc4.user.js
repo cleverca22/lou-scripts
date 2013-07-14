@@ -10806,7 +10806,6 @@ try{
 						return val;
 					},
 					updateNeededResources : function() {
-						return;
 						var oPlayer = webfrontend.data.Player.getInstance();
 						var title = oPlayer.getTitle();
 						if (_oTech == null) {
