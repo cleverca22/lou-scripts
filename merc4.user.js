@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        4.4.13
+// @version        4.4.14
 /*
  * Changelog
 
@@ -10805,26 +10805,36 @@ try{
 						}
 						return val;
 					},
+					extractTechCosts: function () {
+						var coredata = webfrontend.res.Main.getInstance();
+						var techTreeSteps = coredata.techTreeSteps;
+						var stepid = 283;
+						this.TACosts = [];
+						while (stepid != 0) {
+							this.TACosts.push(techTreeSteps[stepid]);
+							stepid = techTreeSteps[stepid].c;
+						}
+					},
 					updateNeededResources : function() {
 						var oPlayer = webfrontend.data.Player.getInstance();
 						var title = oPlayer.getTitle();
 						if (_oTech == null) {
 							_oTech = webfrontend.data.Tech.getInstance();
 						}
-						var ix = _oTech.getBonus("baronCount", webfrontend.data.Tech.research) + 3;
+						var numBarons = _oTech.getBonus("baronCount", webfrontend.data.Tech.research);
 						if (title >= 3) {
 							var pr = oPlayer.getVoidResources();
 							if (pr) {
+								if (!this.TACosts) this.extractTechCosts();
 								var curGold = oPlayer.getGold();
 								var woodImg = '<img src="http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons_ressource_voidWood_16.png" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
 								var stoneImg = '<img src="http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons_ressource_voidStone_16.png" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
 								var ironImg = '<img src="http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons_ressource_voidIron_16.png" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
 								var foodImg = '<img src="http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons_ressource_voidFood_16.png" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
 								var goldImg = '<img src="http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons_ressource_gold.png" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
-								var numBarons = _oTech.getBonus("baronCount", webfrontend.data.Tech.research);
-								var goldNeeded = _oTech.__fB['283'][numBarons].g;
-								var resNeeded = _oTech.__fB['283'][numBarons].r['5'];
-								var numCastlesNeeded = Math.floor((ix - 3) / 4) + 1;
+								var goldNeeded = this.TACosts[numBarons].g;
+								var resNeeded = this.TACosts[numBarons].r['5'];
+								var numCastlesNeeded = Math.floor(numBarons / 4) + 1;
 								var playerCastles = oPlayer.getNumCastles();
 								var sb = new qx.util.StringBuilder(200);
 								var mr = MissingResourcesValue.getValue();
@@ -10839,8 +10849,8 @@ try{
 								var stoneNeeded = Math.max(0, resNeeded - curStone);
 								var ironNeeded = Math.max(0, resNeeded - curIron);
 								var foodNeeded = Math.max(0, resNeeded - curFood);
-								var goldNeeded = Math.max(0, goldNeeded - curGold);
-								if ((ix - 5) % 4 == 0) {
+								goldNeeded = Math.max(0, goldNeeded - curGold);
+								if ((numBarons - 2) % 4 == 0) {
 									if (playerCastles >= numCastlesNeeded) {
 										sb.add("<span style='v-align: middle'>Free</span>");
 									} else {
