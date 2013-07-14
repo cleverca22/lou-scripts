@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        4.4.14
+// @version        4.4.15
 /*
  * Changelog
 
@@ -10827,11 +10827,11 @@ try{
 							if (pr) {
 								if (!this.TACosts) this.extractTechCosts();
 								var curGold = oPlayer.getGold();
-								var woodImg = '<img src="http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons_ressource_voidWood_16.png" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
-								var stoneImg = '<img src="http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons_ressource_voidStone_16.png" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
-								var ironImg = '<img src="http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons_ressource_voidIron_16.png" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
-								var foodImg = '<img src="http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons_ressource_voidFood_16.png" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
-								var goldImg = '<img src="http://prodcdngame.lordofultima.com/cdn/364354/resource/webfrontend/ui/icons_ressource_gold.png" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
+								var woodImg = '<img src="'+louConfig.getUIImagePath('ui/icons_ressource_voidWood_16.png')+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
+								var stoneImg = '<img src="'+louConfig.getUIImagePath('ui/icons_ressource_voidStone_16.png')+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
+								var ironImg = '<img src="'+louConfig.getUIImagePath('ui/icons_ressource_voidIron_16.png')+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
+								var foodImg = '<img src="'+louConfig.getUIImagePath('ui/icons_ressource_voidFood_16.png')+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
+								var goldImg = '<img src="'+louConfig.getUIImagePath('ui/icons_ressource_gold.png')+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 10px; height: 10px; padding-right:2px;">';
 								var goldNeeded = this.TACosts[numBarons].g;
 								var resNeeded = this.TACosts[numBarons].r['5'];
 								var numCastlesNeeded = Math.floor(numBarons / 4) + 1;
