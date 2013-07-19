@@ -1,5 +1,6 @@
-// @version        1
+// @version        2
 (function () {
+	return;
 	var titleWidget = qx.core.Init.getApplication().getTitleWidget();
 	titleWidget.mail = new webfrontend.gui.Mail.ListWidget();
 	for (x in titleWidget.mail) {

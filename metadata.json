@@ -113,9 +113,9 @@
   },{
    "name":"improve mail performance",
    "filename":"mailfix.js",
-   "version":"1",
+   "version":"2",
    "type":"smart_inject",
-   "default":true
+   "default":false
   }
  ],
  "conflicts":[
