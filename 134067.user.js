@@ -3,7 +3,7 @@
 // @description Adds extra functionality to Lord of Ultima chat
 // @namespace   LoUBBCode 
 // @include     http://prodgame*.lordofultima.com/*/index.aspx*
-// @version     1.8
+// @version     1.9
 // @grant       none
 // ==/UserScript==
 qx.event.GlobalError.observeMethod(function () {
@@ -316,8 +316,10 @@ qx.event.GlobalError.observeMethod(function () {
             members: {
               init: function () {
                 qx.core.Init.getApplication().chat._outputMsg = this.outputMsgIntercept;
-                webfrontend.gui.Util._convertBBCode = webfrontend.gui.Util.convertBBCode;
-                webfrontend.gui.Util.convertBBCode = this.convertBBCode;
+                if (!webfrontend.gui.Util._convertBBCode) {
+                  webfrontend.gui.Util._convertBBCode = webfrontend.gui.Util.convertBBCode;
+                  webfrontend.gui.Util.convertBBCode = this.convertBBCode;
+                }
               },
               convertBBCode: function (pq, pr, ps) {
                 // place for various custom BBCodes
