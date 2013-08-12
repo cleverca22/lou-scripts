@@ -7,14 +7,14 @@
 /*
  * script developer code, to aid in testing things inside the extension
  * to compile: gcc testscript.c -lsqlite3 -o testscript
- * usage example: ./testscript merc.user.js
+ * usage example: ./testscript merc.user.js smart_inject
  * 
  * copies merc.user.js into the sqlite db and forces it to run until the next script update
  */
 
 int main(int argc,char *argv[]) {
-	if (argc != 2) {
-		printf("usage: %s scriptpath\n",argv[0]);
+	if (argc != 3) {
+		printf("usage: %s scriptpath type\n",argv[0]);
 		char buffer2[10];
 		read(0,buffer2,1);
 		return -1;
@@ -66,7 +66,7 @@ int main(int argc,char *argv[]) {
 	}
 	fclose(fh);
 	buffer[done] = 0;
-	char *query = "INSERT OR REPLACE INTO scripts (name,filename,remote_version,installed,localversion,enabled,code,prio) VALUES ('local override',?,'9999',1,'9999',1,?,10)";
+	char *query = "INSERT OR REPLACE INTO scripts (name,filename,remote_version,installed,localversion,enabled,code,prio,type) VALUES ('local override',?,'9999',1,'9999',1,?,10,?)";
 	sqlite3_stmt *statement;
 	err = sqlite3_prepare_v2(db,query,strlen(query),&statement,0);
 	if (err != SQLITE_OK) {
@@ -83,11 +83,11 @@ int main(int argc,char *argv[]) {
 		printf("sqlite error\n");
 		return -7;
 	}
-	//err = sqlite3_bind_text(statement,3,argv[2],-1,0);
-	//if (err != SQLITE_OK) {
-	//	printf("sqlite error\n");
-	//	return -11;
-	//}
+	err = sqlite3_bind_text(statement,3,argv[2],-1,0);
+	if (err != SQLITE_OK) {
+		printf("sqlite error\n");
+		return -11;
+	}
 	err = sqlite3_step(statement);
 	if (err != SQLITE_DONE) {
 		printf("sqlite error in step %d\n",err);
