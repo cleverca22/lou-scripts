@@ -120,7 +120,8 @@
    "name":"City Building Counts",
    "filename":"cityBuildingCounts.js",
    "version":"1",
-   "type":"smart_inject"
+   "type":"smart_inject",
+   "screenshot":"cityBuildingCounts.png"
   }
  ],
  "conflicts":[
