@@ -1,4 +1,4 @@
-// @version 11
+// @version 12
 // this script is built from stuff in another repo plus addon-base-in.js
 qx.event.GlobalError.observeMethod(function () {
 
@@ -1577,6 +1577,8 @@ qx.Class.define("dsislou.ScriptRow",{
 			//apply:"_setEnabled",
 			nullable:true,
 			event:'scriptEnableChanged'
+		},screenshot:{
+			check:"String"
 		}
 	},members:{
 		_createChildControlImpl: function(id) {
@@ -1621,13 +1623,15 @@ qx.Class.define("dsislou.ScriptRow",{
 });
 qx.Class.define("dsislou.Script",{
 	extend: qx.core.Object,
-	construct: function (name,filename,enabled,version) {
+	construct: function (name,filename,enabled,version,screenshot) {
 		this.setName(name);
 		this.setFilename(filename);
 		this.setScriptEnabled(enabled);
 		if (version === undefined) version = '???';
 		this.setVersion(version);
 		this.addListener("scriptEnableChanged",this.updateSql,this);
+		if (screenshot) this.setScreenshot(screenshot);
+		else this.setScreenshot('');
 	},
 	properties:{
 		name:{
@@ -1638,6 +1642,9 @@ qx.Class.define("dsislou.Script",{
 			event:'scriptEnableChanged'
 		},version:{
 			event:'versionChanged'
+		},screenshot:{
+			event:'screenshotChanged',
+			check:'String'
 		}
 	},members:{
 		updateSql:function () {
@@ -1660,7 +1667,7 @@ qx.Class.define("dsislou.Scripts",{
 			console.log(listIn);
 			var i;
 			while (i = listIn.shift()) {
-				scripts.push(new dsislou.Script(i.name,i.filename,i.enabled,i.version));
+				scripts.push(new dsislou.Script(i.name,i.filename,i.enabled,i.version,i.screenshot));
 			}
 
 			this.setScripts(scripts);
@@ -1684,7 +1691,7 @@ qx.Class.define('dsislou.MainWindow',{
 		//this.setShowClose(false);
 		this.setShowMaximize(false);
 		this.setShowMinimize(false);
-		this.setWidth(250);
+		this.setWidth(600);
 		this.setHeight(300);
 		this.setContentPadding(0);
 		var layout = new qx.ui.layout.Grid(0,0);
@@ -1703,7 +1710,15 @@ qx.Class.define('dsislou.MainWindow',{
 
 		this.__list = new qx.ui.form.List();
 		this.add(this.__list, {row: 1, column: 0});
-
+		
+		var rightPane = new qx.ui.container.Composite();
+		this.add(rightPane,{row:1,column:1});
+		var rightLayout = new qx.ui.layout.Grid(0,0);
+		rightLayout.setRowFlex(1, 1);
+		rightLayout.setColumnFlex(0, 1);
+		rightPane.setLayout(rightLayout);
+		this.screenshot = new qx.ui.basic.Image();
+		rightPane.add(this.screenshot,{row:0,column:0});
 	},
 	events:{
 		"reload" : "qx.event.type.Event",
@@ -1727,6 +1742,7 @@ qx.Class.define('dsislou.MainWindow',{
 					controller.bindProperty("name","name",null,item,id);
 					controller.bindProperty("version","version",null,item,id);
 					controller.bindProperty("scriptEnabled","scriptEnabled",null,item,id);
+					controller.bindProperty("screenshot","screenshot",null,item,id);
 					controller.bindPropertyReverse("scriptEnabled","scriptEnabled",null,item,id);
 					controller.bindProperty("","model",null,item,id);
 				},
@@ -1741,6 +1757,11 @@ qx.Class.define('dsislou.MainWindow',{
 				}.bind(this));
 			});
 			service.fetchScripts();
+			list.addListener("changeSelection",function(arg1) {
+				var selection = arg1.getData()[0];
+				var image = selection.getScreenshot()
+				main.screenshot.setSource('https://raw.github.com/cleverca22/lou-scripts/master/'+image);
+			});
 		}
 	}
 });
