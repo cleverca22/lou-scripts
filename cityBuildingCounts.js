@@ -1,5 +1,7 @@
-// @version 1
+// @version 2
 // city building counts stuff, extracted from TDK
+
+var EVENT_PRIORITY_DEFER_DELAY = 250;
 
 qx.Class.define("senocular.tdk.CityBuildingCounts", {
 	type:"singleton",
@@ -59,12 +61,17 @@ qx.Class.define("senocular.tdk.CityBuildingCounts", {
 		buildUI: function(){
 			this.set({marginLeft:1, marginRight:8, marginTop:5, marginBottom:5});
 			this.decor = new qx.ui.decoration.Single().set({backgroundColor:"#E1D0B0", width:1, color:"#7B5930"});
-		},
-		onCityChange: function(){
+		},defer: function defer(method, target, time, argsArray){
+			return window.setTimeout(function(){
+				try {
+					method.apply(target, argsArray);
+				}catch(ignore){}
+			}, time);
+		},onCityChange: function(){
 			try {
 				// KLUDGE: though city version changes map to changes in the city buildings
 				// this event seems to happen before actual data is set, so we delay the update
-				defer(this.refreshCounts, this, EVENT_PRIORITY_DEFER_DELAY);
+				this.defer(this.refreshCounts, this, EVENT_PRIORITY_DEFER_DELAY);
 			}catch(e){ debug(e); }
 		},
 		onMapChange: function(){
