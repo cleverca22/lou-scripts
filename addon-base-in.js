@@ -32,6 +32,9 @@
 					var scriptList = new qx.ui.menu.Button("Script List");
 					scriptList.addListener("execute",this.openScriptList,this);
 					this.menu.add(scriptList);
+					var sourceList = new qx.ui.menu.Button("Source List");
+					sourceList.addListener("execute",this.openSourceList,this);
+					this.menu.add(sourceList);
 				}
 			},members:{
 				getMainMenu: function () {
@@ -115,6 +118,12 @@
 					//dsisLouBridge.openScriptList();
 					qx.event.GlobalError.observeMethod(function () {
 						dsislou.MainWindow.openAndSetup()
+					})();
+				},openSourceList: function () {
+					qx.event.GlobalError.observeMethod(function () {
+						var win = new dsislou.ScriptSources();
+						win.open();
+						win.moveTo(30,30);
 					})();
 				},addChatMessage: function(msg) {
 					var eV = webfrontend.config.Config.getInstance().getChat(),

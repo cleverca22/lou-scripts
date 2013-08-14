@@ -1,4 +1,4 @@
-// @version 11
+// @version 14
 // this script is built from stuff in another repo plus addon-base-in.js
 qx.event.GlobalError.observeMethod(function () {
 
@@ -1577,6 +1577,8 @@ qx.Class.define("dsislou.ScriptRow",{
 			//apply:"_setEnabled",
 			nullable:true,
 			event:'scriptEnableChanged'
+		},screenshot:{
+			check:"String"
 		}
 	},members:{
 		_createChildControlImpl: function(id) {
@@ -1621,13 +1623,15 @@ qx.Class.define("dsislou.ScriptRow",{
 });
 qx.Class.define("dsislou.Script",{
 	extend: qx.core.Object,
-	construct: function (name,filename,enabled,version) {
+	construct: function (name,filename,enabled,version,screenshot) {
 		this.setName(name);
 		this.setFilename(filename);
 		this.setScriptEnabled(enabled);
 		if (version === undefined) version = '???';
 		this.setVersion(version);
 		this.addListener("scriptEnableChanged",this.updateSql,this);
+		if (screenshot) this.setScreenshot(screenshot);
+		else this.setScreenshot('');
 	},
 	properties:{
 		name:{
@@ -1638,6 +1642,9 @@ qx.Class.define("dsislou.Script",{
 			event:'scriptEnableChanged'
 		},version:{
 			event:'versionChanged'
+		},screenshot:{
+			event:'screenshotChanged',
+			check:'String'
 		}
 	},members:{
 		updateSql:function () {
@@ -1660,7 +1667,7 @@ qx.Class.define("dsislou.Scripts",{
 			console.log(listIn);
 			var i;
 			while (i = listIn.shift()) {
-				scripts.push(new dsislou.Script(i.name,i.filename,i.enabled,i.version));
+				scripts.push(new dsislou.Script(i.name,i.filename,i.enabled,i.version,i.screenshot));
 			}
 
 			this.setScripts(scripts);
@@ -1684,7 +1691,7 @@ qx.Class.define('dsislou.MainWindow',{
 		//this.setShowClose(false);
 		this.setShowMaximize(false);
 		this.setShowMinimize(false);
-		this.setWidth(250);
+		this.setWidth(600);
 		this.setHeight(300);
 		this.setContentPadding(0);
 		var layout = new qx.ui.layout.Grid(0,0);
@@ -1703,7 +1710,15 @@ qx.Class.define('dsislou.MainWindow',{
 
 		this.__list = new qx.ui.form.List();
 		this.add(this.__list, {row: 1, column: 0});
-
+		
+		var rightPane = new qx.ui.container.Composite();
+		this.add(rightPane,{row:1,column:1});
+		var rightLayout = new qx.ui.layout.Grid(0,0);
+		rightLayout.setRowFlex(1, 1);
+		rightLayout.setColumnFlex(0, 1);
+		rightPane.setLayout(rightLayout);
+		this.screenshot = new qx.ui.basic.Image();
+		rightPane.add(this.screenshot,{row:0,column:0});
 	},
 	events:{
 		"reload" : "qx.event.type.Event",
@@ -1727,6 +1742,7 @@ qx.Class.define('dsislou.MainWindow',{
 					controller.bindProperty("name","name",null,item,id);
 					controller.bindProperty("version","version",null,item,id);
 					controller.bindProperty("scriptEnabled","scriptEnabled",null,item,id);
+					controller.bindProperty("screenshot","screenshot",null,item,id);
 					controller.bindPropertyReverse("scriptEnabled","scriptEnabled",null,item,id);
 					controller.bindProperty("","model",null,item,id);
 				},
@@ -1741,6 +1757,137 @@ qx.Class.define('dsislou.MainWindow',{
 				}.bind(this));
 			});
 			service.fetchScripts();
+			list.addListener("changeSelection",function(arg1) {
+				var selection = arg1.getData()[0];
+				var image = selection.getScreenshot()
+				if (image == '') main.screenshot.setVisibility('excluded');
+				else {
+					main.screenshot.setVisibility('visible');
+					main.screenshot.setSource('https://raw.github.com/cleverca22/lou-scripts/master/'+image);
+				}
+			});
+		}
+	}
+});
+qx.Class.define("dsislou.ScriptSource",{
+	extend: qx.core.Object,
+	construct: function (name,url) {
+		this.setName(name);
+		this.setUrl(url);
+	},properties:{
+		name:{
+			event:'nameChanged'
+		},url:{
+			event:'urlChanged'
+		}
+	}
+});
+qx.Class.define("dsislou.ScriptSourceRow",{
+	extend: qx.ui.core.Widget,
+	include: [qx.ui.form.MModelProperty],
+	construct: function() {
+		this.base(arguments);
+		var layout = new qx.ui.layout.Grid(0, 0);
+		layout.setColumnFlex(0, 1);
+		this._setLayout(layout);
+		this._createChildControl("name");
+	},properties:{
+		appearance:{
+			refine:true,
+			init:"listitem"
+		},name:{
+			check:"String",
+			apply:"_setName",
+			nullable: true
+		},url:{
+			check:"String"
+		}
+	},members:{
+		_createChildControlImpl: function(id) {
+			var control;
+			switch (id) {
+			case "name":
+				control = new qx.ui.basic.Label(this.getName());
+				control.setAnonymous(true);
+				this._add(control,{row:0,column:0});
+				break;
+			}
+			return control || this.base(arguments,id);
+		},_setName: function (value,old) {
+			var name = this.getChildControl("name");
+			name.setValue(value);
+		}
+	}
+});
+qx.Class.define('dsislou.ScriptSources',{
+	extend: qx.ui.window.Window,
+	construct: function() {
+		this.base(arguments,"Script Sources");
+		this.setShowMaximize(false);
+		this.setShowMinimize(false);
+		this.setWidth(300);
+		this.setHeight(300);
+		this.setContentPadding(0);
+		var layout = new qx.ui.layout.Grid(0,0);
+		this.setLayout(layout);
+		layout.setRowFlex(1, 1);
+		layout.setColumnFlex(0, 1);
+
+		var toolbar = new qx.ui.toolbar.ToolBar();
+		this.add(toolbar, {row: 0, column: 0});
+
+		var addButton = new qx.ui.toolbar.Button('Add Source');
+		addButton.addListener("execute", function() {
+			this.fireEvent('addSource');
+		},this);
+		toolbar.add(addButton);
+		this.addListener('addSource',function () {
+			dsisLouBridge.addScriptSource(prompt("source url?"),this.reload.bind(this));
+		});
+		this.removeBut = new qx.ui.toolbar.Button('Remove Source');
+		this.removeBut.addListener('execute',this.removeSource,this);
+		this.removeBut.setEnabled(false);
+		toolbar.add(this.removeBut);
+
+		this.__list = new qx.ui.form.List();
+		this.add(this.__list, {row: 1, column: 0});
+		this.__controller = new qx.data.controller.List(null,this.__list);
+		this.__controller.setDelegate({   
+			bindItem: function (controller,item,id) {
+				controller.bindProperty("name","name",null,item,id);
+				controller.bindProperty("url","url",null,item,id);
+			},createItem: function () {
+				return new dsislou.ScriptSourceRow();
+			}
+		});
+		this.__list.addListener('changeSelection',function (arg1) {
+			var selection = arg1.getData()[0];
+			this.setSelected(selection.getUrl());
+			this.removeBut.setEnabled(true);
+		}.bind(this));
+		this.bind("scripts",this.__controller,"model");
+		this.reload();
+	},events:{
+		'addSource':'qx.event.type.Event'
+	},properties:{
+		selected:{
+			check:'String',
+			nullable:true
+		},scripts:{
+			nullable: true,
+			event:'sourcesChanged'
+		}
+	},members:{
+		removeSource: function () {
+			dsisLouBridge.removeScriptSource(this.getSelected());
+		},reload: function () {
+			var sources = new qx.data.Array();
+			var listIn = dsisLouBridge.getSources();
+			var i;
+			while (i = listIn.shift()) {
+				sources.push(new dsislou.ScriptSource(i.name,i.baseurl));
+			}
+			this.setScripts(sources);
 		}
 	}
 });
@@ -1778,6 +1925,9 @@ qx.Class.define('dsislou.MainWindow',{
 					var scriptList = new qx.ui.menu.Button("Script List");
 					scriptList.addListener("execute",this.openScriptList,this);
 					this.menu.add(scriptList);
+					var sourceList = new qx.ui.menu.Button("Source List");
+					sourceList.addListener("execute",this.openSourceList,this);
+					this.menu.add(sourceList);
 				}
 			},members:{
 				getMainMenu: function () {
@@ -1861,6 +2011,12 @@ qx.Class.define('dsislou.MainWindow',{
 					//dsisLouBridge.openScriptList();
 					qx.event.GlobalError.observeMethod(function () {
 						dsislou.MainWindow.openAndSetup()
+					})();
+				},openSourceList: function () {
+					qx.event.GlobalError.observeMethod(function () {
+						var win = new dsislou.ScriptSources();
+						win.open();
+						win.moveTo(30,30);
 					})();
 				},addChatMessage: function(msg) {
 					var eV = webfrontend.config.Config.getInstance().getChat(),
