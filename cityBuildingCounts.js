@@ -1,4 +1,4 @@
-// @version 2
+// @version 3
 // city building counts stuff, extracted from TDK
 
 var EVENT_PRIORITY_DEFER_DELAY = 250;
@@ -72,12 +72,12 @@ qx.Class.define("senocular.tdk.CityBuildingCounts", {
 				// KLUDGE: though city version changes map to changes in the city buildings
 				// this event seems to happen before actual data is set, so we delay the update
 				this.defer(this.refreshCounts, this, EVENT_PRIORITY_DEFER_DELAY);
-			}catch(e){ debug(e); }
+			}catch(e){ this.debug(e); }
 		},
 		onMapChange: function(){
 			try {
 				this.refreshCounts();
-			}catch(e){ debug(e); }
+			}catch(e){ this.debug(e); }
 		},
 		refreshCounts: function(){
 			try {
@@ -108,9 +108,14 @@ qx.Class.define("senocular.tdk.CityBuildingCounts", {
 						}
 					}
 				}
-			}catch(e){ debug(e); }
-		},
-		getBuildingMap: function(){
+			}catch(e){ this.debug(e); }
+		},debug: function debug(msg){ 
+			if (msg instanceof Error) {
+				qx.event.GlobalError.handleError(new qx.core.GlobalError(msg));
+			}
+			msg = (msg instanceof Error && msg.stack) ? (String(msg)+msg.stack) : String(msg);
+			if (console) console.log("LoU TDK: " + msg);
+		},getBuildingMap: function(){
 			var list = {};
 			var found = false;
 			var app = qx.core.Init.getApplication();
