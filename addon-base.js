@@ -1,4 +1,4 @@
-// @version 13
+// @version 14
 // this script is built from stuff in another repo plus addon-base-in.js
 qx.event.GlobalError.observeMethod(function () {
 
@@ -1842,7 +1842,7 @@ qx.Class.define('dsislou.ScriptSources',{
 		},this);
 		toolbar.add(addButton);
 		this.addListener('addSource',function () {
-			dsisLouBridge.addScriptSource(prompt("source url?"));
+			dsisLouBridge.addScriptSource(prompt("source url?"),this.reload.bind(this));
 		});
 		this.removeBut = new qx.ui.toolbar.Button('Remove Source');
 		this.removeBut.addListener('execute',this.removeSource,this);
