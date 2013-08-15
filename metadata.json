@@ -19,7 +19,7 @@
    "filename":"lou-tweak.js",
    "type":"smart_inject",
    "prio":2,
-   "version":"1.7.6.5"
+   "version":"1.7.6.6"
   },{
    "name":"LoU winter disable",
    "userscript":153096,
@@ -123,7 +123,7 @@
    "type":"smart_inject",
    "screenshot":"cityBuildingCounts.png"
   },{
-   "name":"LoU Notififer",
+   "name":"LoU Notifier",
    "filename":"alertscript.js",
    "type":"smart_inject",
    "version":"0.1.4"

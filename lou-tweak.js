@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      AmpliDude
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.7.6.5
+// @version        1.7.6.6
 // @grant          GM_log
 // ==/UserScript==
 
@@ -2337,16 +2337,18 @@
 						this.incResCont.setVisibility("visible");
 						it = [];
 					}
+					var cnt = 0;
 					this.incResCont.setVisibility("visible");
 					var resVal = [0,0,0,0,0,-1]; // 0 - last trader, 1-4 res, 5 - first trader
 					for (i=0; i<it.length; i++) {
-						for (j=0; j<it[i].resources.length; j++) {
-							resVal[it[i].resources[j].type] += it[i].resources[j].count;
+						if (it[i].state != 7) {
+							cnt++;
+							for (j=0; j<it[i].resources.length; j++) {
+								resVal[it[i].resources[j].type] += it[i].resources[j].count;
+							}
+							if (it[i].end > resVal[0]) resVal[0] = it[i].end;
+							if (resVal[5] == -1 || it[i].end < resVal[5]) resVal[5] = it[i].end;
 						}
-						if (it[i].end > resVal[0])
-							resVal[0] = it[i].end;
-						if (resVal[5] == -1 || it[i].end < resVal[5])
-							resVal[5] = it[i].end;
 					}
 
 					var st = webfrontend.data.ServerTime.getInstance();
@@ -2364,7 +2366,7 @@
 							fcs = Math.round(c.getFoodConsumptionSupporter() * 3600);
 							ft = c.getResourceGrowPerHour(i) - fc - fcs;
 						}
-						if (it.length > 0) {
+						if ((cnt > 0) && (it.length > 0)) {
 							timeSpan = resVal[0] - st.getServerStep();
 							resAtArrival = Math.floor(curVal + ((i == 4) ? ft*timeSpan/3600 : timeSpan * curDel) + resVal[i]);
 							
@@ -2404,7 +2406,7 @@
 						this.incResCont.getUserData("incResLabTot" + i).setTextColor(clr);
 					}
 					
-					if (it.length > 0) {
+					if ((cnt > 0) && (it.length > 0)) {
 						timeSpan = resVal[5] - st.getServerStep();
 						this.incResLabNext.setValue("Next arrival in: " + webfrontend.Util.getTimespanString(timeSpan));
 					} else
