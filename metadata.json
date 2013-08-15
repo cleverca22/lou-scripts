@@ -122,6 +122,16 @@
    "version":"3",
    "type":"smart_inject",
    "screenshot":"cityBuildingCounts.png"
+  },{
+   "name":"LoU Notififer",
+   "filename":"alertscript.js",
+   "type":"smart_inject",
+   "version":"0.1.4"
+  },{
+   "name":"Nessus River Guardian Tools",
+   "filename":"nessusRiverGuardingTools.js",
+   "type":"smart_inject",
+   "version":"1"
   }
  ],
  "conflicts":[
