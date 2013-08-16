@@ -126,6 +126,12 @@
    "filename":"nessusRiverGuardingTools.js",
    "type":"smart_inject",
    "version":"1"
+  },{
+   "name":"LoU Dungeons Riding",
+   "filename":"132554.user.js",
+   "userscript":132554,
+   "type":"smart_inject",
+   "version":"0.9.4"
   }
  ],
  "conflicts":[
