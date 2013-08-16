@@ -99,12 +99,6 @@
    "prio":2,
    "conflicts":[1]
   },{
-   "name":"(untested) Empire Manager",
-   "filename":"CityHelp2.2.6.user.js",
-   "type":"smart_inject",
-   "version":"2.2.6.4",
-   "prio":3
-  },{
    "name":"(untested) SkraggleSkript",
    "filename":"142304.user.js",
    "type":"old",
