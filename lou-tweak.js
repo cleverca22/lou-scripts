@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      AmpliDude
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.7.6.6
+// @version        1.7.6.7
 // @grant          GM_log
 // ==/UserScript==
 
@@ -1689,7 +1689,7 @@
 					if (LT.a.visMain.mapmode != "c") return;
 					_cells = LT.a.visMain.cells;
 					if (!_cells[0]) {
-						window.setTimeout(function(){LT.main.getCity()}, 250);
+						window.setTimeout(qx.event.GlobalError.observeMethod(function(){LT.main.getCity()}), 250);
 						return;
 					}
 					_cgi = webfrontend.data.City.getInstance();
@@ -1777,7 +1777,7 @@
 					for (i=0; i<this.city.length; i++) {
 						if (this.city[i] == null) {
 							this.city = new Array(441);
-							window.setTimeout(function(){LT.main.getCity()}, 1000);
+							window.setTimeout(qx.event.GlobalError.observeMethod(function(){LT.main.getCity()}), 1000);
 							return;
 						}
 					}
@@ -1809,7 +1809,7 @@
 				},
 				countUpgradeable: function() {
 					if (this.app.visMain.getBuildings().length == 0) {
-						window.setTimeout(function(){LT.main.countUpgradeable()}, 1500);
+						window.setTimeout(qx.event.GlobalError.observeMethod(function(){LT.main.countUpgradeable()}), 1500);
 						return;
 					}
 					this.getCity();
@@ -1820,7 +1820,7 @@
 					for (i=0; i<this.city.length; i++) {
 						if (this.city[i] == null) {
 							this.getCity();
-							window.setTimeout(function(){LT.main.countUpgradeable()}, 250);
+							window.setTimeout(qx.event.GlobalError.observeMethod(function(){LT.main.countUpgradeable()}), 250);
 							return;
 						}
 						if (this.city[i][1] > -1 && this.city[i][1] < 10 && !/\b(-1|-2|23|27|28|29|30|60|61|62|63|900|901|902|903|904|905|906|907|97|98|99)\b/.test(this.city[i][2]) && !(this.city[i][2] > 52 && this.city[i][2] < 60)) _upCount++;
@@ -2265,7 +2265,7 @@
 							return 0;
 					}
 				},
-				thSep: function(val) {
+				thSep: function thSep(val) {
 					if (val == undefined) return "";
 					separators = [".", ",", " ", ""];
 					return val.toString().replace(/\d(?=(\d{3})+(\D|$))/g, "$&" + separators[LT.options.thousandsSeparator]);
@@ -2352,6 +2352,7 @@
 					}
 
 					var st = webfrontend.data.ServerTime.getInstance();
+					// FIXME, .thSep is somewhat expensive, find out if the value even changed before running it
 					for (i=1; i<5; i++) {
 						freeSpc = 0;
 						curVal = c.getResourceCount(i);
@@ -3314,18 +3315,18 @@
 					c = LT.city;
 					cgi = webfrontend.data.City.getInstance();
 					if (c == null || c == undefined) {
-						window.setTimeout(function(){LT.main.layoutWindow.showOverlayLayout();}, 1000);
+						window.setTimeout(qx.event.GlobalError.observeMethod(function(){LT.main.layoutWindow.showOverlayLayout();}), 1000);
 						return;
 					}
 					for (i=0; i<c.length; i++) {
 						if (c[i] == null) {
-							window.setTimeout(function(){LT.main.layoutWindow.showOverlayLayout();}, 1000);
+							window.setTimeout(qx.event.GlobalError.observeMethod(function(){LT.main.layoutWindow.showOverlayLayout();}), 1000);
 							return;
 						}
 					}
 					cId = cgi.getId();
 					if (LT.main.cityId != cId || qx.lang.Object.isEmpty(LT.a.visMain.selectableEntities) || LT.main.cityId != LT.a.visMain.mapid) {
-						window.setTimeout(function(){LT.main.layoutWindow.showOverlayLayout();}, 2000);
+						window.setTimeout(qx.event.GlobalError.observeMethod(function(){LT.main.layoutWindow.showOverlayLayout();}), 2000);
 						return;
 					}
 					

@@ -4,7 +4,7 @@
 // @namespace      BoS
 // @author         Urthadar
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.6.6
+// @version        1.6.7
 // @require        http://sizzlemctwizzle.com/updater.php?id=84343&days=1
 // ==/UserScript==
 
@@ -2454,7 +2454,7 @@ qx.Class.define("bos.Tweaks", {
 				});
 						
 			} catch (e) {
-				bos.Utils.handleError(tr("error during BOS Tools menu creation: ") + e);
+				bos.Utils.handleError(tr("error during BOS Tools menu creation: ") + e + ':'+e.lineNumber);
 			}
 
 			a.overlaySizes[bos.Const.EXTRA_WIDE_OVERLAY] = {
@@ -4483,7 +4483,7 @@ var summaryWidget = null;
 
 var reportsTweaked = false;
 
-window.setTimeout(bosCheckIfLoaded, 1000);
+window.setTimeout(qx.event.GlobalError.observeMethod(bosCheckIfLoaded), 1000);
 
 function bosCheckIfLoaded() {
 	if (/*qx.$$domReady == */true) {
@@ -4491,10 +4491,10 @@ function bosCheckIfLoaded() {
 		if (a && a.chat && a.cityInfoView && a.title.reportButton) {
 			bos.Tweaks.getInstance().gameStarted();
 		} else {
-			window.setTimeout(bosCheckIfLoaded, 1000);
+			window.setTimeout(qx.event.GlobalError.observeMethod((bosCheckIfLoaded), 1000);
 		}
 	} else {
-		window.setTimeout(bosCheckIfLoaded, 1000);
+		window.setTimeout(qx.event.GlobalError.observeMethod(bosCheckIfLoaded), 1000);
 	}
 }
 

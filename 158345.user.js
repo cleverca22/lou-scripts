@@ -3,13 +3,13 @@
 // @description    Trade Minister utility
 // @namespace      davelou
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        0.3.4
+// @version        0.3.5
 // ==/UserScript==
 
 (function() {
 	var inject = function daveloutm() {
 		if (webfrontend.data.City.getInstance().getId()<1) {
-			window.setTimeout(daveloutm, 5000);
+			window.setTimeout(qx.event.GlobalError.observeMethod(daveloutm), 5000);
 			return;
 		}
 	qx.Class.define("dave.lou.TMC", {

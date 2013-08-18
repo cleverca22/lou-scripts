@@ -5,7 +5,7 @@
    "userscript":84343,
    "filename":"lou-bos.js",
    "type":"smart_inject",
-   "version":"1.6.6"
+   "version":"1.6.7"
   },{
    "name":"LoU MERC Tools 3.1",
    "filename":"merc3.user.js",
@@ -19,7 +19,7 @@
    "filename":"lou-tweak.js",
    "type":"smart_inject",
    "prio":2,
-   "version":"1.7.6.6"
+   "version":"1.7.6.7"
   },{
    "name":"LoU winter disable",
    "userscript":153096,
@@ -58,7 +58,7 @@
    "prio":2,
    "type":"smart_inject",
    "userscript":158345,
-   "version":"0.3.4"
+   "version":"0.3.5"
   },{
    "name":"LoU davelou Raid Assistant",
    "filename":"154016.user.js",
@@ -72,7 +72,7 @@
    "filename":"LoUDefiant_script.js",
    "prio":2,
    "type":"smart_inject",
-   "version":"0.0.36"
+   "version":"0.0.37"
   },{
    "name":"city startup helper",
    "filename":"city-starter.js",

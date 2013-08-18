@@ -1,4 +1,4 @@
-// @version 0.0.36
+// @version 0.0.37
 var com_senocular_LoUDefiant_pageScript = function(){
 	
 function debug(msg){ 
@@ -4974,11 +4974,11 @@ function loadSavedData(name){
 }
 
 function defer(method, target, time, argsArray){
-	return window.setTimeout(function(){
+	return window.setTimeout(qx.event.GlobalError.observeMethod(function(){
 		try {
 			method.apply(target, argsArray);
 		}catch(ignore){}
-	}, time);
+	}), time);
 }
 
 
@@ -4990,7 +4990,7 @@ function pollForInitComplete() {
 		// the app as dependencies are found (or not)
 		debug("init: " + err);
 		
-		window.setTimeout(pollForInitComplete, INIT_ATTEMPT_INTERVAL);
+		window.setTimeout(qx.event.GlobalError.observeMethod((pollForInitComplete), INIT_ATTEMPT_INTERVAL);
 	}
 }
 
