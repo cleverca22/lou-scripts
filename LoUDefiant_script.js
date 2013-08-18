@@ -1,4 +1,4 @@
-// @version 0.0.37
+// @version 0.0.38
 var com_senocular_LoUDefiant_pageScript = function(){
 	
 function debug(msg){ 
@@ -4990,7 +4990,7 @@ function pollForInitComplete() {
 		// the app as dependencies are found (or not)
 		debug("init: " + err);
 		
-		window.setTimeout(qx.event.GlobalError.observeMethod((pollForInitComplete), INIT_ATTEMPT_INTERVAL);
+		window.setTimeout(qx.event.GlobalError.observeMethod(pollForInitComplete), INIT_ATTEMPT_INTERVAL);
 	}
 }
 

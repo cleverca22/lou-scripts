@@ -6,7 +6,7 @@
    "filename":"lou-bos.js",
    "type":"smart_inject",
    "prio":2,
-   "version":"1.6.7"
+   "version":"1.6.8"
   },{
    "name":"LoU MERC Tools 3.1",
    "filename":"merc3.user.js",
@@ -73,7 +73,7 @@
    "filename":"LoUDefiant_script.js",
    "prio":2,
    "type":"smart_inject",
-   "version":"0.0.37"
+   "version":"0.0.38"
   },{
    "name":"city startup helper",
    "filename":"city-starter.js",
