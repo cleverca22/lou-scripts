@@ -5,6 +5,7 @@
    "userscript":84343,
    "filename":"lou-bos.js",
    "type":"smart_inject",
+   "prio":2,
    "version":"1.6.7"
   },{
    "name":"LoU MERC Tools 3.1",
