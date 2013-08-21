@@ -133,6 +133,11 @@
    "userscript":132554,
    "type":"smart_inject",
    "version":"0.9.4"
+  },{
+   "name":"merc 5",
+   "filename":"merc5.js",
+   "version":"5.2.3",
+   "type":"smart_inject"
   }
  ],
  "conflicts":[
