@@ -3,7 +3,7 @@
 // @description    MERC Tools - script for Lord of Ultima(tm)
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        5.2.3
+// @version        5.2.4
 // ==/UserScript==
 /*
  * Changelog
@@ -11937,6 +11937,7 @@ function addApplyAllButtons()
 						app.ministerInfoWidget = new Object();
 						app.ministerInfoWidget[webfrontend.base.GameObjects.eMinisterId.TradeMinister] = tmWidget;
 						tmWidget.addListenerOnce("appear", function() {
+							return; // FIXME
 							var app = qx.core.Init.getApplication();
 							if (app.hasOwnProperty("ministerInfoWidget"))
 							{
