@@ -1,4 +1,4 @@
-// @version 14
+// @version 15
 // this script is built from stuff in another repo plus addon-base-in.js
 qx.event.GlobalError.observeMethod(function () {
 
@@ -1751,6 +1751,7 @@ qx.Class.define('dsislou.MainWindow',{
 				}
 			});
 			main.addListener("reload",function() {
+				console.log('checking for updates');
 				service.checkForUpdates(function () {
 					console.log('done checking, refreshing');
 					service.fetchScripts();
