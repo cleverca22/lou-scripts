@@ -2940,6 +2940,7 @@ function addApplyAllButtons()
 			});
 			
 			qx.Class.define("paTweak.ui.FillWithResourcesWindow", {
+				// 'send res' button in merc tools
 				type: "singleton",
 				extend: qx.ui.window.Window,
 				construct: function() {
@@ -3328,6 +3329,7 @@ function addApplyAllButtons()
 						this.toY.setValue("" + coords.yPos);
 					},
 					_updateSendingProgress: function() {
+						// FIXME, remove this?
 						//var count = webfrontend.net.CommandManager.getInstance().getNumberOfPendingCommands();
 						//this.progressLabel.setValue("In queue: " );//+ count);
 					}

@@ -6,7 +6,7 @@
    "filename":"lou-bos.js",
    "type":"smart_inject",
    "prio":2,
-   "version":"1.6.8"
+   "version":"1.6.9"
   },{
    "name":"LoU MERC Tools 3.1",
    "filename":"merc3.user.js",
