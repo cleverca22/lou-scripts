@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           LoU Mail App
 // @description    UI Extension for LordOfUltima
-// @version        1.9.8
+// @version        1.9.9
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
 // ==/UserScript==
 
@@ -210,7 +210,7 @@ qx.Class.define("MailApp",{
 			this.__kc();
 
 			if(bq!=0){
-				webfrontend.gui.MessageBox.messageBox({title:"Deleting Error",text:"Error occurred while deleting Messages",buttons:1});
+				webfrontend.ui.MessageBox.messageBox({title:"Deleting Error",text:"Error occurred while deleting Messages",buttons:1});
 			}
 		},
 		___jR:function(r,bt,bu){
@@ -222,7 +222,7 @@ qx.Class.define("MailApp",{
 			this.___jJ.setValue(false);
 			this.__kc();
 			if(!r){
-				webfrontend.gui.MessageBox.messageBox({title:"Mark Unread Error",text:"Error occurred while marking messages unread",buttons:1});
+				webfrontend.ui.MessageBox.messageBox({title:"Mark Unread Error",text:"Error occurred while marking messages unread",buttons:1});
 			}
 		},
 		___jS:function(e) {
@@ -321,7 +321,7 @@ qx.Class.define("MailApp",{
 		},
 		___jW:function(r,bB,bC){
 			if(r==false){
-				webfrontend.gui.MessageBox.messageBox({title:"Communication Error",text:"Please Try Again",buttons:1});
+				webfrontend.ui.MessageBox.messageBox({title:"Communication Error",text:"Please Try Again",buttons:1});
 				return;
 			}
 			if(bB==null||bC!=this.___jO){

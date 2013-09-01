@@ -37,7 +37,7 @@
    "name":"LoU Mail App",
    "filename":"mailapp.user.js",
    "type":"dumb_inject",
-   "version":"1.9.8"
+   "version":"1.9.9"
   },{
    "name":"build queue status",
    "filename":"build-queue.js",
