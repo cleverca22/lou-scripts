@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           LoU Mail App
 // @description    UI Extension for LordOfUltima
-// @version        1.9.7
+// @version        1.9.8
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
 // ==/UserScript==
 
@@ -476,8 +476,8 @@ qx.Class.define("MailApp",{
 
 		},
 		_onSendEmail:function(e) {
-			console.log(e._target.classname,e._target.getWndParent().classname);
-			this.createCompose(e._target._lblNameValue.getValue(), 0);
+			var name = e._target.getWndParent().getData().sName;
+			this.createCompose(name, 0);
 			if (!this.isVisible()) {
 				this.open();
 			}
