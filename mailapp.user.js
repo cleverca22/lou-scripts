@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           LoU Mail App
 // @description    UI Extension for LordOfUltima
-// @version        1.9.5
+// @version        1.9.6
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
 // ==/UserScript==
 
@@ -114,7 +114,7 @@ qx.Class.define("MailApp",{
 				this.removeListener("ReportPlayer_Clicked",bh.onReportPlayer,bh);
 				this.removeListener("MarkOnWorldMap_Clicked",bh.onMarkOnWorldMap,bh);
 				bh.removeListener("OnGetPublicPlayerInfoDone",this.onGetPublicPlayerInfoDone,this);
-					bh.removeListener("OnGetPublicPlayerInfoFailed",this.onGetPublicPlayerInfoFailed,this);
+				bh.removeListener("OnGetPublicPlayerInfoFailed",this.onGetPublicPlayerInfoFailed,this);
 				bh.removeListener("appear",this.onWindowAppear,this);
 				bh.removeListener("disappear",this.onWindowDisappear,this);
 			}
@@ -476,6 +476,7 @@ qx.Class.define("MailApp",{
 
 		},
 		_onSendEmail:function(e) {
+			console.log(e.classname,e._target.classname);
 			this.createCompose(e._target._lblNameValue.getValue(), 0);
 			if (!this.isVisible()) {
 				this.open();
