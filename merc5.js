@@ -3,7 +3,7 @@
 // @description    MERC Tools - script for Lord of Ultima(tm)
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        5.2.5
+// @version        5.2.3
 // ==/UserScript==
 /*
  * Changelog
@@ -1876,29 +1876,22 @@ function addApplyAllButtons()
 					onClose : function() {
 						removeConsumer("ALL_AT", this.dispatchResults, this);
 					},
-					checkForShipAttack : function(sourceCid, targetCid, sec, isOwn, aid) {
-						if (isOwn)
-						{
+					checkForShipAttack : function(sourceCid, targetX, targetY, sec, isOwn, aid) {
 							var commandManager = webfrontend.net.CommandManager.getInstance();				
-							commandManager.sendCommand("GetDistance", {target: sourceCid }, null,
+							commandManager.sendCommand("GetOrderTargetInfo", {cityid: sourceCid,"x":targetX,"y":targetY }, null,
 							function(ok, res) 
 							{
 								if (ok && res != null)
 								{
-									var dist = -1;
-									for (var ii = 0; ii < res.length; ++ii)
-									{
-										if (res[ii].s == targetCid && res[ii].w > 0)
-										{
-											dist = Number(res[ii].w);
-											break;
-										}
-									}
+									var dist = Number(res.dw);
+									console.log(sec);
 									sec -= 3600;
+									sec = sec == 0 ? 1 : sec;
 									dist = (dist == 0 ? 1 : dist);
 									var diffMs = ((sec * 1000)/ dist);
 									var diffSec = Math.ceil(diffMs / 1000);
 									var ship = Math.round((Math.round((5 / (diffSec / 60) - 1) * 100) * 10) / 10);
+									console.log(dist + ":" + diffSec + ":" + ship);
 									var iaw = paTweak.ui.IncomingAttacksWindow.getInstance();
 									if (iaw._allianceBonuses.hasOwnProperty(aid))
 									{
@@ -1906,11 +1899,11 @@ function addApplyAllButtons()
 									}
 									if ((ship == 0) || (ship == 1) || (ship == 3) || (ship == 6) || (ship > 6 && ship <= 50 && ((ship % 5) == 0)))
 									{
-										ship = "Ships if attacking player has " + ship + "% travel speed research";
+										ship = "Ships possible if attacking player has " + ship + "% travel speed research.";
 									}
 									else
 									{
-										ship = "Not ships";
+										ship = "Not ships, player would need " + ship + "% travel speed research.";
 									}
 									var win = new qx.ui.window.Window("Check ship attack");
 									win.setLayout(new qx.ui.layout.VBox(2));
@@ -1945,42 +1938,6 @@ function addApplyAllButtons()
 									win.open();
 								}
 							});		
-						}
-						else
-						{
-							ship = "Can only check for ship attacks where the target is one of your cities.";
-							var win = new qx.ui.window.Window("Check ship attack");
-							win.setLayout(new qx.ui.layout.VBox(2));
-							win.set({
-								showMaximize : false,
-								showMinimize : false,
-								allowMaximize : false,
-								width : 420,
-								height : 80
-							});
-					
-							win.lbl = new qx.ui.basic.Label(ship).set({
-								rich : true
-							});
-					
-							win.add(win.lbl);
-							var row = new qx.ui.container.Composite(new qx.ui.layout.HBox(2));
-							win.add(row);
-							var btn = new qx.ui.form.Button("Close").set( 
-						 	{
-								appearance : "button-text-small",
-								width : 80,
-						 		paddingLeft: 6, paddingRight: 6, paddingTop: 0, paddingBottom: 0
-						 	} );
-							btn.win = win;
-							row.add(btn);
-							btn.addListener( "click", function() { this.win.hide(); });
-					
-							win.addListener("close", function() {
-							}, this);
-							win.center();
-							win.open();
-						}
 					},
 					getAllianceBonuses : function() {
 			            webfrontend.net.CommandManager.getInstance().sendCommand("AllianceGetRange", { "start":0, "end":1000, "continent":-1, "sort":7, "ascending":true, "type":2 }, 
@@ -2071,9 +2028,9 @@ function addApplyAllButtons()
 						}
 						firstRow.add(this._subText);
 						this._subText.addListener("changeValue", this.setSub, this);
-						var lbl = new qx.ui.basic.Label("If the target city needs more towers the attack may be incorrectly reported as ship. Click ship cell to verify own ship incoming with enough towers.");
-						lbl.setAlignY("middle");
-						firstRow.add(lbl);
+						//var lbl = new qx.ui.basic.Label("If the target city needs more towers the attack may be incorrectly reported as ship. Click ship cell to verify ship incoming with enough towers.");
+						//lbl.setAlignY("middle");
+						//firstRow.add(lbl);
 
 						this._contSelect.addListener("changeSelection", this.redrawGrid, this);
 						this._table = new qx.ui.table.model.Simple();
@@ -2191,12 +2148,12 @@ function addApplyAllButtons()
 											var aid = this.getTableModel().getValue(18, event.getRow());
 											var targetPlayer = this.getTableModel().getValue(2, event.getRow());
 											var isOwn = (targetPlayer == _mtPn);
-											var targetCoords = this.getTableModel().getValue(5, event.getRow());
 											var sourceCoords = this.getTableModel().getValue(10, event.getRow());
+											var targetCoords = this.getTableModel().getValue(5, event.getRow());
 											coords = targetCoords.split(":");
-											var x = coords[0];
-											var y = coords[1];
-											var targetCid = convertCoordinatesToId(x, y);
+											var targetX = coords[0];
+											var targetY = coords[1];
+											var targetCid = convertCoordinatesToId(targetX, targetY);
 											coords = sourceCoords.split(":");
 											var x = coords[0];
 											var y = coords[1];
@@ -2205,7 +2162,10 @@ function addApplyAllButtons()
 											var dispatchTime = new Date(this.getTableModel().getValue(11, event.getRow()));
 											var ms = arrivalTime.getTime() - dispatchTime.getTime();
 											var sec = Math.ceil(ms / 1000);
-											this.checkForShipAttack(sourceCid, targetCid, sec, isOwn, aid);
+											if (Number(targetX) != 0 && Number(targetY) != 0)
+											{
+												this.checkForShipAttack(sourceCid, targetX, targetY, sec, isOwn, aid);
+											}
 										}
 									}
 									break;
@@ -2335,7 +2295,7 @@ function addApplyAllButtons()
 													}
 													else
 													{
-														IncomingScout = "-";
+														IncomingScout = IncomingScout + "%";
 													}
 													if ((IncomingCav == 0) || (IncomingCav == 1) || (IncomingCav == 3) || (IncomingCav == 6) || (IncomingCav > 6 && IncomingCav <= 50 && ((IncomingCav % 5) == 0)))
 													{
@@ -2344,7 +2304,7 @@ function addApplyAllButtons()
 													}
 													else
 													{
-														IncomingCav = "-";
+														IncomingCav = IncomingCav + "%";
 													}
 													if ((IncomingInf == 0) || (IncomingInf == 1) || (IncomingInf == 3) || (IncomingInf == 6) || (IncomingInf > 6 && IncomingInf <= 50 && ((IncomingInf % 5) == 0)))
 													{
@@ -2353,7 +2313,7 @@ function addApplyAllButtons()
 													}
 													else
 													{
-														IncomingInf = "-";
+														IncomingInf = IncomingInf + "%";
 													}
 													if ((IncomingSiege == 0) || (IncomingSiege == 1) || (IncomingSiege == 3) || (IncomingSiege == 6) || (IncomingSiege > 6 && IncomingSiege <= 50 && ((IncomingSiege % 5) == 0)))
 													{
@@ -2362,7 +2322,7 @@ function addApplyAllButtons()
 													}
 													else
 													{
-														IncomingSiege = "-";
+														IncomingSiege = IncomingSiege + "%";
 													}
 													if ((IncomingBaron == 0) || (IncomingBaron == 1) || (IncomingBaron == 3) || (IncomingBaron == 6) || (IncomingBaron > 6 && IncomingBaron <= 50 && ((IncomingBaron % 5) == 0)))
 													{
@@ -2371,7 +2331,7 @@ function addApplyAllButtons()
 													}
 													else
 													{
-														IncomingBaron = "-";
+														IncomingBaron = IncomingBaron + "%";
 													}
 													if (!foundType)
 													{
@@ -2645,7 +2605,7 @@ function addApplyAllButtons()
 											}
 											else
 											{
-												IncomingScout = "-";
+												IncomingScout = IncomingScout + "%";
 											}
 											if ((IncomingCav == 0) || (IncomingCav == 1) || (IncomingCav == 3) || (IncomingCav == 6) || (IncomingCav > 6 && IncomingCav <= 50 && ((IncomingCav % 5) == 0)))
 											{
@@ -2654,7 +2614,7 @@ function addApplyAllButtons()
 											}
 											else
 											{
-												IncomingCav = "-";
+												IncomingCav = IncomingCav + "%";
 											}
 											if ((IncomingInf == 0) || (IncomingInf == 1) || (IncomingInf == 3) || (IncomingInf == 6) || (IncomingInf > 6 && IncomingInf <= 50 && ((IncomingInf % 5) == 0)))
 											{
@@ -2663,7 +2623,7 @@ function addApplyAllButtons()
 											}
 											else
 											{
-												IncomingInf = "-";
+												IncomingInf = IncomingInf + "%";
 											}
 											if ((IncomingSiege == 0) || (IncomingSiege == 1) || (IncomingSiege == 3) || (IncomingSiege == 6) || (IncomingSiege > 6 && IncomingSiege <= 50 && ((IncomingSiege % 5) == 0)))
 											{
@@ -2672,7 +2632,7 @@ function addApplyAllButtons()
 											}
 											else
 											{
-												IncomingSiege = "-";
+												IncomingSiege = IncomingSiege + "%";
 											}
 											if ((IncomingBaron == 0) || (IncomingBaron == 1) || (IncomingBaron == 3) || (IncomingBaron == 6) || (IncomingBaron > 6 && IncomingBaron <= 50 && ((IncomingBaron % 5) == 0)))
 											{
@@ -2681,7 +2641,7 @@ function addApplyAllButtons()
 											}
 											else
 											{
-												IncomingBaron = "-";
+												IncomingBaron = IncomingBaron + "%";
 											}
 											if (!foundType)
 											{
@@ -3314,7 +3274,6 @@ function addApplyAllButtons()
 			});
 			
 			qx.Class.define("paTweak.ui.FillWithResourcesWindow", {
-				// 'send res' button in merc tools
 				type: "singleton",
 				extend: qx.ui.window.Window,
 				construct: function() {
