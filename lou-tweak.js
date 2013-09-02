@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      AmpliDude
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.7.6.7
+// @version        1.7.6.8
 // @grant          GM_log
 // ==/UserScript==
 
@@ -2325,6 +2325,7 @@
 					var c = webfrontend.data.City.getInstance();
 					it = c.getTradeIncoming();
 					ot = c.getTradeOrders();
+					var uo = c.unitOrders;
 					if (LT.options.showIncResCont == 0) {
 						this.incResCont.setVisibility("excluded");
 						return;
@@ -2351,6 +2352,22 @@
 						}
 					}
 
+					for (i=0; uo != null && i < uo.length; ++i) {
+						var o = uo[i];
+						if (o.hasOwnProperty("loot") && o.loot != null && o.loot.hasOwnProperty("resources")) {
+							++cnt;
+							for (j=0; j < o.loot.resources.length; ++j) {
+								resVal[o.loot.resources[j].t] += o.loot.resources[j].c;
+							}
+							if (o.end > resVal[0]) {
+								resVal[0] = o.end;
+							}
+							if (resVal[5] == -1 || o.end < resVal[5]){
+								resVal[5] = o.end;
+							}
+						}
+					}
+
 					var st = webfrontend.data.ServerTime.getInstance();
 					// FIXME, .thSep is somewhat expensive, find out if the value even changed before running it
 					for (i=1; i<5; i++) {
@@ -2367,7 +2384,7 @@
 							fcs = Math.round(c.getFoodConsumptionSupporter() * 3600);
 							ft = c.getResourceGrowPerHour(i) - fc - fcs;
 						}
-						if ((cnt > 0) && (it.length > 0)) {
+						if ((cnt > 0) && ((it.length > 0) || (uo.length > 0))) {
 							timeSpan = resVal[0] - st.getServerStep();
 							resAtArrival = Math.floor(curVal + ((i == 4) ? ft*timeSpan/3600 : timeSpan * curDel) + resVal[i]);
 							
@@ -2407,7 +2424,7 @@
 						this.incResCont.getUserData("incResLabTot" + i).setTextColor(clr);
 					}
 					
-					if ((cnt > 0) && (it.length > 0)) {
+					if ((cnt > 0) && ((it.length > 0) || (uo.length > 0))) {
 						timeSpan = resVal[5] - st.getServerStep();
 						this.incResLabNext.setValue("Next arrival in: " + webfrontend.Util.getTimespanString(timeSpan));
 					} else
