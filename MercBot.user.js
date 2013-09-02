@@ -1579,16 +1579,17 @@
 		}
 	}
 	function inject() {
-		MBDebug('Injecting MercBot script');
-		var script = document.createElement("script");
-		txt = main.toString();
-		if (window.opera != undefined)
-			txt = txt.replace(/</g, "&lt;");
-		script.innerHTML = "(" + txt + ")();";
-		script.type = "text/javascript";
-		document.getElementsByTagName("head")[0].appendChild(script);
-		MBDebug('Injected');
-		//main();
+		if (typeof dsisLouBridge != 'undefined') main();
+		else {
+			MBDebug('Injecting MercBot script');
+			var script = document.createElement("script");
+			txt = main.toString();
+			if (window.opera != undefined) txt = txt.replace(/</g, "&lt;");
+			script.innerHTML = "(" + txt + ")();";
+			script.type = "text/javascript";
+			document.getElementsByTagName("head")[0].appendChild(script);
+			MBDebug('Injected');
+		}
 	}
 
 	if (/lordofultima\.com/i.test(document.domain))
