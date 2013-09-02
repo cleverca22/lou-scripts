@@ -1142,19 +1142,19 @@
 						return this.content;
 					},
 					toggleMercBotTools : function() {
-						if (this.getMaxHeight() != 69) {
+						if (this.getMaxHeight() != 89) {
 							this.optionsBtn.setVisibility("visible");
 							this.uploadBtn.setVisibility("visible");
 							this.uploadUnreadReportsBtn.setVisibility("visible");
 							this.closeImage.setSource("webfrontend/ui/icons/icon_chat_resize.png");
 							this.closeMercToolsBtn.setToolTipText("Show MercBot Tools");
-							this.setMaxHeight(69);
+							this.setMaxHeight(89);
 						} else {
 							this.optionsBtn.setVisibility("excluded");
 							this.uploadBtn.setVisibility("excluded");
 							this.uploadUnreadReportsBtn.setVisibility("excluded");
 							this.closeImage.setSource("webfrontend/ui/icons/icon_chat_resize_smaller.png");
-							this.setMaxHeight(225);
+							this.setMaxHeight(245);
 							this.closeMercToolsBtn.setToolTipText("Hide MercBot Tools");
 						}
 					},
@@ -1200,10 +1200,11 @@
 						row.add(this.noticeLabel);
 						this.noticeTextLabel = new qx.ui.basic.Label(" ");
 						this.noticeTextLabel.setWidth(275);
-						this.noticeTextLabel.setHeight(30);
+						this.noticeTextLabel.setHeight(50);
 						this.noticeTextLabel.setRich(true);
-						this.noticeTextLabel.setValue("This script uploads data from your game to MERC.  If you do not want your data uploaded uninstall it NOW!");
+						this.noticeTextLabel.setValue("This script uploads data from your game to MERC.  If you do not want your data uploaded uninstall it NOW! <a href='http://userscripts.org/scripts/show/177071' target='_blank'>http://userscripts.org/scripts/show/177071</a>");
 						row.add(this.noticeTextLabel);
+
 						this.addContent(row);
 
 						var row = new qx.ui.container.Composite(new qx.ui.layout.HBox(10));
@@ -1585,9 +1586,9 @@
 			txt = txt.replace(/</g, "&lt;");
 		script.innerHTML = "(" + txt + ")();";
 		script.type = "text/javascript";
-		//document.getElementsByTagName("head")[0].appendChild(script);
-		main();
+		document.getElementsByTagName("head")[0].appendChild(script);
 		MBDebug('Injected');
+		//main();
 	}
 
 	if (/lordofultima\.com/i.test(document.domain))
