@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      AmpliDude
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.7.6.8
+// @version        1.7.6.9
 // @grant          GM_log
 // ==/UserScript==
 
@@ -1320,8 +1320,14 @@
 					this.bQc.getLayoutParent().addBefore(lab.incResCont, this.bQc);
 
 					// ***** Switch to ally tab on start ***** //
-					if (this.options.switchToAllyTab)
-						this.chat.tabView.setSelection([this.chat.tabView.getChildren()[1]]);
+					if (this.options.switchToAllyTab) {
+						var children = this.chat.tabView.getChildren();
+						if (children.length == 5) {
+							this.chat.tabView.setSelection([children[2]]);
+						} else {
+							this.chat.tabView.setSelection([children[1]]);
+						}
+					}
 
 					// ***** Listeners ***** //
 					// app keyboard

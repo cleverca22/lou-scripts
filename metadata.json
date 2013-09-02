@@ -20,7 +20,7 @@
    "filename":"lou-tweak.js",
    "type":"smart_inject",
    "prio":2,
-   "version":"1.7.6.8"
+   "version":"1.7.6.9"
   },{
    "name":"LoU winter disable",
    "userscript":153096,
