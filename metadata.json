@@ -138,6 +138,12 @@
    "filename":"merc5.js",
    "version":"5.2.3",
    "type":"smart_inject"
+  },{
+   "name":"(UPLOADS DATA TO MERC) MercBot tools",
+   "filename":"MercBot.user.js",
+   "version":"0.1",
+   "screenshot":"mercbot.png",
+   "type":"smart_inject"
   }
  ],
  "conflicts":[
