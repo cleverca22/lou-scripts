@@ -3,7 +3,7 @@
 // @description    MERC Tools - script for Lord of Ultima(tm)
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        5.2.3
+// @version        5.2.4
 // ==/UserScript==
 /*
  * Changelog
@@ -12272,32 +12272,6 @@ function addApplyAllButtons()
 						IncomingAttacksButton.addListener("execute", this.showIncomingAttacks, this);
 						row.add(IncomingAttacksButton);
 						var dialog = paTweak.ui.IncomingAttacksWindow.getInstance();
-
-						var tmWidget = new webfrontend.gui.MinisterInfo.Trade();
-						app.ministerInfoWidget = new Object();
-						app.ministerInfoWidget[webfrontend.base.GameObjects.eMinisterId.TradeMinister] = tmWidget;
-						tmWidget.addListenerOnce("appear", function() {
-							var app = qx.core.Init.getApplication();
-							if (app.hasOwnProperty("ministerInfoWidget"))
-							{
-								var tmWidget = app.ministerInfoWidget[webfrontend.base.GameObjects.eMinisterId.TradeMinister];
-								var children = tmWidget._tabView.getChildren();
-								if (children.length > 2)
-								{
-									children = children[2].getChildren();
-									if (children.length > 1)
-									{
-										var br = children[1].getChildren()[1];
-										var btn = new qx.ui.form.Button("Use closest hub");
-										btn.setToolTipText("Sets trade settings to use the closest city by land in a City Group containing 'hub' in its name.");
-										btn.set({marginLeft: 6}); 
-										btn.addListener("execute", function() { paTweak.Main.getInstance().panel.findClosestHub(); }, btn);
-										br.addAfter(btn, br.getChildren()[0]);
-									}
-								}
-							}
-						}, tmWidget);
-
 
 						// Combat command window, written by Mikee
 						var combatButton = new qx.ui.form.Button("Combat");
