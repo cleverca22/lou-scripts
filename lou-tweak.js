@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      AmpliDude
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.7.6.9
+// @version        1.7.6.10
 // @grant          GM_log
 // ==/UserScript==
 
@@ -2329,21 +2329,22 @@
 				incResLabFs: null,
 				updateIncResCont: function() {
 					var c = webfrontend.data.City.getInstance();
-					it = c.getTradeIncoming();
-					ot = c.getTradeOrders();
+					var it = c.getTradeIncoming();
+					var ot = c.getTradeOrders();
 					var uo = c.unitOrders;
 					if (LT.options.showIncResCont == 0) {
 						this.incResCont.setVisibility("excluded");
 						return;
 					}
-					if (it == null || it == undefined) {
+					if (!it) {
 						if (LT.options.showIncResCont == 2) {
 							this.incResCont.setVisibility("excluded");
 							return;
 						}
 						this.incResCont.setVisibility("visible");
-						it = [];
 					}
+					if (!it) it = [];
+					if (!uo) uo = [];
 					var cnt = 0;
 					this.incResCont.setVisibility("visible");
 					var resVal = [0,0,0,0,0,-1]; // 0 - last trader, 1-4 res, 5 - first trader
@@ -2358,12 +2359,15 @@
 						}
 					}
 
-					for (i=0; uo != null && i < uo.length; ++i) {
+					var haveReturning = false;
+					for (i=0; i < uo.length; ++i) {
 						var o = uo[i];
 						if (o.hasOwnProperty("loot") && o.loot != null && o.loot.hasOwnProperty("resources")) {
+							haveReturning = true;
 							++cnt;
 							for (j=0; j < o.loot.resources.length; ++j) {
 								resVal[o.loot.resources[j].t] += o.loot.resources[j].c;
+								haveReturning = true;
 							}
 							if (o.end > resVal[0]) {
 								resVal[0] = o.end;
@@ -2372,6 +2376,10 @@
 								resVal[5] = o.end;
 							}
 						}
+					}
+					if (!haveReturning && (LT.options.showIncResCont == 2)) {
+						this.incResCont.setVisibility("excluded");
+						return;
 					}
 
 					var st = webfrontend.data.ServerTime.getInstance();
