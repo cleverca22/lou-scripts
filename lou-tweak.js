@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      AmpliDude
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.7.6.11
+// @version        1.7.6.12
 // @grant          GM_log
 // ==/UserScript==
 
@@ -2377,7 +2377,7 @@
 							}
 						}
 					}
-					if (!haveReturning && (LT.options.showIncResCont == 2)) {
+					if (!it && !haveReturning && (LT.options.showIncResCont == 2)) {
 						this.incResCont.setVisibility("excluded");
 						return;
 					}
