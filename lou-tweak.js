@@ -3,7 +3,7 @@
 // @description    Adds various functionalities to Lord of Ultima
 // @namespace      AmpliDude
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.7.6.10
+// @version        1.7.6.11
 // @grant          GM_log
 // ==/UserScript==
 
@@ -2336,7 +2336,7 @@
 						this.incResCont.setVisibility("excluded");
 						return;
 					}
-					if (!it) {
+					if (!it && !uo) {
 						if (LT.options.showIncResCont == 2) {
 							this.incResCont.setVisibility("excluded");
 							return;
