@@ -54,6 +54,13 @@
    "version":"15",
    "default":true
   },{
+   "name":"shutdown speedup",
+   "filename":"speedup.js",
+   "prio":1,
+   "type":"smart_inject",
+   "version":"1",
+   "default":true
+  },{
    "name":"LoU davelou TM Assist",
    "filename":"158345.user.js",
    "prio":2,
