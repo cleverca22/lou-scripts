@@ -3,7 +3,7 @@
 // @description    MERC Tools - script for Lord of Ultima(tm)
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        5.2.4
+// @version        5.2.5
 // ==/UserScript==
 /*
  * Changelog
@@ -314,11 +314,10 @@
 		};
 		/* main script that defines the plugin */
 		var createTweak = function() {
-
 			qx.Class.define("paTweak.Version", {
 				type : "static",
 				statics : {
-					PAversion : "5.2.4",
+					PAversion : "5.2.5",
 					PAbuild : "Friday September 6 15:48:42 MT 2013",
 					PAcodename : "",
 					PAauthors : "Michal Dvořák (Mikee)",
@@ -12382,19 +12381,19 @@ function addApplyAllButtons()
 				bS: null,
 				app: null,
 				updateCityBuildings: function() {
+					if (typeof dsisLouBridge == 'object') return;
 					var city = webfrontend.data.City.getInstance();
 					if (this.app == null) this.app = qx.core.Init.getApplication();
 					if (this.bS == null) this.bS = webfrontend.res.Main.getInstance();
 					if (this.cMain == null) this.cMain = paTweak.Main.getInstance();
-					if (!this.bS || !city || !this.cMain)
-						return;
+					if (!this.bS || !city || !this.cMain) return;
 					if (this.cMain.options.showCityBuildings == 0 || (this.cMain.options.showCityBuildings == 2 && (this.app.visMain.mapmode != "c"))) {
 						this.bldgsCont.setVisibility("excluded");
 						return;
 					}
 					this.bldgsCont.setVisibility("visible");
 					var bCount = city.getBuildingCount();
-					if (bCount == this.prevCount && this.lastId == city.getId()) { return; }
+					if (bCount == this.prevCount && this.lastId == city.getId()) return;
 					this.prevCount = bCount;
 					this.lastId = city.getId();
 					this.row.removeAll();
@@ -12405,33 +12404,24 @@ function addApplyAllButtons()
 					this.row3.setVisibility("excluded");
 					this.row4.setVisibility("excluded");
 					var i = 0;
-					for (var a in this.bS.buildings)
-					{
+					for (var a in this.bS.buildings) {
 						var cnt = city.getBuildingCountByType(a);
-						if (cnt > 0 && this.bS.buildings[a].t != 5)
-						{
+						if (cnt > 0 && this.bS.buildings[a].t != 5) {
 		 					var lbl = new qx.ui.basic.Label(" ");
 							lbl.setRich(true);
 							var title = this.bS.buildings[a].dn;
 							lbl.setValue('<img alt="'+title+'" title="'+title+'" src="resource/webfrontend/'+this.bS.getFileInfo(this.bS.buildings[Number(a)].mimg).url+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 28px; height: 28px; padding-left:4px;" /><br/><span style="margin-left: '
 											+(cnt > 10 ? 10 : 15)+'px;">' + cnt + '</span>');
 							++i;
-							if (i <= 8)
-							{
+							if (i <= 8) {
 								this.row.add(lbl);
-							}
-							else if (i <= 16)
-							{
+							} else if (i <= 16) {
 								this.row2.add(lbl);
 								this.row2.setVisibility("visible");
-							}
-							else if (i <= 24)
-							{
+							} else if (i <= 24) {
 								this.row3.add(lbl);
 								this.row3.setVisibility("visible");
-							}
-							else
-							{
+							} else {
 								this.row4.add(lbl);
 								this.row4.setVisibility("visible");
 							}
@@ -12630,15 +12620,13 @@ function addApplyAllButtons()
 						app.ministerInfoWidget[webfrontend.base.GameObjects.eMinisterId.TradeMinister] = tmWidget;
 						tmWidget.addListenerOnce("appear", function() {
 							var app = qx.core.Init.getApplication();
-							if (app.hasOwnProperty("ministerInfoWidget"))
-							{
+							if (typeof dsisLouBridge == 'object') return;
+							if (app.hasOwnProperty("ministerInfoWidget")) {
 								var tmWidget = app.ministerInfoWidget[webfrontend.base.GameObjects.eMinisterId.TradeMinister];
 								var children = tmWidget._tabView.getChildren();
-								if (children.length > 2)
-								{
+								if (children.length > 2) {
 									children = children[2].getChildren();
-									if (children.length > 1)
-									{
+									if (children.length > 1) {
 										var br = children[1].getChildren()[1];
 										var row = new qx.ui.container.Composite(new qx.ui.layout.HBox(1));
 										var btn = new qx.ui.form.Button("Set hub");
@@ -12669,16 +12657,13 @@ function addApplyAllButtons()
 										btn2.addListener("execute", function() { paTweak.Main.getInstance().panel.setHubAmounts(); }, selBox);
 										br.addAfter(row, br.getChildren()[0]);
 										paTweak.Main.getInstance().panel.useClosestHubButton = row;
-										if (!cMain.options.enableClosestHub)
-										{
+										if (!cMain.options.enableClosestHub) {
 											row.setVisibility("excluded");
 										}
 									}
 								}
 							}
 						}, tmWidget);
-
-
 						// Combat command window, written by Mikee
 						var combatButton = new qx.ui.form.Button("Combat");
 						combatButton.set({
@@ -12861,22 +12846,20 @@ function addApplyAllButtons()
 							}, null, function(ok, res) { }); 
 					},
 					findClosestHub : function() {
-						var commandManager = webfrontend.net.CommandManager.getInstance();				
+						var commandManager = webfrontend.net.CommandManager.getInstance();
 						var player = webfrontend.data.Player.getInstance();
 						var hubGroupId;
 						var cids;
 						var nameDistance = new Array();
 						for (var ii = 0; ii < player.citygroups.length; ++ii) {
-							if (player.citygroups[ii].n.toLowerCase().indexOf('hub') >= 0 && player.citygroups[ii].c.length > 0)
-							{
+							if (player.citygroups[ii].n.toLowerCase().indexOf('hub') >= 0 && player.citygroups[ii].c.length > 0) {
 								hubGroupId = player.citygroups[ii].i;
 								cids = player.citygroups[ii].c; 
 								break;
 							}
 						}
 						commandManager.sendCommand("GetDistance", {target: webfrontend.data.City.getInstance().getId() }, this,
-						function(ok, res) 
-						{
+						function(ok, res) {
 							var minCid = 0;
 							var minDistance = 99999;
 								for (var x = 0; x < cids.length; ++x) {
@@ -12890,67 +12873,62 @@ function addApplyAllButtons()
 									}
 								}
 							}
-								if (minCid != 0)
-								{
-							var cityList = player.getCities();
-							var hubX = cityList[minCid].xPos;
-							var hubY = cityList[minCid].yPos
-									var entry = paTweak.Main.getInstance().hubSelBox.getSelection()[0].entry;
-							data = webfrontend.net.UpdateManager.getInstance().requester["MAT"].obj;
-							var ro = data.getResourceOptions();			
-							var dst = data.getBDeliverSameTarget();			
-							var dir = data.getBDisableIncomingTradeRequest();
-							var rst = data.getBRequestSameTarget();
-							var dor = data.getBDisableOutgoingTradeRequest();
-							var ptr = data.getBProtectResourcesFromRequests();
-							var rcr = data.getCartTransportReserveCapacity();
-							var rsr = data.getShipTransportReserveCapacity();
-							commandManager.sendCommand("CityAutoTradeParamsSet", 
-							{
-								"cityid": webfrontend.data.City.getInstance().getId(),
-								"autoTradeParams": {"dst":dst,"rst":rst,"dir":dir,"dor":dor,
-									"r":[
-													{"t":1,"r":minCid,"s":2,"d":minCid,"p":(entry.wood)},
-													{"t":2,"r":(rst ? 0 : minCid),"s":ro['2'].surplusMode,"d":(dst ? 0 : minCid),"p":(entry.stone)},
-													{"t":3,"r":(rst ? 0 : minCid),"s":ro['3'].surplusMode,"d":(dst ? 0 : minCid),"p":(entry.iron)},
-													{"t":4,"r":(rst ? 0 : minCid),"s":ro['4'].surplusMode,"d":(dst ? 0 : minCid),"p":(entry.food)}],
-									"ptr":ptr,"rcr":rcr,"rsr":rsr}
+							if (minCid != 0) {
+								var cityList = player.getCities();
+								var hubX = cityList[minCid].xPos;
+								var hubY = cityList[minCid].yPos
+								var entry = paTweak.Main.getInstance().hubSelBox.getSelection()[0].entry;
+								data = webfrontend.net.UpdateManager.getInstance().requester["MAT"].obj;
+								var ro = data.getResourceOptions();
+								var dst = data.getBDeliverSameTarget();
+								var dir = data.getBDisableIncomingTradeRequest();
+								var rst = data.getBRequestSameTarget();
+								var dor = data.getBDisableOutgoingTradeRequest();
+								var ptr = data.getBProtectResourcesFromRequests();
+								var rcr = data.getCartTransportReserveCapacity();
+								var rsr = data.getShipTransportReserveCapacity();
+								commandManager.sendCommand("CityAutoTradeParamsSet", {
+									"cityid": webfrontend.data.City.getInstance().getId(),
+									"autoTradeParams": {"dst":dst,"rst":rst,"dir":dir,"dor":dor,
+										"r":[
+											{"t":1,"r":minCid,"s":2,"d":minCid,"p":(entry.wood)},
+											{"t":2,"r":(rst ? 0 : minCid),"s":ro['2'].surplusMode,"d":(dst ? 0 : minCid),"p":(entry.stone)},
+											{"t":3,"r":(rst ? 0 : minCid),"s":ro['3'].surplusMode,"d":(dst ? 0 : minCid),"p":(entry.iron)},
+											{"t":4,"r":(rst ? 0 : minCid),"s":ro['4'].surplusMode,"d":(dst ? 0 : minCid),"p":(entry.food)}
+										],
+										"ptr":ptr,"rcr":rcr,"rsr":rsr}
+									}, null, function(ok, res) { }); 
+							} else {
+								var win = new qx.ui.window.Window("Set hub");
+								win.setLayout(new qx.ui.layout.VBox(2));
+								win.set({
+									showMaximize : false,
+									showMinimize : false,
+									allowMaximize : false,
+									width : 150,
+									height : 80
+								});
 								
-										}, null, function(ok, res) { }); 
-								}
-								else
-							{
-									var win = new qx.ui.window.Window("Set hub");
-									win.setLayout(new qx.ui.layout.VBox(2));
-									win.set({
-										showMaximize : false,
-										showMinimize : false,
-										allowMaximize : false,
-										width : 150,
-										height : 80
-									});
-							
-									win.lbl = new qx.ui.basic.Label("No hub found").set({
-										rich : true
-									});
-							
-									win.add(win.lbl);
-									var row = new qx.ui.container.Composite(new qx.ui.layout.HBox(2));
-									win.add(row);
-									var btn = new qx.ui.form.Button("Close").set( 
-								 	{
-										appearance : "button-text-small",
+								win.lbl = new qx.ui.basic.Label("No hub found").set({
+									rich : true
+								});
+								
+								win.add(win.lbl);
+								var row = new qx.ui.container.Composite(new qx.ui.layout.HBox(2));
+								win.add(row);
+								var btn = new qx.ui.form.Button("Close").set({
+									appearance : "button-text-small",
 										width : 80,
-								 		paddingLeft: 6, paddingRight: 6, paddingTop: 0, paddingBottom: 0
-								 	} );
-									btn.win = win;
-									row.add(btn);
-									btn.addListener( "click", function() { this.win.hide(); });
-									win.addListener("close", function() { }, this);
-									win.center();
-									win.open();
+										paddingLeft: 6, paddingRight: 6, paddingTop: 0, paddingBottom: 0
+								});
+								btn.win = win;
+								row.add(btn);
+								btn.addListener( "click", function() { this.win.hide(); });
+								win.addListener("close", function() { }, this);
+								win.center();
+								win.open();
 							}
-						});		
+						});
 					},
 					removeResNode : function() {
 						this.getCity();
