@@ -12740,6 +12740,7 @@ function addApplyAllButtons()
 
 							this.BaronLabel = new qx.ui.basic.Label(" ");
 							this.BaronLabel.setRich(true);
+							// FIXME, use this function maybe? webfrontend.config.Config.getInstance().getImageSource()
 							this.BaronLabel.setValue('<div style="-moz-transform: scaleX(1);background-image:url(resource/webfrontend/theme/tree/open.png);background-repeat:no-repeat;width:16px;height:16px;font-weight:bold;padding-left:15px;"><img src="resource/webfrontend/ui/icons/units/icon_units_baron.png"  style="align:absmiddle;-moz-transform: scaleX(1); width: 16px; height: 16px; padding-left:4px;" /></div>');
 							this.BaronLabel.setToolTipText(ToolTip);
 							this.BaronLabel.addListener("click", this.toggleTable);
