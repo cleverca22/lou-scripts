@@ -318,7 +318,7 @@
 			qx.Class.define("paTweak.Version", {
 				type : "static",
 				statics : {
-					PAversion : "5.2.5.1-dsis",
+					PAversion : "5.2.5.1d",
 					PAbuild : "Sunday September 15 12:15:29 MT 2013",
 					PAcodename : "",
 					PAauthors : "Michal Dvořák (Mikee)",
