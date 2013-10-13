@@ -2,7 +2,7 @@
 // @name           MERC Bot
 // @description    Adds MercBot integration
 // @namespace      Uldrich
-// @include        http://prodgame*.lordofultima.com/*/index.aspx*
+// @include        http://prodgame*.lordofultima.com/255/index.aspx*
 // @version        0.2.1
 // ==/UserScript==
 /*
