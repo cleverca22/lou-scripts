@@ -3,13 +3,13 @@
 // @description    Adds MercBot integration
 // @namespace      Uldrich
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        0.1
+// @version        0.2
 // ==/UserScript==
 /*
  * Changelog
 
  * 0.1  initial release
- * 
+ * 0.2  fixed hide options label
  */
 (function() {
 	var main = function() {
@@ -30,8 +30,8 @@
 			qx.Class.define("MercBot.Version", {
 				type : "static",
 				statics : {
-					version : "0.1",
-					build : "Sunday September 1 11:30:45 MT 2013",
+					version : "0.2",
+					build : "Tuesday September 3 17:51:26 MT 2013",
 					authors : "Uldrich",
 					contrib : "",
 					License : "END USER LICENSE AGREEMENT\r\n\r\nThis copy of the MercBot script (\"the Software Product\") and accompanying documentation and access to MercBot is licensed and not sold.  This Software Product is protected by copyright laws and treaties, as well as laws and treaties related to other forms of intellectual property.  Uldrich owns intellectual property rights in the Software Product.  The Licensee's (\"you\" or \"your\") license to download, use, copy, or change the Software Product is subject to these rights and to all the terms and conditions of this End User License Agreement (\"Agreement\").\r\n\r\nAcceptance\r\n\r\nYOU ACCEPT AND AGREE TO BE BOUND BY THE TERMS OF THIS AGREEMENT BY DOWNLOADING THE SOFTWARE PRODUCT OR BY INSTALLING, USING, OR COPYING THE SOFTWARE PRODUCT.  YOU MUST AGREE TO ALL OF THE TERMS OF THIS AGREEMENT BEFORE INSTALLING AND USING THE SOFTWARE PRODUCT.  IF YOU DO NOT AGREE TO ALL OF THE TERMS OF THIS AGREEMENT, YOU MUST NOT INSTALL, USE, OR COPY THE SOFTWARE PRODUCT.\r\n\r\nLicense Grant\r\n\r\nThis Agreement entitles you to install and use the Software Product provided you are a member of MERC or a recognized affiliate alliance.  Providing data from this product to those outside of MERC or a recognized affiliate alliance constitutes a breach of this agreement.\r\n\r\nRestrictions on Transfer\r\n\r\nWithout first obtaining the express written consent of Uldrich, you may not assign your rights and obligations under this Agreement, or redistribute, encumber, sell, rent, lease, sublicense, or otherwise transfer your rights to the Software Product.\r\n\r\nRestrictions on Use\r\n\r\nYou may use, copy, or install the Software Product only if you are a member of the MERC alliance or a member of a recognized affiliate of the MERC alliance.\r\n\r\nYou may not decomplie, \"reverse-engineer\", disassemble, or otherwise attempt to derive the source code for the Software Product.\r\n\r\nYou may not use the database portion of the Software Product in connection with any software other than the Software Product.\r\n\r\nRestrictions on Alteration\r\n\r\nYou may not modify the Software Product or create any derivative work of the Software Product or its accompanying documentation.  Derivative works include but are not limited to translations.  You may not alter any files or libraries in any portion of the Software Product.  You may not reproduce the database portion or create any tables or reports relating to the database portion.\r\n\r\nRestrictions on Copying\r\n\r\nYou may not copy any part of the Software Product except to the extent that licensed use inherantly demands for the creation of a temporary copy stored in computer memory and not permanently affixed on storage medium.\r\n\r\nDisclaimer of Warranties and Limitation of Liability\r\n\r\nUNLESS OTHERWISE EXPLICITLY AGREED TO IN WRITING BY ULDRICH, ULDRICH MAKES NO OTHER WARRANTIES, EXPRESS OR IMPLIED, IN FACT OR IN LAW, INCLUDING, BUT NOT LIMITED TO, ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE OTHER THAN AS SET FORTH IN THIS AGREEMENT.\r\n\r\nUldrich makes no warranty that the Software Product will meet your requirements or operate under your specific conditions of use.  Uldrich makes no warranty that the operation of the Software Product will be secure, error free, or free from interruption.  YOU MUST DETERMINE WHETHER THE SOFTWARE PRODUCT SUFFICIENTLY MEETS YOUR REQUIREMENTS FOR SECURITY AND UNINTERUPTABILITY.  YOU BEAR SOLE RESPONSIBILITY AND ALL LIABILITY FOR ANY LOSS INCURRED DUE TO FAILURE OF THE SOFTWARE PRODUCT TO MEET YOUR REQUIREMENTS.  ULDRICH WILL NOT, UNDER ANY CIRCUMSTANCES, BE RESPONSIBLE OR LIABLE FOR THE LOSS OF DATA ON ANY COMPUTER OR INFORMATION STORAGE DEVICE.\r\n\r\nUNDER NO CIRCUMSTANCES SHALL ULDRICH, BE LIABLE TO YOU OR ANY OTHER PARTY FOR INDIRECT, CONSEQUENTIAL, SPECIAL, INCIDENTAL, PUNITIVE, OR EXEMPLARY DAMAGES OF ANY KIND (INCLUDING LOST REVENUES OR PROFITS OR LOSS OF BUSINESS) RESULTING FROM THIS AGREEMENT, OR FROM THE FURNISHING, PERFORMANCE, INSTALLATION, OR USE OF THE SOFTWARE PRODUCT, WHETHER DUE TO A BREACH OF CONTRACT, BREACH OF WARRANTY, OR THE NEGLIGENCE OF ULDRICH OR ANY OTHER PARTY, EVEN IF ULDRICH IS ADVISED BEFOREHAND OF THE POSSIBLITY OF SUCH DAMAGES.  TO THE EXTENT THAT THE APPLICABLE JURISTICTION LIMITS ULDRICH'S ABILITY TO DISCLAIM ANY IMPLIED WARRANTIES, THIS DISCLAIMER SHALL BE EFFECTIVE TO THE MAXIMUM EXTENT PERMITTED.\r\n\r\nLimitation of Remedies and Damages\r\n\r\nNo warranty is provided for the Software Product.  You agree to hold Uldrich harmless from all claims, judgements, liabilities, expenses, or costs arising from your breach of this Agreement and/or acts or omissions.\r\n\r\nSeverability\r\n\r\nIf any provision of this Agreement shall be held to be invalid or unenforceable, the remainder of this Agreement shall remain in full force and effect.  To the extent any express or implied restrictions are not permitted by applicable laws, these express or implied restrictions shall remain in force and effect to the maximum extent permitted by such applicable laws."
@@ -834,7 +834,7 @@
 					// ----- Page 1
 	
 					// ----- Show city buildings window
-					cb = new qx.ui.form.CheckBox("Hide Merc Tools panel at load");
+					cb = new qx.ui.form.CheckBox("Hide MercBot panel at load");
 					cb.cMain = cMain;
 					if (cMain.options.hideMercBot)
 						cb.setValue(true);
@@ -970,7 +970,7 @@
 						this.add(licenseLabel);
 
 						var license = "MercBot - script for Lord of Ultima(tm)";
-						license += "\nCopyright © 2013 " + MercBot.Version.authors;
+						license += "\nCopyright (c) 2013 " + MercBot.Version.authors;
 						if (MercBot.Version.contrib.length > 0) license += "\n\nPortions copyright " + MercBot.Version.contrib;
 						license += "\nThe MercBot script uploads portions of your game data to MERC.  If you are not a member of MERC or an affiliate alliance you should uninstall this tool immediately.";
 						license += "\n\n" + MercBot.Version.License;
@@ -1142,13 +1142,13 @@
 						return this.content;
 					},
 					toggleMercBotTools : function() {
-						if (this.getMaxHeight() != 89) {
+						if (this.getMaxHeight() != 84) {
 							this.optionsBtn.setVisibility("visible");
 							this.uploadBtn.setVisibility("visible");
 							this.uploadUnreadReportsBtn.setVisibility("visible");
 							this.closeImage.setSource("webfrontend/ui/icons/icon_chat_resize.png");
 							this.closeMercToolsBtn.setToolTipText("Show MercBot Tools");
-							this.setMaxHeight(89);
+							this.setMaxHeight(84);
 						} else {
 							this.optionsBtn.setVisibility("excluded");
 							this.uploadBtn.setVisibility("excluded");
@@ -1584,7 +1584,8 @@
 			MBDebug('Injecting MercBot script');
 			var script = document.createElement("script");
 			txt = main.toString();
-			if (window.opera != undefined) txt = txt.replace(/</g, "&lt;");
+			if (window.opera != undefined)
+				txt = txt.replace(/</g, "&lt;");
 			script.innerHTML = "(" + txt + ")();";
 			script.type = "text/javascript";
 			document.getElementsByTagName("head")[0].appendChild(script);

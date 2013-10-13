@@ -134,7 +134,7 @@
   },{
    "name":"(UPLOADS DATA TO MERC) MercBot tools",
    "filename":"MercBot.user.js",
-   "version":"0.1",
+   "version":"0.2",
    "screenshot":"mercbot.png",
    "type":"smart_inject"
   }
