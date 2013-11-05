@@ -3,7 +3,7 @@
 // @description    MERC Tools - script for Lord of Ultima(tm)
 // @namespace      Maddock
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        5.2.5.1
+// @version        5.2.6
 // ==/UserScript==
 /*
  * Changelog
@@ -21,6 +21,8 @@
  * 5.2.4 - Put simple building counts panel back in with options menu.  Added option to disable "Use closest hub" button and 
  * 			setup on the options tab. 
  * 5.2.5 - Throttle rate requests are made to determine if cities involved in attacks are on water due to reports of being kicked when opening incoming window.
+ * 5.2.6 - Option to hide notice.  "Set Hub" button now only sets to the closest hub.
+ * 	Added columns for TS attacker and TS defender in incoming window.
  */
 (function() {
 	var main = function() {
@@ -315,15 +317,15 @@
 		};
 		/* main script that defines the plugin */
 		var createTweak = function() {
+			
 			qx.Class.define("paTweak.Version", {
 				type : "static",
 				statics : {
-					PAversion : "5.2.5.1d",
-					PAbuild : "Sunday September 15 12:15:29 MT 2013",
+					PAversion : "5.2.6d",
+					PAbuild : "Saturday October 5 17:12:13 MT 2013",
 					PAcodename : "",
 					PAauthors : "Michal Dvořák (Mikee)",
 					PAcontrib : "William Leemans (Maddock), MousePak, Uldrich, WatchmanCole and Henkytin",
-
 					GPL : "This program is free software: you can redistribute it and/or modify" + " it under the terms of the GNU General Public License as published by" + " the Free Software Foundation, either version 3 of the License, or" + " (at your option) any later version." + "\n\n" + "This program is distributed in the hope that it will be useful," + " but WITHOUT ANY WARRANTY; without even the implied warranty of" + " MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + " GNU General Public License for more details." + "\n\n" + "You should have received a copy of the GNU General Public License" + " along with this program. If not, see http://www.gnu.org/licenses/."
 				}
 			});
@@ -500,6 +502,7 @@ function addApplyAllButtons()
 							"chatAlertPhrases" : "",
 							"showCityBuildings" : 1,
 							"enableClosestHub" : true,
+							"hideMercToolsNotice" : false,
 							"hubTemplates" : [
 								{name: "Castle", res: {wood: 300000, stone: 300000, iron: 300000, food: 1000000}},
 								{name: "Res City", res: {wood: 150000, stone: 150000, iron: 0, food: 0}},
@@ -517,6 +520,7 @@ function addApplyAllButtons()
 					if (!this.options.hasOwnProperty("enableClosestHub")) this.options.enableClosestHub = true;
 					if (!this.options.hasOwnProperty("showCityBuildings")) this.options.showCityBuildings = 2;
 					if (this.options.showCityBuildings == true) this.options.showCityBuildings = 2;
+					if (!this.options.hasOwnProperty("hideMercToolsNotice")) this.options.hideMercToolsNotice = false;
 					if (!this.options.hasOwnProperty("hubTemplates"))
 					{
 						this.options.hubTemplates = [
@@ -2074,8 +2078,8 @@ function addApplyAllButtons()
 						this._contSelect.addListener("changeSelection", this.redrawGrid, this);
 						this._table = new qx.ui.table.model.Simple();
 
-						var columnNames = ["MG", "Internal", "Player", "Target", "Cont", "Coords", "Time", "Attacker", "Alliance", "Source", "AttCoords", "Spotted", "Baron", "Siege", "Infantry", "Cav", "Scout", "Ship", "allianceId"];
-						var columnIDs = ["MG", "Internal", "Player", "Target", "Cont", "Coords", "Time", "Attacker", "Alliance", "Source", "AttCoords", "Spotted", "Baron", "Siege", "Infantry", "Cav", "Scout", "Ship", "allianceId"];
+						var columnNames = ["MG", "Internal", "Player", "Target", "Cont", "Coords", "Time", "Attacker", "Alliance", "Source", "AttCoords", "Spotted", "Baron", "Siege", "Infantry", "Cav", "Scout", "Ship", "alliance", "TS attacker", "TS defender"];
+						var columnIDs = ["MG", "Internal", "Player", "Target", "Cont", "Coords", "Time", "Attacker", "Alliance", "Source", "AttCoords", "Spotted", "Baron", "Siege", "Infantry", "Cav", "Scout", "Ship", "alliance", "TS attacker", "TS defender"];
 
 						this._table.setColumnIds(columnIDs);
 						this._table.setColumns(columnNames);
@@ -2083,7 +2087,7 @@ function addApplyAllButtons()
 						this._table.setCaseSensitiveSorting(false);
 						this._table.sortByColumn(6, true);
 						var table = new qx.ui.table.Table(this._table).set({
-							height : 400
+							height : 440
 						});
 						var columnModel = table.getTableColumnModel();
 						//columnModel.setColumnVisible( 3, false );
@@ -2121,6 +2125,8 @@ function addApplyAllButtons()
 						columnModel.setColumnWidth(17, 50);
 						columnModel.setColumnVisible(18, false);
 						columnModel.setColumnWidth(18, 50);
+						columnModel.setColumnWidth(19, 60);
+						columnModel.setColumnWidth(20, 60);
 						table.onCellClick = function(event) {
 							var spl = this.getTableModel().getValue(event.getColumn(), event.getRow());
 							switch( event.getColumn() ) {
@@ -2394,7 +2400,7 @@ function addApplyAllButtons()
 												IncomingShip = "?";
 											}
 											var isInternal = (mAid == item.a);
-											rowData.push([(item.m ? "webfrontend/world/icon_wm_city_moongate.png" : ""), ( isInternal ? "Internal " : ""), item.tpn, item.tcn, cont, paTweak.CoordUtils.convertIdToCoodrinates(item.tc), formatIncomingDate(this.serverTime.getStepTime(item.es)), item.pn, item.an, item.cn, paTweak.CoordUtils.convertIdToCoodrinates(item.c), formatIncomingDate(this.serverTime.getStepTime(item.ds)), IncomingBaron, IncomingSiege, IncomingInf, IncomingCav, IncomingScout, IncomingShip, item.a.toString()]);
+											rowData.push([(item.m ? "webfrontend/world/icon_wm_city_moongate.png" : ""), ( isInternal ? "Internal " : ""), item.tpn, item.tcn, cont, paTweak.CoordUtils.convertIdToCoodrinates(item.tc), formatIncomingDate(this.serverTime.getStepTime(item.es)), item.pn, item.an, item.cn, paTweak.CoordUtils.convertIdToCoodrinates(item.c), formatIncomingDate(this.serverTime.getStepTime(item.ds)), IncomingBaron, IncomingSiege, IncomingInf, IncomingCav, IncomingScout, IncomingShip, item.a.toString(), webfrontend.gui.Util.formatNumbers(item.ta).toString(), webfrontend.gui.Util.formatNumbers(item.td).toString()]);
 										}
 									} catch (ex) {
 										paError(ex);
@@ -2543,7 +2549,9 @@ function addApplyAllButtons()
 							output.add("'Infantry'	");
 							output.add("'Cav'	");
 							output.add("'Scout'	");
-							output.add("'Ship/Not enough towers'	");
+							output.add("'Ship'	");
+							output.add("'TS attacker'	");
+							output.add("'TS defender'	");
 							output.add("\n");
 							var resArray = [];
 							var IncomingAttacks;
@@ -2731,6 +2739,8 @@ function addApplyAllButtons()
 									output.add('"' + IncomingCav + '"	');
 									output.add('"' + IncomingScout + '"	');
 									output.add('"' + IncomingShip + '"	');
+									output.add('"' + webfrontend.gui.Util.formatNumbers(item.ta).toString() + '"	');
+									output.add('"' + webfrontend.gui.Util.formatNumbers(item.td).toString() + '"	');
 									output.add("\n");
 								} catch (ex1) {
 									paError(ex1);
@@ -10159,6 +10169,10 @@ function addApplyAllButtons()
 						this.titleRow.add(this.closeMercToolsBtn);
 
 						var options = paTweak.Main.getInstance().options;
+						if (options.hideMercToolsNotice)
+						{
+							this.addListenerOnce("appear", function() { var pMain = paTweak.Main.getInstance(); pMain.panel.noticeLabel.setVisibility("excluded"); pMain.panel.noticeTextLabel.setVisibility("excluded"); });
+						}
 						if (options.hideMercTools)
 						{
 							this.addListenerOnce("appear", function() { paTweak.Main.getInstance().panel.toggleMercTools(); });
@@ -10169,11 +10183,13 @@ function addApplyAllButtons()
 					},
 					toggleMercTools : function() {
 						var barButtonsVisibility = "hidden";
-						if (this.getMaxHeight() != 84) {
+						var options = paTweak.Main.getInstance().options;
+						var minHeight = options.hideMercToolsNotice ? 32 : 84;
+						if (this.getMaxHeight() != minHeight) {
 							barButtonsVisibility = "visible";
 							this.closeImage.setSource("webfrontend/ui/icons/icon_chat_resize.png");
 							this.closeMercToolsBtn.setToolTipText("Show Merc Tools");
-							this.setMaxHeight(84);
+							this.setMaxHeight(minHeight);
 						} else {
 							this.closeImage.setSource("webfrontend/ui/icons/icon_chat_resize_smaller.png");
 							this.setMaxHeight(242);
@@ -11992,6 +12008,28 @@ function addApplyAllButtons()
 				// ----- Page 1
 
 				// ----- Show city buildings window
+				var noticeRow = new qx.ui.container.Composite(new qx.ui.layout.HBox(2));
+				this.tabPages[0].vbox.add(noticeRow);
+				this.noticeLabel = new qx.ui.basic.Label(" ");
+				this.noticeLabel.setTextColor("red");
+				this.noticeLabel.setWidth(48);
+				this.noticeLabel.setValue('NOTICE:');
+				noticeRow.add(this.noticeLabel);
+				this.noticeTextLabel = new qx.ui.basic.Label(" ");
+				this.noticeTextLabel.setWidth(400);
+				this.noticeTextLabel.setHeight(45);
+				this.noticeTextLabel.setRich(true);
+				this.noticeTextLabel.setValue("This version of MERC Tools DOES NOT upload ANY data from your game provided you downloaded it from <a href='http://userscripts.org/scripts/show/176051' target='_blank'>http://userscripts.org/scripts/show/176051</a>.");
+				noticeRow.add(this.noticeTextLabel);
+				this.tabPages[0].vbox.add(noticeRow);
+				
+				cb = new qx.ui.form.CheckBox("Hide Merc Tools upload notice in panel.");
+				cb.cMain = cMain;
+				if (cMain.options.hideMercToolsNotice)
+					cb.setValue(true);
+				cb.addListener("click", function() { this.cMain.options.hideMercToolsNotice = this.getValue() ? true : false; var pMain = paTweak.Main.getInstance(); pMain.panel.noticeLabel.setVisibility(this.cMain.options.hideMercToolsNotice ? "excluded" : "visible");pMain.panel.noticeTextLabel.setVisibility(this.cMain.options.hideMercToolsNotice ? "excluded" : "visible");var maxHeight = pMain.panel.getMaxHeight(); if (maxHeight < 100) { pMain.panel.setMaxHeight(this.cMain.options.hideMercToolsNotice ? 32 : 84);}}, cb);
+				this.tabPages[0].vbox.add(cb);
+				
 				cb = new qx.ui.form.CheckBox("Hide Merc Tools panel at load");
 				cb.cMain = cMain;
 				if (cMain.options.hideMercTools)
@@ -12405,14 +12443,15 @@ function addApplyAllButtons()
 					if (this.app == null) this.app = qx.core.Init.getApplication();
 					if (this.bS == null) this.bS = webfrontend.res.Main.getInstance();
 					if (this.cMain == null) this.cMain = paTweak.Main.getInstance();
-					if (!this.bS || !city || !this.cMain) return;
+					if (!this.bS || !city || !this.cMain)
+						return;
 					if (this.cMain.options.showCityBuildings == 0 || (this.cMain.options.showCityBuildings == 2 && (this.app.visMain.mapmode != "c"))) {
 						this.bldgsCont.setVisibility("excluded");
 						return;
 					}
 					this.bldgsCont.setVisibility("visible");
 					var bCount = city.getBuildingCount();
-					if (bCount == this.prevCount && this.lastId == city.getId()) return;
+					if (bCount == this.prevCount && this.lastId == city.getId()) { return; }
 					this.prevCount = bCount;
 					this.lastId = city.getId();
 					this.row.removeAll();
@@ -12423,24 +12462,33 @@ function addApplyAllButtons()
 					this.row3.setVisibility("excluded");
 					this.row4.setVisibility("excluded");
 					var i = 0;
-					for (var a in this.bS.buildings) {
+					for (var a in this.bS.buildings)
+					{
 						var cnt = city.getBuildingCountByType(a);
-						if (cnt > 0 && this.bS.buildings[a].t != 5) {
-		 					var lbl = new qx.ui.basic.Label(" ");
+						if (cnt > 0 && this.bS.buildings[a].t != 5)
+						{
+							var lbl = new qx.ui.basic.Label(" ");
 							lbl.setRich(true);
 							var title = this.bS.buildings[a].dn;
 							lbl.setValue('<img alt="'+title+'" title="'+title+'" src="resource/webfrontend/'+this.bS.getFileInfo(this.bS.buildings[Number(a)].mimg).url+'" style="align:absmiddle;-moz-transform: scaleX(1); width: 28px; height: 28px; padding-left:4px;" /><br/><span style="margin-left: '
 											+(cnt > 10 ? 10 : 15)+'px;">' + cnt + '</span>');
 							++i;
-							if (i <= 8) {
+							if (i <= 8)
+							{
 								this.row.add(lbl);
-							} else if (i <= 16) {
+							}
+							else if (i <= 16)
+							{
 								this.row2.add(lbl);
 								this.row2.setVisibility("visible");
-							} else if (i <= 24) {
+							}
+							else if (i <= 24)
+							{
 								this.row3.add(lbl);
 								this.row3.setVisibility("visible");
-							} else {
+							}
+							else
+							{
 								this.row4.add(lbl);
 								this.row4.setVisibility("visible");
 							}
@@ -12640,12 +12688,15 @@ function addApplyAllButtons()
 						tmWidget.addListenerOnce("appear", function() {
 							var app = qx.core.Init.getApplication();
 							if (typeof dsisLouBridge == 'object') return;
-							if (app.hasOwnProperty("ministerInfoWidget")) {
+							if (app.hasOwnProperty("ministerInfoWidget"))
+							{
 								var tmWidget = app.ministerInfoWidget[webfrontend.base.GameObjects.eMinisterId.TradeMinister];
 								var children = tmWidget._tabView.getChildren();
-								if (children.length > 2) {
+								if (children.length > 2)
+								{
 									children = children[2].getChildren();
-									if (children.length > 1) {
+									if (children.length > 1)
+									{
 										var br = children[1].getChildren()[1];
 										var row = new qx.ui.container.Composite(new qx.ui.layout.HBox(1));
 										var btn = new qx.ui.form.Button("Set hub");
@@ -12676,7 +12727,8 @@ function addApplyAllButtons()
 										btn2.addListener("execute", function() { paTweak.Main.getInstance().panel.setHubAmounts(); }, selBox);
 										br.addAfter(row, br.getChildren()[0]);
 										paTweak.Main.getInstance().panel.useClosestHubButton = row;
-										if (!cMain.options.enableClosestHub) {
+										if (!cMain.options.enableClosestHub)
+										{
 											row.setVisibility("excluded");
 										}
 									}
@@ -12872,14 +12924,16 @@ function addApplyAllButtons()
 						var cids;
 						var nameDistance = new Array();
 						for (var ii = 0; ii < player.citygroups.length; ++ii) {
-							if (player.citygroups[ii].n.toLowerCase().indexOf('hub') >= 0 && player.citygroups[ii].c.length > 0) {
+							if (player.citygroups[ii].n.toLowerCase().indexOf('hub') >= 0 && player.citygroups[ii].c.length > 0)
+							{
 								hubGroupId = player.citygroups[ii].i;
 								cids = player.citygroups[ii].c; 
 								break;
 							}
 						}
 						commandManager.sendCommand("GetDistance", {target: webfrontend.data.City.getInstance().getId() }, this,
-						function(ok, res) {
+						function(ok, res)
+						{
 							var minCid = 0;
 							var minDistance = 99999;
 								for (var x = 0; x < cids.length; ++x) {
@@ -12893,7 +12947,8 @@ function addApplyAllButtons()
 									}
 								}
 							}
-							if (minCid != 0) {
+							if (minCid != 0)
+							{
 								var cityList = player.getCities();
 								var hubX = cityList[minCid].xPos;
 								var hubY = cityList[minCid].yPos
@@ -12907,18 +12962,21 @@ function addApplyAllButtons()
 								var ptr = data.getBProtectResourcesFromRequests();
 								var rcr = data.getCartTransportReserveCapacity();
 								var rsr = data.getShipTransportReserveCapacity();
-								commandManager.sendCommand("CityAutoTradeParamsSet", {
+								commandManager.sendCommand("CityAutoTradeParamsSet",
+								{
 									"cityid": webfrontend.data.City.getInstance().getId(),
 									"autoTradeParams": {"dst":dst,"rst":rst,"dir":dir,"dor":dor,
 										"r":[
-											{"t":1,"r":minCid,"s":2,"d":minCid,"p":(entry.wood)},
-											{"t":2,"r":(rst ? 0 : minCid),"s":ro['2'].surplusMode,"d":(dst ? 0 : minCid),"p":(entry.stone)},
-											{"t":3,"r":(rst ? 0 : minCid),"s":ro['3'].surplusMode,"d":(dst ? 0 : minCid),"p":(entry.iron)},
-											{"t":4,"r":(rst ? 0 : minCid),"s":ro['4'].surplusMode,"d":(dst ? 0 : minCid),"p":(entry.food)}
-										],
+											{"t":1,"r":minCid,"s":2,"d":minCid,"p":(ro['1'].protectedAmount)},
+											{"t":2,"r":(rst ? 0 : minCid),"s":ro['2'].surplusMode,"d":(dst ? 0 : minCid),"p":(ro['2'].protectedAmount)},
+											{"t":3,"r":(rst ? 0 : minCid),"s":ro['3'].surplusMode,"d":(dst ? 0 : minCid),"p":(ro['3'].protectedAmount)},
+											{"t":4,"r":(rst ? 0 : minCid),"s":ro['4'].surplusMode,"d":(dst ? 0 : minCid),"p":(ro['4'].protectedAmount)}],
 										"ptr":ptr,"rcr":rcr,"rsr":rsr}
+									
 									}, null, function(ok, res) { }); 
-							} else {
+							}
+							else
+							{
 								var win = new qx.ui.window.Window("Set hub");
 								win.setLayout(new qx.ui.layout.VBox(2));
 								win.set({
@@ -12999,7 +13057,6 @@ function addApplyAllButtons()
 						var ordersSent = 0;
 						var delay = 500;
 						this.deleteResButton.setEnabled(false);
-
 						for ( k = 0; k < this.city.length && ordersSent < freeSlots; k++) {
 							if (this.city[k] && this.city[k][2] >= 900 && this.city[k][1] == 0) {
 								var type = this.city[k][2] == 902 ? 27 : (this.city[k][2] == 901 ? 29 : (this.city[k][2] == 903 ? 30 : 28));
