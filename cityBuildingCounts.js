@@ -1,4 +1,4 @@
-// @version 3
+// @version 4
 // city building counts stuff, extracted from TDK
 
 var EVENT_PRIORITY_DEFER_DELAY = 250;
@@ -168,7 +168,7 @@ qx.Class.define("senocular.tdk.CityBuildingCountsItem", {
 		toolTipText:null,
 		buildUI: function(){
 			var imgPath = webfrontend.config.Config.getInstance().getImagePath(this.img);
-			var buildingImage = new qx.ui.basic.Image(imgPath).set({width:38, height:38, scale:true});
+			var buildingImage = new qx.ui.basic.Image(imgPath).set({width:28, height:28, scale:true});
 			buildingImage.setToolTipText(this.toolTipText);
 			
 			var buildingText = new qx.ui.basic.Label(this.text).set({rich:true});
