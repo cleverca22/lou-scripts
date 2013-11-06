@@ -101,7 +101,7 @@
   },{
    "name":"City Building Counts",
    "filename":"cityBuildingCounts.js",
-   "version":"4",
+   "version":"5",
    "type":"smart_inject",
    "screenshot":"cityBuildingCounts.png"
   },{
