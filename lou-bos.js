@@ -4,7 +4,7 @@
 // @namespace      BoS
 // @author         Urthadar
 // @include        http://prodgame*.lordofultima.com/*/index.aspx*
-// @version        1.6.9
+// @version        1.6.10
 // @require        http://sizzlemctwizzle.com/updater.php?id=84343&days=1
 // ==/UserScript==
 
@@ -1973,7 +1973,8 @@ qx.Class.define("bos.Tweaks", {
 			var res = webfrontend.res.Main.getInstance();
 
 			try {
-				var container = a.title.reportButton.getLayoutParent();
+				var app = qx.core.Init.getApplication();
+				var container = app.title.reportButton.getLayoutParent();
 				var btnSummary = new qx.ui.form.Button(tr("summary")).set({
 					marginLeft: 10
 				});
