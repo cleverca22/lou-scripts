@@ -15,12 +15,6 @@
    "prio":2,
    "version":"1.7.6.12"
   },{
-   "name":"LoU winter disable",
-   "userscript":153096,
-   "filename":"lou-summer.js",
-   "type":"old",
-   "version":"1.1.1"
-  },{
    "name":"Dada's Raiding Master",
    "userscript":160990,
    "filename":"160990.user.js",
