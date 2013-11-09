@@ -1,4 +1,4 @@
-// @version 0.0.38
+// @version 0.0.39
 var com_senocular_LoUDefiant_pageScript = function(){
 	
 function debug(msg){ 
@@ -3489,7 +3489,7 @@ debug('in init');
 				try {
 					
 				var prefs = senocular.tdk.TDKExtension.getInstance().prefs;
-				var chatIsMin = qx.core.Init.getApplication().chat.chatMimimizedButton.getUserData("Shown");
+				var chatIsMin = qx.core.Init.getApplication().chat.chatMinimizedButton.getUserData("Shown");
 					
 				
 				// only allow notifications when chat window is minimized
