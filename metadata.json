@@ -131,6 +131,11 @@
    "version":"0.3",
    "screenshot":"mercbot.png",
    "type":"smart_inject"
+  },{
+   "name":"LoU winter disable",
+   "filename":"153096.user.js",
+   "version":"1.4",
+   "type":"old"
   }
  ],
  "conflicts":[
