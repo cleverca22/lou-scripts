@@ -3,7 +3,7 @@
 // @description    Adds MercBot integration
 // @namespace      Uldrich
 // @include        http://prodgame*.lordofultima.com/255/index.aspx*
-// @version        0.3
+// @version        0.3.1
 // ==/UserScript==
 /*
  * Changelog
@@ -1794,7 +1794,8 @@
 	}
 	
 	function inject() {
-		if (document.location.pathname.indexOf('/255') == -1) return;
+		if ((document.location.pathname.indexOf('/255') == -1) &&
+			document.location.pathname.indexOf('/253') == -1)) return;
 		if (typeof dsisLouBridge != 'undefined') main();
 		else {
 			MBDebug('Injecting MercBot script');
