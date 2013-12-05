@@ -130,6 +130,7 @@
    "filename":"MercBot.user.js",
    "version":"0.3.1",
    "screenshot":"mercbot.png",
+   "prio":2,
    "type":"smart_inject"
   },{
    "name":"LoU winter disable",
